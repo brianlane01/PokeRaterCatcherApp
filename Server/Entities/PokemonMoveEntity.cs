@@ -19,6 +19,8 @@ public class PokemonMoveEntity
     [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
     public string MoveDescription { get; set; } = string.Empty;
 
+    public int Accuracy { get; set; }
+
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "PP Must be Greater than or equal to one.")]
     public int MoveBasePP { get; set; }
@@ -40,6 +42,8 @@ public class PokemonMoveEntity
     public bool MoveAppliesAStatusCondition { get; set; }
 
     [ForeignKey(nameof(StatusCondition))]
-    public int StatusConditionId { get; set; }
+    public int? StatusConditionId { get; set; }
     public StatusConditionEntity? StatusCondition { get; set; }
+
+    
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+using Duende.IdentityServer.EntityFramework.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace PokemonCatcherGame.Server.Entities;
 

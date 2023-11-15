@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using PokemonCatcherGame.Server.Data;
 using PokemonCatcherGame.Server.Entities;
+using PokemonCatcherGame.Server.Services.PokemonServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ var connectionString = builder.Configuration.GetConnectionString("PokemonDB") ??
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddScoped<IPokemonService, PokemonService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();

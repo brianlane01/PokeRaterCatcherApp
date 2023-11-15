@@ -18,7 +18,7 @@ public class PokeBallEntity
     public string DescriptionOfPokeBall { get; set; } = string.Empty;
 
     [Required]
-    public decimal CatchRate { get; set; }
+    public double CatchRate { get; set; }
 
     public ICollection<PlayerItemInventoryEntity> PlayerInventory { get; set; }
 

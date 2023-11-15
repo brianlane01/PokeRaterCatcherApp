@@ -18,7 +18,7 @@ public class PlayerEntity
     public string Name { get; set; } = string.Empty;
 
     [ForeignKey(nameof(User))]
-    public int UserId { get; set; }
+    public string UserId { get; set; } =string.Empty;
     public virtual ApplicationUser? User {get; set;}
 
     [ForeignKey(nameof(ItemInventory))]
