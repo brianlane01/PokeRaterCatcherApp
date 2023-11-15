@@ -74,7 +74,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             {
                 Id = 1006,
                 AbilityName = "Sand-Veil",
-                AbilityEffect = "During a sandstorm, this Pokémon has 1.25× its evasion, and it does not take sandstorm damage regardless of type. The evasion bonus does not count as a stat modifier. Overworld: If the lead Pokémon has this ability, the wild encounter rate is halved in a sandstorm.",
+                AbilityEffect = "During a sandstorm, this Pokémon has 1.25xits evasion, and it does not take sandstorm damage regardless of type. The evasion bonus does not count as a stat modifier. Overworld: If the lead Pokémon has this ability, the wild encounter rate is halved in a sandstorm.",
             },
             new PokemonAbilityEntity 
             {
@@ -110,7 +110,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             {
                 Id = 1012,
                 AbilityName = "Compound-Eyes",
-                AbilityEffect = "This Pokémon's moves have 1.3× their accuracy. This ability has no effect on the one-hit KO moves (fissure, guillotine, horn drill, and sheer cold). Overworld: If the first Pokémon in the party has this ability, the chance of a wild Pokémon holding a particular item is raised from 50%, 5%, or 1% to 60%, 20%, or 5%, respectively.",
+                AbilityEffect = "This Pokémon's moves have 1.3xtheir accuracy. This ability has no effect on the one-hit KO moves (fissure, guillotine, horn drill, and sheer cold). Overworld: If the first Pokémon in the party has this ability, the chance of a wild Pokémon holding a particular item is raised from 50%, 5%, or 1% to 60%, 20%, or 5%, respectively.",
             },
             new PokemonAbilityEntity 
             {
@@ -134,7 +134,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             {
                 Id = 1016,
                 AbilityName = "Flash-Fire",
-                AbilityEffect = "This Pokémon is immune to fire-type moves. Once this Pokémon has been hit by a Fire move, its own Fire moves will inflict 1.5× as much damage until it leaves battle. This ability has no effect while the Pokémon is frozen. The Fire damage bonus is retained even if the Pokémon is frozen and thawed or the ability is lost or disabled. Fire moves will ignore this Pokémon's substitute. This ability takes effect even on non-damaging moves, i.e. will o wisp.",
+                AbilityEffect = "This Pokémon is immune to fire-type moves. Once this Pokémon has been hit by a Fire move, its own Fire moves will inflict 1.5xas much damage until it leaves battle. This ability has no effect while the Pokémon is frozen. The Fire damage bonus is retained even if the Pokémon is frozen and thawed or the ability is lost or disabled. Fire moves will ignore this Pokémon's substitute. This ability takes effect even on non-damaging moves, i.e. will o wisp.",
             },
             new PokemonAbilityEntity 
             {
@@ -270,6 +270,291 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             }
         );
         
+        modelBuilder.Entity<PokemonTypeEntity>().HasData(
+            new PokemonTypeEntity 
+            {
+                Id = 1000,
+                PokeType = "Normal",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1001,
+                PokeType = "Fighting",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1002,
+                PokeType = "Flying",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1003,
+                PokeType = "Poison",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1004,
+                PokeType = "Ground",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1005,
+                PokeType = "Rock",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1006,
+                PokeType = "Bug",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1007,
+                PokeType = "Ghost",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1008,
+                PokeType = "Steel",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1009,
+                PokeType = "Fire",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1010,
+                PokeType = "Water",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1011,
+                PokeType = "Grass",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1012,
+                PokeType = "Electric",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1013,
+                PokeType = "Psychic",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1014,
+                PokeType = "Ice",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1015,
+                PokeType = "Dragon",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1016,
+                PokeType = "Dark",
+            },
+            new PokemonTypeEntity 
+            {
+                Id = 1017,
+                PokeType = "Fairy",
+            }
+        );
+
+        modelBuilder.Entity<PokeBallEntity>().HasData(
+            new PokeBallEntity
+            {
+                Id = 1001,
+                NameOfBall = "Poke Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1x. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 0.25,
+            },
+            new PokeBallEntity
+            {
+                Id = 1002,
+                NameOfBall = "Great Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1.5x. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 0.50,
+            },
+            new PokeBallEntity
+            {
+                Id = 1003,
+                NameOfBall = "Ultra Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 2x. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 0.75,
+            },
+            new PokeBallEntity
+            {
+                Id = 1004,
+                NameOfBall = "Master Ball",
+                DescriptionOfPokeBall = "Used in battle : Catches a wild Pokémon without fail. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 100,
+            },
+            new PokeBallEntity
+            {
+                Id = 1005,
+                NameOfBall = "Safari Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1.5x. This item can only be used in the great marsh or kanto safari zone.",
+                CatchRate = .50,
+            },
+            new PokeBallEntity
+            {
+                Id = 1006,
+                NameOfBall = "Net Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon. If the wild Pokémon is water- or bug-type, this ball has a catch rate of 3x. Otherwise, it has a catch rate of 1x. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 1.25,
+            },
+            new PokeBallEntity
+            {
+                Id = 1007,
+                NameOfBall = "Dive Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon. If the wild Pokémon was encountered by surfing or fishing, this ball has a catch rate of 3.5x. Otherwise, it has a catch rate of 1x. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 1.5,
+            },
+            new PokeBallEntity
+            {
+                Id = 1008,
+                NameOfBall = "Nest Ball",
+                DescriptionOfPokeBall = "Attempts to catch a wild Pokémon. Has a catch rate of given by `(40 - level) / 10`, where `level` is the wild Pokémon's level, to a maximum of 3.9xfor level 1 Pokémon. If the wild Pokémon's level is higher than 30, this ball has a catch rate of 1x.",
+                CatchRate = 1.85,
+            },
+            new PokeBallEntity
+            {
+                Id = 1009,
+                NameOfBall = "Repeat Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon. If the wild Pokémon's species is marked as caught in the trainer's Pokédex, this ball has a catch rate of 3x. Otherwise, it has a catch rate of 1x. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 1.25,
+            },
+            new PokeBallEntity
+            {
+                Id = 1010,
+                NameOfBall = "Timer ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon. Has a catch rate of 1.1x on the first turn of the battle and increases by 0.1x every turn, to a maximum of 4xon turn 30. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 1.25,
+            },
+            new PokeBallEntity
+            {
+                Id = 1011,
+                NameOfBall = "Luxury Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1x. Whenever the caught Pokémon's happiness increases, it increases by one extra point. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 0.25,
+            },
+            new PokeBallEntity
+            {
+                Id = 1012,
+                NameOfBall = "Premier Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1×. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 0.25,
+            },
+            new PokeBallEntity
+            {
+                Id = 1013,
+                NameOfBall = "Dusk Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon. If it's currently nighttime or the wild Pokémon was encountered while walking in a cave, this ball has a catch rate of 3.5×. Otherwise, it has a catch rate of 1×. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 1.50,
+            },
+            new PokeBallEntity
+            {
+                Id = 1014,
+                NameOfBall = "Heal Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1×. The caught Pokémon's HP is immediately restored, PP for all its moves is restored, and any status ailment is cured. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 0.25,
+            },
+            new PokeBallEntity
+            {
+                Id = 1015,
+                NameOfBall = "Quick Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 4× on the first turn of a battle, but 1× any other time. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 2.00,
+            },
+            new PokeBallEntity
+            {
+                Id = 1016,
+                NameOfBall = "Cherish Ball",
+                DescriptionOfPokeBall = "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1×. If used in a trainer battle, nothing happens and the ball is lost.",
+                CatchRate = 0.25,
+            }
+        );
+
+        modelBuilder.Entity<StatusConditionEntity>().HasData(
+            new StatusConditionEntity
+            {
+                Id = 1001,
+                StatusConditionName = "Paralysis",
+                StatusConditionDescription = "The Pokémon afflicted Speed stat is reduced to 50% of it's maximum. The Pokémon has a 25% chance of being unable to attack each turn",
+                ConditionDoesDamage = false,
+                DamageAmount = 0,
+                DamageFrequency = "Last for four turns.",
+                ParalysisEffect = true,
+                BurnEffect = false,
+                FreezeEffect = false,
+                SleepEffect = false,
+                PoisonEffect = false,
+                ConditionDuration = "The affect lasts four turns, unless it is removed by an item."
+            },
+            new StatusConditionEntity
+            {
+                Id = 1002,
+                StatusConditionName = "Burn",
+                StatusConditionDescription = "The pokemon is afflicted with a severe burn. Each turn, the Pokémon afflicted with the Burn loses 1/8th of it's Max HP.",
+                ConditionDoesDamage = true,
+                DamageAmount = 15,
+                DamageFrequency = "Last until healed or pokemon faints.",
+                ParalysisEffect = false,
+                BurnEffect = true,
+                FreezeEffect = false,
+                SleepEffect = false,
+                PoisonEffect = false,
+                ConditionDuration = "Last until healed or pokemon faints."
+            },
+            new StatusConditionEntity
+            {
+                Id = 1003,
+                StatusConditionName = "Freeze ",
+                StatusConditionDescription = "The Pokemon is frozen solid. The Pokémon cannot use any attacks (apart from those that thaw it)",
+                ConditionDoesDamage = false,
+                DamageAmount = 0,
+                DamageFrequency = "Last for four turns.",
+                ParalysisEffect = false,
+                BurnEffect = false,
+                FreezeEffect = true,
+                SleepEffect = false,
+                PoisonEffect = false,
+                ConditionDuration = "The affect lasts four turns, unless it is removed by an item."
+            },
+            new StatusConditionEntity
+            {
+                Id = 1004,
+                StatusConditionName = "Poison",
+                StatusConditionDescription = "Poisons the targeted pokemon gradually lowering the Pokémon's Hit Points until the Pokémon faint.",
+                ConditionDoesDamage = true,
+                DamageAmount = 15,
+                DamageFrequency = "Last until the Pokemon is healed or the Pokemon Faints.",
+                ParalysisEffect = false,
+                BurnEffect = false,
+                FreezeEffect = false,
+                SleepEffect = false,
+                PoisonEffect = true,
+                ConditionDuration = "Last until the Pokemon is healed or the Pokemon Faints."
+            },
+            new StatusConditionEntity
+            {
+                Id = 1005,
+                StatusConditionName = "Sleep",
+                StatusConditionDescription = "The targeted Pokemon is put to sleep for up to seven turns. The pokemon is not able to use any moves while asleep.",
+                ConditionDoesDamage = false,
+                DamageAmount = 0,
+                DamageFrequency = "Last for up to seven turns unless removed.",
+                ParalysisEffect = false,
+                BurnEffect = false,
+                FreezeEffect = false,
+                SleepEffect = true,
+                PoisonEffect = false,
+                ConditionDuration = "Last for up to seven turns unless removed."
+            }
+        );
     }
 
 }

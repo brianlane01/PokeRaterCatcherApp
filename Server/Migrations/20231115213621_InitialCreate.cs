@@ -142,7 +142,7 @@ namespace PokemonCatcherGame.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NameOfBall = table.Column<string>(type: "nvarchar(55)", maxLength: 55, nullable: false),
-                    DescriptionOfPokeBall = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    DescriptionOfPokeBall = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     CatchRate = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
@@ -203,7 +203,7 @@ namespace PokemonCatcherGame.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StatusCondittionName = table.Column<string>(type: "nvarchar(55)", maxLength: 55, nullable: false),
+                    StatusConditionName = table.Column<string>(type: "nvarchar(55)", maxLength: 55, nullable: false),
                     StatusConditionDescription = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     ConditionDoesDamage = table.Column<bool>(type: "bit", nullable: false),
                     DamageAmount = table.Column<double>(type: "float", nullable: false),
@@ -615,6 +615,29 @@ namespace PokemonCatcherGame.Server.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "PokeBalls",
+                columns: new[] { "Id", "CatchRate", "DescriptionOfPokeBall", "NameOfBall" },
+                values: new object[,]
+                {
+                    { 1001, 0.25, "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1x. If used in a trainer battle, nothing happens and the ball is lost.", "Poke Ball" },
+                    { 1002, 0.5, "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1.5x. If used in a trainer battle, nothing happens and the ball is lost.", "Great Ball" },
+                    { 1003, 0.75, "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 2x. If used in a trainer battle, nothing happens and the ball is lost.", "Ultra Ball" },
+                    { 1004, 100.0, "Used in battle : Catches a wild Pokémon without fail. If used in a trainer battle, nothing happens and the ball is lost.", "Master Ball" },
+                    { 1005, 0.5, "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1.5x. This item can only be used in the great marsh or kanto safari zone.", "Safari Ball" },
+                    { 1006, 1.25, "Used in battle : Attempts to catch a wild Pokémon. If the wild Pokémon is water- or bug-type, this ball has a catch rate of 3x. Otherwise, it has a catch rate of 1x. If used in a trainer battle, nothing happens and the ball is lost.", "Net Ball" },
+                    { 1007, 1.5, "Used in battle : Attempts to catch a wild Pokémon. If the wild Pokémon was encountered by surfing or fishing, this ball has a catch rate of 3.5x. Otherwise, it has a catch rate of 1x. If used in a trainer battle, nothing happens and the ball is lost.", "Dive Ball" },
+                    { 1008, 1.8500000000000001, "Attempts to catch a wild Pokémon. Has a catch rate of given by `(40 - level) / 10`, where `level` is the wild Pokémon's level, to a maximum of 3.9xfor level 1 Pokémon. If the wild Pokémon's level is higher than 30, this ball has a catch rate of 1x.", "Nest Ball" },
+                    { 1009, 1.25, "Used in battle : Attempts to catch a wild Pokémon. If the wild Pokémon's species is marked as caught in the trainer's Pokédex, this ball has a catch rate of 3x. Otherwise, it has a catch rate of 1x. If used in a trainer battle, nothing happens and the ball is lost.", "Repeat Ball" },
+                    { 1010, 1.25, "Used in battle : Attempts to catch a wild Pokémon. Has a catch rate of 1.1x on the first turn of the battle and increases by 0.1x every turn, to a maximum of 4xon turn 30. If used in a trainer battle, nothing happens and the ball is lost.", "Timer ball" },
+                    { 1011, 0.25, "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1x. Whenever the caught Pokémon's happiness increases, it increases by one extra point. If used in a trainer battle, nothing happens and the ball is lost.", "Luxury Ball" },
+                    { 1012, 0.25, "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1×. If used in a trainer battle, nothing happens and the ball is lost.", "Premier Ball" },
+                    { 1013, 1.5, "Used in battle : Attempts to catch a wild Pokémon. If it's currently nighttime or the wild Pokémon was encountered while walking in a cave, this ball has a catch rate of 3.5×. Otherwise, it has a catch rate of 1×. If used in a trainer battle, nothing happens and the ball is lost.", "Dusk Ball" },
+                    { 1014, 0.25, "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1×. The caught Pokémon's HP is immediately restored, PP for all its moves is restored, and any status ailment is cured. If used in a trainer battle, nothing happens and the ball is lost.", "Heal Ball" },
+                    { 1015, 2.0, "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 4× on the first turn of a battle, but 1× any other time. If used in a trainer battle, nothing happens and the ball is lost.", "Quick Ball" },
+                    { 1016, 0.25, "Used in battle : Attempts to catch a wild Pokémon, using a catch rate of 1×. If used in a trainer battle, nothing happens and the ball is lost.", "Cherish Ball" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "PokemonAbilities",
                 columns: new[] { "Id", "AbilityEffect", "AbilityName", "PokemonEntityId" },
                 values: new object[,]
@@ -625,17 +648,17 @@ namespace PokemonCatcherGame.Server.Migrations
                     { 1003, "This Pokémon's Speed rises one stage after each turn.", "Battle-Armor", null },
                     { 1004, "When this Pokémon is at full HP, any hit that would knock it out will instead leave it with 1 HP. Regardless of its current HP, it is also immune to the one-hit KO moves: fissure, guillotine, horn drill, and sheer cold. If this Pokémon is holding a focus sash, this ability takes precedence and the item will not be consumed.", "Sturdy", null },
                     { 1005, "While this Pokémon is in battle, self destruct and explosion will fail and aftermath will not take effect.", "Damp", null },
-                    { 1006, "During a sandstorm, this Pokémon has 1.25× its evasion, and it does not take sandstorm damage regardless of type. The evasion bonus does not count as a stat modifier. Overworld: If the lead Pokémon has this ability, the wild encounter rate is halved in a sandstorm.", "Sand-Veil", null },
+                    { 1006, "During a sandstorm, this Pokémon has 1.25xits evasion, and it does not take sandstorm damage regardless of type. The evasion bonus does not count as a stat modifier. Overworld: If the lead Pokémon has this ability, the wild encounter rate is halved in a sandstorm.", "Sand-Veil", null },
                     { 1007, "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being paralyzed. Pokémon that are immune to electric-type moves can still be paralyzed by this ability. Overworld: If the lead Pokémon has this ability, there is a 50% chance that encounters will be with an electric Pokémon, if applicable.", "Static", null },
                     { 1008, "Whenever an electric-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it. This ability will not take effect if this Pokémon is ground-type and thus immune to Electric moves. Electric moves will ignore this Pokémon's substitute. This effect includes non-damaging moves, i.e. thunder wave.", "Volt-Absorb", null },
                     { 1009, "Whenever a water-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it. Water moves will ignore this Pokémon's substitute.", "Water-Absorb", null },
                     { 1010, "Whenever a water-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it. Water moves will ignore this Pokémon's substitute.", "Water-Absorb", null },
                     { 1011, "This Pokémon cannot be infatuated and is immune to captivate. If a Pokémon is infatuated and acquires this ability, its infatuation is cleared.", "Oblivious", null },
-                    { 1012, "This Pokémon's moves have 1.3× their accuracy. This ability has no effect on the one-hit KO moves (fissure, guillotine, horn drill, and sheer cold). Overworld: If the first Pokémon in the party has this ability, the chance of a wild Pokémon holding a particular item is raised from 50%, 5%, or 1% to 60%, 20%, or 5%, respectively.", "Compound-Eyes", null },
+                    { 1012, "This Pokémon's moves have 1.3xtheir accuracy. This ability has no effect on the one-hit KO moves (fissure, guillotine, horn drill, and sheer cold). Overworld: If the first Pokémon in the party has this ability, the chance of a wild Pokémon holding a particular item is raised from 50%, 5%, or 1% to 60%, 20%, or 5%, respectively.", "Compound-Eyes", null },
                     { 1013, "This Pokémon cannot be asleep. This causes rest to fail altogether. If a Pokémon is asleep and acquires this ability, it will immediately wake up; this includes when regaining a lost ability upon leaving battle. This ability functions identically to vital spirit in battle.", "Insomnia", null },
                     { 1014, "Whenever this Pokémon takes damage from a move, the Pokémon's type changes to match the move. If the Pokémon has two types, both are overridden. The Pokémon must directly take damage; for example, moves blocked by a substitute will not trigger this ability, nor will moves that deal damage indirectly, such as spikes. This ability takes effect on only the last hit of a multiple-hit attack.", "Color-Change", null },
                     { 1015, "This Pokémon cannot be poisoned. This includes bad poison. If a Pokémon is poisoned and acquires this ability, its poison is healed; this includes when regaining a lost ability upon leaving battle.", "Immunity", null },
-                    { 1016, "This Pokémon is immune to fire-type moves. Once this Pokémon has been hit by a Fire move, its own Fire moves will inflict 1.5× as much damage until it leaves battle. This ability has no effect while the Pokémon is frozen. The Fire damage bonus is retained even if the Pokémon is frozen and thawed or the ability is lost or disabled. Fire moves will ignore this Pokémon's substitute. This ability takes effect even on non-damaging moves, i.e. will o wisp.", "Flash-Fire", null },
+                    { 1016, "This Pokémon is immune to fire-type moves. Once this Pokémon has been hit by a Fire move, its own Fire moves will inflict 1.5xas much damage until it leaves battle. This ability has no effect while the Pokémon is frozen. The Fire damage bonus is retained even if the Pokémon is frozen and thawed or the ability is lost or disabled. Fire moves will ignore this Pokémon's substitute. This ability takes effect even on non-damaging moves, i.e. will o wisp.", "Flash-Fire", null },
                     { 1017, "This Pokémon cannot be confused. If a Pokémon is confused and acquires this ability, its confusion will immediately be healed.", "Own-Tempo", null },
                     { 1018, "When this Pokémon enters battle, the opponent's Attack is lowered by one stage. In a double battle, both opponents are affected. This ability also takes effect when acquired during a battle, but will not take effect again if lost and reobtained without leaving battle. This ability has no effect on an opponent that has a substitute. Overworld: If the first Pokémon in the party has this ability, any random encounter with a Pokémon five or more levels lower than it has a 50% chance of being skipped.", "Intimidate", null },
                     { 1019, "Whenever a move makes contact with this Pokémon, the move's user takes 1/8 of its maximum HP in damage. This ability functions identically to iron barbs.", "Rough-Skin", null },
@@ -658,6 +681,43 @@ namespace PokemonCatcherGame.Server.Migrations
                     { 1036, "After each turn, this Pokémon has a 33% of being cured of any major status ailment.", "Shed-Skin", null },
                     { 1037, "Whenever a Pokémon would heal after hitting this Pokémon with a leeching move like absorb, it instead loses as many HP as it would usually gain. dream eater is unaffected.", "Liquid-Ooze", null },
                     { 1038, "Whenever a Pokémon would heal after hitting this Pokémon with a leeching move like absorb, it instead loses as many HP as it would usually gain. dream eater is unaffected.", "Liquid-Ooze", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PokemonTypes",
+                columns: new[] { "Id", "PokeType" },
+                values: new object[,]
+                {
+                    { 1000, "Normal" },
+                    { 1001, "Fighting" },
+                    { 1002, "Flying" },
+                    { 1003, "Poison" },
+                    { 1004, "Ground" },
+                    { 1005, "Rock" },
+                    { 1006, "Bug" },
+                    { 1007, "Ghost" },
+                    { 1008, "Steel" },
+                    { 1009, "Fire" },
+                    { 1010, "Water" },
+                    { 1011, "Grass" },
+                    { 1012, "Electric" },
+                    { 1013, "Psychic" },
+                    { 1014, "Ice" },
+                    { 1015, "Dragon" },
+                    { 1016, "Dark" },
+                    { 1017, "Fairy" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "StatusConditions",
+                columns: new[] { "Id", "BurnEffect", "ConditionDoesDamage", "ConditionDuration", "DamageAmount", "DamageFrequency", "FreezeEffect", "ParalysisEffect", "PoisonEffect", "SleepEffect", "StatusConditionDescription", "StatusConditionName" },
+                values: new object[,]
+                {
+                    { 1001, false, false, "The affect lasts four turns, unless it is removed by an item.", 0.0, "Last for four turns.", false, true, false, false, "The Pokémon afflicted Speed stat is reduced to 50% of it's maximum. The Pokémon has a 25% chance of being unable to attack each turn", "Paralysis" },
+                    { 1002, true, true, "Last until healed or pokemon faints.", 15.0, "Last until healed or pokemon faints.", false, false, false, false, "The pokemon is afflicted with a severe burn. Each turn, the Pokémon afflicted with the Burn loses 1/8th of it's Max HP.", "Burn" },
+                    { 1003, false, false, "The affect lasts four turns, unless it is removed by an item.", 0.0, "Last for four turns.", true, false, false, false, "The Pokemon is frozen solid. The Pokémon cannot use any attacks (apart from those that thaw it)", "Freeze " },
+                    { 1004, false, true, "Last until the Pokemon is healed or the Pokemon Faints.", 15.0, "Last until the Pokemon is healed or the Pokemon Faints.", false, false, true, false, "Poisons the targeted pokemon gradually lowering the Pokémon's Hit Points until the Pokémon faint.", "Poison" },
+                    { 1005, false, false, "Last for up to seven turns unless removed.", 0.0, "Last for up to seven turns unless removed.", false, false, false, true, "The targeted Pokemon is put to sleep for up to seven turns. The pokemon is not able to use any moves while asleep.", "Sleep" }
                 });
 
             migrationBuilder.CreateIndex(

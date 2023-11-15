@@ -14,7 +14,7 @@ public class PokeBallEntity
     [Required, MinLength(4), MaxLength(55)]
     public string NameOfBall { get; set; } = string.Empty;
 
-    [Required, MinLength(4), MaxLength(250)]
+    [Required, MinLength(4), MaxLength(1000)]
     public string DescriptionOfPokeBall { get; set; } = string.Empty;
 
     [Required]
