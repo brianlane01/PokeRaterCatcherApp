@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace PokemonCatcherGame.Shared.Models.PokemonMoveModels;
 
+//* this is the detail for the information that is being sent back from the PokeApi.....
 public class PokemonMoveDetail
 {
     [JsonProperty("id")]
@@ -16,7 +13,13 @@ public class PokemonMoveDetail
 
     [JsonProperty("accuracy")]
     [JsonPropertyName("accuracy")]
-    public int Accuracy { get; set; }
+    public int? AccuracyPokeApi { get; set; }
+
+    public int Accuracy 
+    {
+        get { return AccuracyPokeApi == null ? 0 : (int)AccuracyPokeApi;} 
+        set {AccuracyPokeApi = value;}
+    }
 
     [JsonProperty("name")]
     [JsonPropertyName("name")]
@@ -26,7 +29,13 @@ public class PokemonMoveDetail
     [JsonPropertyName("power")]
     [Required]
     [Range(0, int.MaxValue, ErrorMessage = "Power Must be Greater than or equal to zero.")]
-    public int MovePower { get; set; }
+    public int? MovePowerPokeApi { get; set; }
+
+    public int MovePower 
+    {
+        get {return MovePowerPokeApi == null ? 0 : (int)MovePowerPokeApi;}
+        set {MovePowerPokeApi = value;}
+    }
 
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "PP Must be Greater than or equal to one.")]

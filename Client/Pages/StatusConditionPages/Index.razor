@@ -1,0 +1,44 @@
+@page "/StatusCondition"
+@using PokemonCatcherGame.Shared.Models.StatusConditionModels
+@inject HttpClient httpClient
+@attribute [Authorize]
+
+<PageTitle>Index</PageTitle>
+<h3>Status Conditions that can affect Pokémon</h3>
+
+@code{
+    private List<StatusConditionList> statusConditions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        statusConditions = await httpClient.GetFromJsonAsync<List<StatusConditionList>>("/api/StatusCondition");
+    }
+}
+
+@if (statusConditions == null)
+{
+    <p><em>Loading. . . </em></p>
+}
+else
+{
+    <table class = "table table-striped table-dark table-hover table-bordered border-danger">
+        <thead>
+            <tr>
+                <th>Identifier for Status Condition</th>
+                <th>Name of Status Condition</th>
+                <th>Description of Status Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(StatusConditionList statusCondition in statusConditions)
+            {
+                <tr>
+                    <td class ="text-center">@statusCondition.Id</td>
+                    <td>@statusCondition.StatusConditionName</td>
+                    <td>@statusCondition.StatusConditionDescription</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}

@@ -8,6 +8,6 @@ namespace PokemonCatcherGame.Shared.Models.StatusConditionModels;
 public class StatusConditionList
 {
     public int Id { get; set; }
-    public string StatusCondittionName { get; set; } = string.Empty;
+    public string StatusConditionName { get; set; } = string.Empty;
     public string StatusConditionDescription { get; set; } = string.Empty;
 }

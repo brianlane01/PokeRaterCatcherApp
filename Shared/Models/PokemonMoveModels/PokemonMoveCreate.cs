@@ -11,13 +11,13 @@ namespace PokemonCatcherGame.Shared.Models.PokemonMoveModels;
 public class PokemonMoveCreate
 {
     public int PokeApiMoveId { get; set; }
-    public int Accuracy { get; set; }
+    public int? Accuracy { get; set; }
 
     public string MoveName { get; set; } = string.Empty;
 
     [Required]
     [Range(0, int.MaxValue, ErrorMessage = "Power Must be Greater than or equal to zero.")]
-    public int MovePower { get; set; }
+    public int? MovePower { get; set; }
 
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "PP Must be Greater than or equal to one.")]
@@ -26,7 +26,6 @@ public class PokemonMoveCreate
     public string MoveType { get; set; } = string.Empty;
 
     [Required, MinLength(3), MaxLength(200)]
-    [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
     public string MoveDescription { get; set; } = string.Empty;
 
     [Required]

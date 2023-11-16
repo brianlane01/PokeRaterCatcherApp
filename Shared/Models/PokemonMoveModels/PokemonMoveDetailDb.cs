@@ -1,49 +1,25 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Server.Entities;
+namespace Shared.Models.PokemonMoveModels;
 
-public class PokemonMoveEntity
+//* This is the detail coming back from the Database for this project
+public class PokemonMoveDetailDb
 {
-    [Key]
     public int Id { get; set; }
-
-    [Required]
     public int PokeApiMoveId { get; set; }
-
-    [Required]
     public string MoveName { get; set; } = string.Empty;
-
-    [Required, MinLength(3), MaxLength(200)]
     public string MoveDescription { get; set; } = string.Empty;
-
     public int? Accuracy { get; set; }
-
-    [Required]
-    [Range(1, int.MaxValue, ErrorMessage = "PP Must be Greater than or equal to one.")]
     public int MoveBasePP { get; set; }
-
-    [Range(0, int.MaxValue, ErrorMessage = "Power Must be Greater than or equal to zero.")]
     public int? MovePower { get; set; }
-
-    [Required, MinLength(3), MaxLength(55)]
     public string MoveType { get; set; } = string.Empty;
-
-    [Required]
     public bool MoveRestoresHealth { get; set; }
-
-    [Range(1, 300)]
     public int HealthRestorationAmount { get; set; }
-
-    [Required]
     public bool MoveAppliesAStatusCondition { get; set; }
-
-    [ForeignKey(nameof(StatusCondition))]
     public int? StatusConditionId { get; set; }
-    public virtual StatusConditionEntity? StatusCondition { get; set; }
-
+    public string StatusConditionName { get; set; } = string.Empty;
+    public string StatusConditionDescription { get; set; } = string.Empty;
 }

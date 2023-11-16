@@ -537,11 +537,12 @@ namespace PokemonCatcherGame.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PokeApiMoveId = table.Column<int>(type: "int", nullable: false),
                     MoveName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MoveDescription = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Accuracy = table.Column<int>(type: "int", nullable: false),
+                    Accuracy = table.Column<int>(type: "int", nullable: true),
                     MoveBasePP = table.Column<int>(type: "int", nullable: false),
-                    MovePower = table.Column<int>(type: "int", nullable: false),
+                    MovePower = table.Column<int>(type: "int", nullable: true),
                     MoveType = table.Column<string>(type: "nvarchar(55)", maxLength: 55, nullable: false),
                     MoveRestoresHealth = table.Column<bool>(type: "bit", nullable: false),
                     HealthRestorationAmount = table.Column<int>(type: "int", nullable: false),

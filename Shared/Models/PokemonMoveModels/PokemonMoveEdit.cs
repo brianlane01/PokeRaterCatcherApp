@@ -1,24 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Server.Entities;
+namespace PokemonCatcherGame.Shared.Models.PokemonMoveModels;
 
-public class PokemonMoveEntity
+public class PokemonMoveEdit
 {
-    [Key]
     public int Id { get; set; }
-
-    [Required]
-    public int PokeApiMoveId { get; set; }
 
     [Required]
     public string MoveName { get; set; } = string.Empty;
 
     [Required, MinLength(3), MaxLength(200)]
+    [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
     public string MoveDescription { get; set; } = string.Empty;
 
     public int? Accuracy { get; set; }
@@ -41,9 +37,7 @@ public class PokemonMoveEntity
 
     [Required]
     public bool MoveAppliesAStatusCondition { get; set; }
-
-    [ForeignKey(nameof(StatusCondition))]
+    
     public int? StatusConditionId { get; set; }
-    public virtual StatusConditionEntity? StatusCondition { get; set; }
 
 }

@@ -12,7 +12,7 @@ namespace PokemonCatcherGame.Server.Services.PokemonServices;
 public class PokemonService : IPokemonService
 {
     private readonly ApplicationDbContext _dbContext;
-    private string _userId;
+    private string? _userId;
 
     public PokemonService(ApplicationDbContext dbContext)
     {

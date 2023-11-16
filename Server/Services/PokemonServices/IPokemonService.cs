@@ -10,8 +10,8 @@ public interface IPokemonService
 {
     Task<bool> CreatePokemonAsync(PokemonCreate model);
     Task<List<PokemonList>> GetAllPokemonAsync();
-    Task<PokemonDetail?> GetPokemonByIdAsync(int noteId);
+    Task<PokemonDetail?> GetPokemonByIdAsync(int id);
     Task<bool> UpdatePokemonAsync(PokemonEdit request);
-    Task<bool> DeletePokemonAsync(int noteId);
+    Task<bool> DeletePokemonAsync(int id);
     void SetUserId(string userId);
 }

@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using PokemonCatcherGame.Server.Data;
 using PokemonCatcherGame.Server.Entities;
+using PokemonCatcherGame.Server.Services.PokemonMoveServices;
 using PokemonCatcherGame.Server.Services.PokemonServices;
+using PokemonCatcherGame.Server.Services.PokemonTypeServices;
+using PokemonCatcherGame.Server.Services.StatusConditionServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddScoped<IPokemonService, PokemonService>();
+builder.Services.AddScoped<IStatusConditionService, StatusConditionService>();
+builder.Services.AddScoped<IPokemonTypeService, PokemonTypeService>();
+builder.Services.AddScoped<IPokemonMoveService, PokemonMoveService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();

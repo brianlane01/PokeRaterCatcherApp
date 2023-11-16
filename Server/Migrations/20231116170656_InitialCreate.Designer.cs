@@ -12,7 +12,7 @@ using PokemonCatcherGame.Server.Data;
 namespace PokemonCatcherGame.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231115213621_InitialCreate")]
+    [Migration("20231116170656_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -988,7 +988,7 @@ namespace PokemonCatcherGame.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Accuracy")
+                    b.Property<int?>("Accuracy")
                         .HasColumnType("int");
 
                     b.Property<int>("HealthRestorationAmount")
@@ -1009,7 +1009,7 @@ namespace PokemonCatcherGame.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MovePower")
+                    b.Property<int?>("MovePower")
                         .HasColumnType("int");
 
                     b.Property<bool>("MoveRestoresHealth")
@@ -1019,6 +1019,9 @@ namespace PokemonCatcherGame.Server.Migrations
                         .IsRequired()
                         .HasMaxLength(55)
                         .HasColumnType("nvarchar(55)");
+
+                    b.Property<int>("PokeApiMoveId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("PokemonEntityId")
                         .HasColumnType("int");
