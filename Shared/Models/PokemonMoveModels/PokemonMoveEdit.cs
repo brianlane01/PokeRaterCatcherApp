@@ -14,7 +14,6 @@ public class PokemonMoveEdit
     public string MoveName { get; set; } = string.Empty;
 
     [Required, MinLength(3), MaxLength(200)]
-    [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
     public string MoveDescription { get; set; } = string.Empty;
 
     public int? Accuracy { get; set; }
@@ -32,7 +31,7 @@ public class PokemonMoveEdit
     [Required]
     public bool MoveRestoresHealth { get; set; }
 
-    [Range(1, 300)]
+    [Range(0, 300)]
     public int HealthRestorationAmount { get; set; }
 
     [Required]

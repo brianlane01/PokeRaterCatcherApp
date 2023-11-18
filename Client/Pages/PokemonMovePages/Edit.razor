@@ -1,0 +1,162 @@
+@page "/PokemonMove/Edit/{PokemonMoveId:int}"
+@using PokemonCatcherGame.Shared.Models.PokemonMoveModels
+@using PokemonCatcherGame.Shared.Models.StatusConditionModels
+@using PokemonCatcherGame.Shared.Models.PokemonTypeModels
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+
+@code{
+    [Parameter]
+    public int PokemonMoveId { get; set; }
+
+    public PokemonMoveEdit PokemonMove = new PokemonMoveEdit();
+
+    public List<StatusConditionList> StatusConditions;
+
+    public List<PokemonTypeList> types;
+
+    public string errorMessage { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        PokemonMove = await httpClient.GetFromJsonAsync<PokemonMoveEdit>($"api/PokemonMove/{PokemonMoveId}");
+        StatusConditions = await httpClient.GetFromJsonAsync<List<StatusConditionList>>($"api/StatusCondition");
+        types = await httpClient.GetFromJsonAsync<List<PokemonTypeList>>("/api/PokemonType");
+    }
+
+    private async void HandleSubmit()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to Update the Pokemon Move: " + PokemonMove?.MoveName);
+        if (confirmed)
+        {
+            var creatRes = await httpClient.PutAsJsonAsync<PokemonMoveEdit>("/api/PokemonMove/Edit/{PokemonMoveId}", PokemonMove);
+            if (creatRes.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo($"/PokemonMove/");
+            }
+            else
+            {
+                errorMessage = "Could not update the Pokemon Move right now. Please try again later.";
+            }
+        }
+    }
+
+    private async Task DeletePokemonMove()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the Pokemon Move: " + PokemonMove?.MoveName);
+        if (confirmed)
+        {
+            await httpClient.DeleteAsync($"api/PokemonMove/{PokemonMoveId}");
+            navigationManager.NavigateTo("/PokemonMove");
+        }
+    }
+
+    private async Task Cancel()
+    {
+        navigationManager.NavigateTo("/PokemonMove");
+    }
+}
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+<h3>Edit Move: @PokemonMove.MoveName</h3>
+
+@if(errorMessage != null)
+{
+    <h5 class="text-danger">@errorMessage</h5>
+}
+
+@if (StatusConditions == null)
+{
+    <p><em>Loading. . . . .</em></p>
+}
+else
+{
+    <div class="container">
+        <EditForm Model="@PokemonMove" OnValidSubmit="@HandleSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label>Move Name</label>
+                <br>
+                <input type="text" class="form-control" @bind="PokemonMove.MoveName" />
+                <br>
+                <label>Move Description</label>
+                <br>
+                <InputTextArea class="form-control" @bind-Value="PokemonMove.MoveDescription" />
+            </div>
+            <br>
+            <div class="form-group">
+                <label>Move Power</label>
+                <input type="number" class="form-control" @bind="PokemonMove.MovePower" />
+                <br>
+                <label>Move Accuracy</label>
+                <br>
+                <input type="number" class="form-control" @bind="PokemonMove.Accuracy" />
+                <br>
+                <label>Move Number of Uses</label>
+                <br>
+                <input type="number" class="form-control" @bind="PokemonMove.MoveBasePP" />
+            </div>
+            <br>
+            <div class="form-group">
+                <label>Does the move restore user's health?</label>
+                <label>Please select yes for true or no for false</label>
+                <InputRadioGroup Name= "MoveRestoresHealth" @bind-Value="@PokemonMove.MoveRestoresHealth">
+                <br>
+                <InputRadio Name= "MoveRestoresHealth" Value="@true" />Yes 
+                <InputRadio Name= "MoveRestoresHealth" Value="@false" />No <br>
+                </InputRadioGroup>
+            </div>
+            <br>
+            <div class="form-group">
+                <label>Health Restoration Amount</label>
+                <br>
+                <input type="number" class="form-control" @bind="PokemonMove.HealthRestorationAmount" />
+            </div>
+            <br />
+            <div>
+                <label id="TypeSelect">Select a Type for the move:</label>
+                <InputSelect class="form-control" @bind-Value="PokemonMove.MoveType" id="SelectionOfType">
+                    @foreach (var type in types)
+                            {
+                                <option value="@type.Id">@type.PokeType</option>
+                            }
+                </InputSelect>
+            </div>
+            <br>
+            <div class="form-group">
+                <label>Does the move apply a Status Condition to the opponent?</label>
+                <label>Please input either true or false</label>
+                <InputRadioGroup Name="AppliesStatusCondition" @bind-Value="@PokemonMove.MoveAppliesAStatusCondition">
+                <br>
+                <InputRadio Name= "AppliesStatusCondition" Value="@true" />Yes 
+                <InputRadio Name= "AppliesStatusCondition" Value="@false" />No <br>
+                </InputRadioGroup>
+            </div>
+            <br>
+            <div>
+                <label id="StatusConditionSelect">Select a Status Condition for the move if applicable:</label>
+                <InputSelect class="form-control" @bind-Value="PokemonMove.StatusConditionId">
+                <option vaule="">Status Condition Effect</option>
+                    @foreach (var statusCondition in StatusConditions)
+                            {
+                                <option value="@statusCondition.Id">@statusCondition.StatusConditionName</option>
+                            }
+                </InputSelect>
+            </div>
+            <button type="submit" class="btn btn-dark bt-block mt-5">Submit</button> 
+            <button type="submit" class="btn btn-dark bt-block mt-5" @onclick="DeletePokemonMove">Delete</button>
+            <button type="submit" class="btn btn-dark bt-block mt-5" @onclick="Cancel">Cancel</button>
+            </EditForm>
+    </div>
+}
+
