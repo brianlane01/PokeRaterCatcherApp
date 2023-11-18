@@ -56,4 +56,59 @@ public class PokemonController : ControllerBase
         else
             return UnprocessableEntity();
     }
+
+    [HttpGet]
+    public async Task<List<PokemonList>> Index()
+    {
+        if (!SetUserIdInService())
+            return new List<PokemonList>();
+
+        var pokemon = await _pokemonService.GetAllPokemonAsync();
+
+        return pokemon.ToList();
+    }
+
+    [HttpGet("{id}")]
+    public async Task<PokemonDetail?> Details(int id)
+    {
+        if (!SetUserIdInService())
+            return null;
+
+        var pokemon = await _pokemonService.GetPokemonByIdAsync(id);
+
+        return pokemon;
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, PokemonEdit model)
+    {
+        if (model == null)
+            return BadRequest();
+
+        if (!SetUserIdInService())
+            return Unauthorized();
+
+        bool wasSuccessful = await _pokemonService.UpdatePokemonAsync(model);
+
+        if (wasSuccessful)
+            return Ok();
+
+        else
+            return UnprocessableEntity();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        if (!SetUserIdInService())
+            return Unauthorized();
+
+        bool wasSuccessful = await _pokemonService.DeletePokemonAsync(id);
+
+        if (wasSuccessful)
+            return Ok();
+
+        else
+            return UnprocessableEntity();
+    }
 }

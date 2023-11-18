@@ -1,11 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Server.Entities;
@@ -20,6 +14,9 @@ public class PokemonEntity
 
     [Required]
     public string Name { get; set; } = string.Empty;
+
+    [Required]
+    public string PokeNickName { get; set; } = string.Empty;
 
     [Required]
     public int Weight { get; set; }
@@ -59,8 +56,14 @@ public class PokemonEntity
 
     public virtual ICollection<PokemonAbilityEntity> AbilitiesList { get; set; }
 
-    public PokemonEntity ()
+    public PokemonEntity()
     {
+        PokeTypeOne = new PokemonTypeEntity();
+        PokeTypeTwo = new PokemonTypeEntity();
+        MoveOne = new PokemonMoveEntity();
+        MoveTwo = new PokemonMoveEntity();
+        MoveThree = new PokemonMoveEntity();
+        MoveFour = new PokemonMoveEntity();
         AbilitiesList = new HashSet<PokemonAbilityEntity>();
     }
 

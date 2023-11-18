@@ -11,10 +11,7 @@ public class PokemonEdit
     public int Id { get; set; }
 
     [Required]
-    public int PokedexNumber { get; set; }
-
-    [Required]
-    public string Name { get; set; } = string.Empty;
+    public string PokeNickName { get; set; } = string.Empty;
 
     [Required]
     public int Weight { get; set; }

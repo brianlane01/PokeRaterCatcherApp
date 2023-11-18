@@ -16,6 +16,9 @@ public class PokemonCreate
     public string Name { get; set; } = string.Empty;
 
     [Required]
+    public string PokeNickName { get; set; } = string.Empty;
+
+    [Required]
     public int Weight { get; set; }
 
     [Required]
