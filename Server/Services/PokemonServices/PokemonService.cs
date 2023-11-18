@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using PokemonCatcherGame.Server.Data;
 using PokemonCatcherGame.Shared.Models.PokemonModels;
 using Server.Entities;
@@ -27,10 +28,19 @@ public class PokemonService : IPokemonService
             Name = model.Name,
             Height = model.Height,
             Weight = model.Weight,
-            BaseExperience = model.BaseExperience
+            BaseExperience = model.BaseExperience,
+            Health = model.Health,
+            PokeTypeIdOne = model.PokeTypeIdOne,
+            PokeTypeIdTwo = model.PokeTypeIdTwo,
+            MoveOneId = model.MoveOneId,
+            MoveTwoId = model.MoveTwoId,
+            MoveThreeId = model.MoveThreeId,
+            MoveFourId = model.MoveFourId
         };
         _dbContext.Pokemon.Add(entity);
         var numberOfChanges = await _dbContext.SaveChangesAsync();
+
+        AddAbilityToPokemon(model.AbilitiesList, entity.Id);
 
         return numberOfChanges == 1;
 
@@ -57,5 +67,20 @@ public class PokemonService : IPokemonService
     }
 
     public void SetUserId(string userId) => _userId = userId;
+
+    public void AddAbilityToPokemon(List<int> abilityIds, int pokeId)
+    {
+        var newPokemon = _dbContext.Pokemon.Include(c => c.AbilitiesList).Single(c => c.Id == pokeId);
+        foreach (var abilityId in abilityIds)
+        {
+            var newAbility = _dbContext.PokemonAbilities.Find(abilityId);
+            if (newAbility != null)
+            {
+                newPokemon.AbilitiesList.Add(newAbility);
+            }
+        }
+
+        _dbContext.SaveChanges();
+    }
 
 }

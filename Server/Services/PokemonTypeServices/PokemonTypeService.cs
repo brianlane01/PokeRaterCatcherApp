@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PokemonCatcherGame.Server.Data;
 using PokemonCatcherGame.Shared.Models.PokemonTypeModels;
+using Server.Entities;
 
 namespace PokemonCatcherGame.Server.Services.PokemonTypeServices;
 

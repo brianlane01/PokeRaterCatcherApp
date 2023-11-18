@@ -58,14 +58,10 @@ public class PokemonEntity
     public virtual PokemonMoveEntity MoveFour { get; set; }
 
     public virtual ICollection<PokemonAbilityEntity> AbilitiesList { get; set; }
-    public virtual ICollection<PokemonMoveEntity> Moves { get; set; }
-    public virtual ICollection<TechnicalMachineMoveEntity> TeachableMoves { get; set; }
 
     public PokemonEntity ()
     {
         AbilitiesList = new HashSet<PokemonAbilityEntity>();
-        Moves = new HashSet<PokemonMoveEntity>();
-        TeachableMoves = new HashSet<TechnicalMachineMoveEntity>();
     }
 
 }

@@ -20,40 +20,40 @@ public class PokemonController : ControllerBase
     }
 
     private string? GetUserId()
-        {
-            string userIdClaim = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+    {
+        string userIdClaim = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
 
-            if(userIdClaim == null) 
-                return null;
-            
-            return userIdClaim;
-        }
+        if (userIdClaim == null)
+            return null;
 
-        private bool SetUserIdInService()
-        {
-            var userId = GetUserId();
-            if(userId == null)
-                return false;
+        return userIdClaim;
+    }
 
-            _pokemonService.SetUserId(userId);
-            return true;
-        }
+    private bool SetUserIdInService()
+    {
+        var userId = GetUserId();
+        if (userId == null)
+            return false;
 
-        [HttpPost]
-        public async Task<IActionResult>  Create(PokemonCreate model)
-        {
-            if(model == null)
-                return BadRequest();
+        _pokemonService.SetUserId(userId);
+        return true;
+    }
 
-            if(!SetUserIdInService())
-                return Unauthorized();
+    [HttpPost]
+    public async Task<IActionResult> Create(PokemonCreate model)
+    {
+        if (model == null)
+            return BadRequest();
 
-            bool wasSuccessful = await _pokemonService.CreatePokemonAsync(model);
+        if (!SetUserIdInService())
+            return Unauthorized();
 
-            if(wasSuccessful)
-                return Ok ();
+        bool wasSuccessful = await _pokemonService.CreatePokemonAsync(model);
 
-            else    
-                return UnprocessableEntity();
-        }
+        if (wasSuccessful)
+            return Ok();
+
+        else
+            return UnprocessableEntity();
+    }
 }

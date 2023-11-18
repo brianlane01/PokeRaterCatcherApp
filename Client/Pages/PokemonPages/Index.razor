@@ -46,6 +46,7 @@ else
                     <button type = "button" class = "btn btn-primary mb-2" @onclick="@(() => ChangePokemonAsync(-1))">Previous</button>
                     <button type = "button" class = "btn btn-primary mb-2" @onclick="@(() => ChangePokemonAsync(1))">Next</button>
                 </form>
+                <EditForm Model=""
             </div>
         </div>
 
@@ -56,8 +57,10 @@ else
 
 @code {
     public PokeApiPokemonDetail Pokemon {get; set;}
+    private PokemonCreate Pokemon = new PokemonCreate();
     public string searchText;
     public bool IsLoading {get; set;}
+    private string? errorMessage;
 
     protected async Task GetPokemonAsync()
     {
