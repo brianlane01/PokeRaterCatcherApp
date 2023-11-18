@@ -41,31 +41,80 @@ public class PokemonMoveController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<PokemonMoveListItem>> Index()
+    public async Task<List<PokemonMoveListItem>> Index(int page = 1, int pageSize = 10)
     {
         if (!SetUserIdInService())
             return new List<PokemonMoveListItem>();
 
-        var notes = await _pokemonMoveService.GetAllPokemonMovesAsync();
-
+        var notes = await _pokemonMoveService.GetAllPokemonMovesAsync(page, pageSize);
+            
         return notes.ToList();
     }
 
     [HttpPost]
-        public async Task<IActionResult>  Create(PokemonMoveCreate model)
-        {
-            if(model == null)
-                return BadRequest();
+    public async Task<IActionResult> Create(PokemonMoveCreate model)
+    {
+        if (model == null)
+            return BadRequest();
 
-            if(!SetUserIdInService())
-                return Unauthorized();
+        if (!SetUserIdInService())
+            return Unauthorized();
 
-            bool wasSuccessful = await _pokemonMoveService.CreatePokemonMoveAsync(model);
+        bool wasSuccessful = await _pokemonMoveService.CreatePokemonMoveAsync(model);
+        if (wasSuccessful)
+            return Ok();
 
-            if(wasSuccessful)
-                return Ok ();
+        else
+            return UnprocessableEntity();
+    }
 
-            else    
-                return UnprocessableEntity();
-        }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> PokemonMove(int id)
+    {
+        if(!SetUserIdInService())
+            return Unauthorized();
+
+        var pokeMove = await _pokemonMoveService.GetPokemonMoveByIdAsync(id);
+
+        if(pokeMove == null)
+            return NotFound();
+
+        return Ok(pokeMove);
+    }
+
+    [HttpPut("Edit/{id}")]
+    public async Task<IActionResult> Edit(PokemonMoveEdit model)
+    {
+        if(!SetUserIdInService())
+            return Unauthorized();
+
+        if(model == null || !ModelState.IsValid)
+            return BadRequest();
+
+        bool wasSuccessful = await _pokemonMoveService.UpdatePokemonMoveAsync(model);
+
+        if(wasSuccessful)
+            return Ok();
+
+        return BadRequest();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        if(!SetUserIdInService())
+            return Unauthorized();
+
+        var pokeMove = await _pokemonMoveService.GetPokemonMoveByIdAsync(id);
+
+        if(pokeMove == null)
+            return NotFound();
+        
+        bool wasSuccessful = await _pokemonMoveService.DeletePokemonMoveAsync(id);
+
+        if(!wasSuccessful)
+            return BadRequest();
+
+        return Ok();
+    }
 }

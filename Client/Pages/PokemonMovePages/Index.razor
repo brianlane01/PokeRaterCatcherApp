@@ -5,20 +5,53 @@
 @inject NavigationManager navigation
 
 @code{
-    private IEnumerable<PokemonMoveListItem> _pokeMoves;
+    private int currentPage = 1;
+    private const int PageSize = 10;
+    private IEnumerable<PokemonMoveListItem>? _pokeMoves;
 
     protected override async Task OnInitializedAsync()
     {
-        _pokeMoves = await httpClient.GetFromJsonAsync<List<PokemonMoveListItem>>("/api/PokemonMove");
+        await LoadData();
     }
-}
 
+    private async Task LoadData()
+    {
+        _pokeMoves = await httpClient.GetFromJsonAsync<List<PokemonMoveListItem>>($"api/PokemonMove?page={currentPage}&pageSize={PageSize}");
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadData();
+        }
+    }
+
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadData();
+    }
+
+    private void CreateNewPokemonMove()
+    {
+        navigation.NavigateTo("/PokemonMove/Create");    }
+    }
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/2832382/pexels-photo-2832382.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
 @if(_pokeMoves == null)
 {
     <p><em>Loading......</em></p>
 }
 else
-{
+{ 
+    <div>
     <br />
     <table class="table table-striped table-dark table-hover table-bordered border-danger">
         <thead>
@@ -34,17 +67,28 @@ else
             {
                 <tr class="text-center">
                     <td class="text-center"><strong>@pokeMove.Id</strong></td>
-                    <td><strong>@pokeMove.MoveName</strong></td>
+                    <td class="text-capitalize"><strong>@pokeMove.MoveName</strong></td>
                     <td><strong>@pokeMove.MoveDescription</strong></td>
                     <td>
-                        <a href=@($"PokemonMove/{pokeMove.Id}")>Details</a>
-                        <a href=@($"PokemonMove/Edit/{pokeMove.Id}")>Edit</a>
-                        <a href=@($"PokemonMove/Delete/{pokeMove.Id}")>Delete</a>
+                        <div style="margin-bottom: 3px;">
+                            <a href=@($"PokemonMove/{pokeMove.Id}")>Get More Details</a>
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <a href=@($"PokemonMove/Edit/{pokeMove.Id}")>Edit</a>
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <a href=@($"PokemonMove/Delete/{pokeMove.Id}")>Delete</a>
+                        </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    <br />
-    <a href ="/PokemonMove/Create">Create A New Pokemon Move</a>
+    <div>
+        <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
+        <button class="btn btn-danger"  @onclick="NextPage">Next</button>
+    </div>
+    <br>
+    <button class="btn btn-danger" @onclick="CreateNewPokemonMove">Create A New Pokemon Move</button>
+    </div>
 }

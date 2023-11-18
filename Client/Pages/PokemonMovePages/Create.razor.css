@@ -1,0 +1,54 @@
+#subtitle{
+    color: rgba(16, 112, 129, 0.783);
+    padding: 2px 1em 0 2em;
+}
+
+#StatusConditionSelect{
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+    border: 1px solid #111111;
+    border-radius: 2px;
+    box-sizing: border-box;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    resize: vertical;
+    color: rgb(247, 9, 9);
+    background-color: rgba(246, 236, 236, 0.426);
+    
+}
+
+#PokeApiMove{
+    background-image: url('https://images.pexels.com/photos/158729/rock-pattern-background-texture-158729.jpeg?auto=compress&cs=tinysrgb&w=1200');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: rgb(30, 204, 210);
+    border: 8px solid #8cb5a8;
+    border-radius: 5px;
+    box-sizing: border-box;
+
+}
+
+#TypeSelect{
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+    box-sizing: border-box;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    resize: vertical;
+    color: rgba(245, 11, 11, 0.992);
+}
+
+#SelectionOfType{
+    background-color: aqua;
+}
+
+option{
+    background-color: rgba(237, 22, 22, 0.671);
+    color: rgb(0, 0, 0);
+}
+
+label{
+    color: rgb(249, 7, 7);
+}   

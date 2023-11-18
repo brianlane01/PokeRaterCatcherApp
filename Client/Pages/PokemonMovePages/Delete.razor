@@ -1,0 +1,62 @@
+@page "/PokemonMove/Delete/{PokemonMoveId:int}"
+@inject HttpClient httpClient
+@using PokemonCatcherGame.Shared.Models.PokemonMoveModels
+@attribute [Authorize]
+@inject NavigationManager navigation
+@inject IJSRuntime JSRuntime
+
+@code {
+    [Parameter]
+    public int PokemonMoveId { get; set; }
+
+    public PokemonMoveDetailDb? PokemonMove { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        PokemonMove = await httpClient.GetFromJsonAsync<PokemonMoveDetailDb>($"api/PokemonMove/{PokemonMoveId}");
+    }
+
+    private async void HandleClick()
+    {
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the Pokemon Move: " + PokemonMove?.MoveName);
+        if (confirmed)
+        {
+            var result = await httpClient.DeleteAsync($"api/PokemonMove/{PokemonMoveId}");
+            if (result.IsSuccessStatusCode)
+            {
+                navigation.NavigateTo("/PokemonMove");
+            }
+            else
+            {
+                ErrorMessage = "Something went wrong deleting the Pokemon Move";
+            }
+        }
+    }
+}
+
+<h3> Pokmon Move Delete Request</h3>
+@if(PokemonMove != null)
+{
+    <div class="container page-background-class">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span class="text-warning">Pokemon Move Id: @PokemonMove.Id</span>
+            </div>
+            <div class="card body">
+                <span class="text-warning">Pokemon Move Name: @PokemonMove.MoveName</span>
+                <span class="text-warning">Pokemon Move Type: @PokemonMove.MoveType</span>
+                <span class="text-warning">Pokemon Move Status Condition: @PokemonMove.StatusConditionName</span>
+                <p class="text-warning">Pokemon Move Description: @PokemonMove.MoveDescription</p>
+            </div>
+        </div>
+    </div>
+    <br />
+    <a href=@($"/PokemonMove/{PokemonMoveId}") class="btn btn-success text-black">Move Details</a>
+    <button class="btn btn-danger" @onclick="HandleClick">Delete</button>
+}
+else
+{
+    <p>There was an error loading the Pokemon Move</p>
+}

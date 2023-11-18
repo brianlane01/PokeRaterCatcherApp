@@ -7,7 +7,7 @@ using PokemonCatcherGame.Server.Data;
 using PokemonCatcherGame.Server.Entities;
 using PokemonCatcherGame.Shared.Models.PokemonMoveModels;
 using Server.Entities;
-using Shared.Models.PokemonMoveModels;
+
 
 namespace PokemonCatcherGame.Server.Services.PokemonMoveServices;
 
@@ -54,7 +54,7 @@ public class PokemonMoveService : IPokemonMoveService
         return await _dbContext.SaveChangesAsync() == 1;
     }
 
-    public async Task<List<PokemonMoveListItem>> GetAllPokemonMovesAsync()
+    public async Task<List<PokemonMoveListItem>> GetAllPokemonMovesAsync(int page, int pageSize)
     {
         var moveQuery = _dbContext.PokemonMoves
             .Select(n => 
@@ -65,13 +65,16 @@ public class PokemonMoveService : IPokemonMoveService
                     MoveDescription = n.MoveDescription,
                 });
         
-        return await moveQuery.ToListAsync();
+        return await moveQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
     }
 
     public async Task<PokemonMoveDetailDb?> GetPokemonMoveByIdAsync(int id)
     {
         PokemonMoveEntity? entity = await _dbContext.PokemonMoves
-            .Include(nameof(StatusConditionEntity))
+            .Include("StatusCondition")
             .FirstOrDefaultAsync(e => e.Id == id);
         
         return entity is null ? null : new PokemonMoveDetailDb

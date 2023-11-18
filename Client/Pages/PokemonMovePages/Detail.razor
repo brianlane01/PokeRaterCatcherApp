@@ -1,0 +1,87 @@
+@page "/PokemonMove/{PokemonMoveId:int}"
+@using PokemonCatcherGame.Shared.Models.PokemonMoveModels
+@attribute [Authorize]
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+
+@code {
+    [Parameter]
+    public int PokemonMoveId { get; set; }
+
+    public PokemonMoveDetailDb? PokemonMove { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        PokemonMove = await httpClient.GetFromJsonAsync<PokemonMoveDetailDb>($"api/PokemonMove/{PokemonMoveId}");
+    }
+
+    private void NavigateToPokemonMove()
+    {
+        navigationManager.NavigateTo("/PokemonMove");
+    }
+}
+
+<h3> Details for Pokemon Move with ID: @PokemonMoveId</h3>
+
+<style>
+    .page-background-class {
+        background-image: linear-gradient(rgba(184, 184, 242, 0.5), rgba(24, 245, 234, 0.5)),
+        url('https://m.media-amazon.com/images/I/61tpoM9Wu0L._AC_.jpg');
+        background-repeat: no-repeat;
+        background-size:  cover;
+        background-position: center;
+        
+    }
+    body{
+        background-image: url('https://images.pexels.com/photos/1629236/pexels-photo-1629236.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+@if(PokemonMove == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="page-background-class">
+        <div class="container-xxl p-3 mb-2 bg-success text-body-tertiary">
+            <div class="card">
+                <div class="card-header justify-content-between text-center bg-secondary">
+                    <h4 class="card-title">Pokemon Move Details</h4>
+                    <span>For Move With Id: @PokemonMove.Id</span>
+                </div>
+                <div class="page-background-class">
+                    <div class="card-body fw-bolder">
+                        <h4 class="text-left text-black text-capitalize fw-bolder">Pokemon Move Name: @PokemonMove.MoveName</h4>
+                        <h4 class="text-left text-black fw-bolder">Pokemon Move Id for PokeAPI: @PokemonMove.PokeApiMoveId</h4>
+                        <p class="text-left text-black fw-bolder">Pokemon Move Description: @PokemonMove.MoveDescription</p>
+                    </div>
+                    <div class="card-footer justify-content-between text-white text-left fw-bolder lh-lg">
+                        <span> Power of Move: @PokemonMove.MovePower</span>
+                        <br>
+                        <span> Number of times move can be used: @PokemonMove.MoveBasePP</span>
+                        <br>
+                        <span> Type of Pokemon Move: @PokemonMove.MoveType</span>
+                        <br>
+                        <span> Does the move resore health? @PokemonMove.MoveRestoresHealth</span>
+                        <br>
+                        <span> How much health is restored by the move: @PokemonMove.HealthRestorationAmount HP</span>
+                        <br>
+                        <span> Does the move apply a status condition? @PokemonMove.MoveAppliesAStatusCondition</span>
+                        <br>
+                        <span> The Id for the Status Condition Move Applies: @PokemonMove.StatusConditionId</span>
+                        <br>
+                        <span> Name of Status Condition Move Applies: @PokemonMove.StatusConditionName</span>
+                        <br>
+                        <span class="text-wrap lh-lg"> Description of Status Condition Move Applies: @PokemonMove.StatusConditionDescription</span>
+                        <br> 
+                        <br>
+                        <button class="btn btn-primary" @onclick="NavigateToPokemonMove">Back to All Moves</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

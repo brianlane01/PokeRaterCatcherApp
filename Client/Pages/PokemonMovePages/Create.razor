@@ -1,5 +1,6 @@
 @page "/PokemonMove/Create"
 @inject HttpClient httpClient
+@inject IJSRuntime jsRuntime
 @attribute [Authorize]
 @inject NavigationManager navigation
 @using PokemonCatcherGame.Shared.Models.PokemonMoveModels
@@ -10,14 +11,28 @@
 @using Newtonsoft.Json
 <PageTitle>CreateMove</PageTitle>
 
+<style>
+body{
+    background-image: url('https://images.pexels.com/photos/326240/pexels-photo-326240.jpeg?auto=compress&cs=tinysrgb&w=1200');
+    background-repeat: no-repeat;
+    background-size:  cover;
+}
+</style>
+
+<h3> Please enter a PokeAPI Move Id to Begin Creating a Move:</h3>
+<hr>
+<h4 id="subtitle"> Please input a value between 1 & 922</h4>
+<br>
 <div class="row">
     <div class="col mx-auto justify-content-between">
         <form class="form-inline" @onsubmit="GetPokemonMoveAsync">
             <div class="form-group mb-2">
                 <input type="text" @bind-value="@searchText" class="form-control" placeholder="Search Pokemon Moves">
             </div>
-            <button type="submit" class="btn btn-primary mb-2 ml-auto">Find</button>
+            <br>
+            <button type="submit" class="btn btn-dark mb-2 ml-auto">Find</button>
         </form>
+        <br>
     </div>
 </div>
 
@@ -33,53 +48,57 @@ else
     }
     else
     {
-        <div class="row">
+    <div class="row">
     <div class="col mx-auto justify-content-between">
-        <div class="card">
+        <div class="card" id="PokeApiMove">
             <div class="card-body">
-                <h3 class="card-title">Name of Move: @Move.MoveName.ToUpper()</h3>
+                <h3 class="card-title text-capitalize">Name of Move: @Move.MoveName</h3>
                 <h6>Id: @Move.PokeApiMoveId</h6>
                 <h6>Move Power: @Move.MovePower</h6>
                 <h6>Move Base PP: @Move.MoveBasePP</h6>
                 <h6>Accuracy of Move: @Move.Accuracy</h6>
             </div>
         </div>
+        <br>
         <form class="form-inline">
-            <button type="button" class="btn btn-primary mb-2"
+            <button type="button" class="btn btn-secondary mb-2"
                 @onclick="@(() => ChangePokemonMoveAsync(-1))">Previous</button>
-            <button type="button" class="btn btn-primary mb-2" @onclick="@(() => ChangePokemonMoveAsync(1))">Next</button>
+            <button type="button" class="btn btn-secondary mb-2" @onclick="@(() => ChangePokemonMoveAsync(1))">Next</button>
         </form>
         <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+            <br>
+            <div class="form-group">
+                <label>Move Description</label>
+                <br>
+                <InputTextArea class="form-control" @bind-Value="model.MoveDescription" />
+            </div>
+            <br>
             <div class="form-group">
                 <label>Does the move restore user's health?</label>
-                <label>Please input either true or false</label>
+                <label>Please select yes for true or no for false</label>
                 <InputRadioGroup Name= "MoveRestoresHealth" @bind-Value="@model.MoveRestoresHealth">
                 <br>
                 <InputRadio Name= "MoveRestoresHealth" Value="@true" />Yes 
                 <InputRadio Name= "MoveRestoresHealth" Value="@false" />No <br>
                 </InputRadioGroup>
             </div>
-            <br />
+            <br>
             <div class="form-group">
                 <label>Health Restoration Amount</label>
+                <br>
                 <input type="number" class="form-control" @bind="model.HealthRestorationAmount" />
             </div>
             <br />
-            <br />
-            <div class="form-group">
-                <label>Move Description</label>
-                <InputTextArea class="form-control" @bind-Value="model.MoveDescription" />
-            </div>
-            <br />
             <div>
-                <label>Select a Type for the move:</label>
-                <InputSelect class="form-control" @bind-Value="model.MoveType">
+                <label id="TypeSelect">Select a Type for the move:</label>
+                <InputSelect class="form-control" @bind-Value="model.MoveType" id="SelectionOfType">
                     @foreach (var type in types)
                             {
                                 <option value="@type.Id">@type.PokeType</option>
                             }
                 </InputSelect>
             </div>
+            <br>
             <div class="form-group">
                 <label>Does the move apply a Status Condition to the opponent?</label>
                 <label>Please input either true or false</label>
@@ -90,32 +109,30 @@ else
                 </InputRadioGroup>
             </div>
             <div>
-                <label>Select a Status Condition for the move if applicable:</label>
+                <label id="StatusConditionSelect">Select a Status Condition for the move if applicable:</label>
                 <InputSelect class="form-control" @bind-Value="model.StatusConditionId">
-                <option vaule=null>No Status Condition Effect</option>
+                <option vaule="">Status Condition Effect</option>
                     @foreach (var statusCondition in statusConditions)
                             {
                                 <option value="@statusCondition.Id">@statusCondition.StatusConditionName</option>
                             }
                 </InputSelect>
             </div>
-            <button type="submit" class="btn btn-primary bt-block mt-5">Submit</button> 
+            <button type="submit" class="btn btn-dark bt-block mt-5">Submit</button> 
             </EditForm>
+            <br>
             </div>
         </div>
-
-        <br />
-        <a href="/Pokemon/Create">Create A Pokemon Move</a>
     }
 }
 
 @code {
-    public PokemonMoveDetail Move { get; set; }
+    public PokemonMoveDetail? Move { get; set; }
     private PokemonMoveCreate model = new();
-    private List<PokemonTypeList> types;
-    private List<StatusConditionList> statusConditions;
-    private string errorMessage;
-    public string searchText;
+    private List<PokemonTypeList>? types;
+    private List<StatusConditionList>? statusConditions;
+    private string? errorMessage;
+    public string? searchText;
     public bool IsLoading { get; set; }
 
     protected async Task GetPokemonMoveAsync()
@@ -130,7 +147,7 @@ else
         Move = await GetPokemonMove((Move.PokeApiMoveId += i).ToString());
     }
 
-    public async Task<PokemonMoveDetail> GetPokemonMove(string id)
+    public async Task<PokemonMoveDetail> GetPokemonMove(string? id)
     {
         var result = JsonConvert.DeserializeObject<PokemonMoveDetail>(await
         httpClient.GetStringAsync($"https://pokeapi.co/api/v2/move/{id}"));
@@ -145,21 +162,25 @@ else
     }
 
     private async void HandleSubmit()
-    {   Console.WriteLine("Hello");
-        model.MoveName = Move.MoveName.ToUpperInvariant();
+    {
+        model.MoveName = Move.MoveName;
         model.PokeApiMoveId = Move.PokeApiMoveId;
         model.MovePower = Move.MovePower;
         model.MoveBasePP = Move.MoveBasePP;
         model.Accuracy = Move.Accuracy;
 
-        var creatRes = await httpClient.PostAsJsonAsync<PokemonMoveCreate>("/api/PokemonMove", model);
-        if (creatRes.IsSuccessStatusCode)
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", new object[] {"Are you sure you want to Create the Pokemon Move:"});
+        if (confirmed)
         {
-            navigation.NavigateTo("/PokemonMove");
-        }
-        else
-        {
-            errorMessage = "Could not create The Pokemon Move right now. Please try again later.";
+            var creatRes = await httpClient.PostAsJsonAsync<PokemonMoveCreate>("/api/PokemonMove", model);
+            if (creatRes.IsSuccessStatusCode)
+            {
+                navigation.NavigateTo("/PokemonMove");
+            }
+            else
+            {
+                errorMessage = "Could not create The Pokemon Move right now. Please try again later.";
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using PokemonCatcherGame.Server.Services.PokemonMoveServices;
 using PokemonCatcherGame.Server.Services.PokemonServices;
 using PokemonCatcherGame.Server.Services.PokemonTypeServices;
 using PokemonCatcherGame.Server.Services.StatusConditionServices;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
