@@ -19,4 +19,11 @@ public class HealthItemEntity
     
     [Required, Range(1, 400)]
     public double AmountOfHealthRestored { get; set; }
+
+    public ICollection<PlayerItemInventoryEntity> PlayerInventory { get; set; }
+
+    public HealthItemEntity()
+    {
+        PlayerInventory = new HashSet<PlayerItemInventoryEntity>();
+    }
 }

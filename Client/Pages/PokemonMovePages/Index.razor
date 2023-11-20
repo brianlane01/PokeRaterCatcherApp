@@ -89,7 +89,7 @@ else
     </table>
     <div>
         <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
-        <button class="btn btn-danger"  @onclick="NextPage">Next</button>
+        <button class="btn btn-danger"  @onclick="NextPage" disabled="@(_pokeMoves.Count() < 10)">Next</button>
     </div>
     <br>
     <button class="btn btn-danger" @onclick="CreateNewPokemonMove">Create A New Pokemon Move</button>
