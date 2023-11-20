@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PokemonCatcherGame.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreate2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -148,6 +148,20 @@ namespace PokemonCatcherGame.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PokeBalls", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PokemonAbilities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AbilityName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AbilityEffect = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PokemonAbilities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -447,91 +461,6 @@ namespace PokemonCatcherGame.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayerItemInventoryEntityTechnicalMachineMoveEntity",
-                columns: table => new
-                {
-                    PlayerInventoryId = table.Column<int>(type: "int", nullable: false),
-                    TMsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PlayerItemInventoryEntityTechnicalMachineMoveEntity", x => new { x.PlayerInventoryId, x.TMsId });
-                    table.ForeignKey(
-                        name: "FK_PlayerItemInventoryEntityTechnicalMachineMoveEntity_PlayerItemInventories_PlayerInventoryId",
-                        column: x => x.PlayerInventoryId,
-                        principalTable: "PlayerItemInventories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pokemon",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PokedexNumber = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Weight = table.Column<int>(type: "int", nullable: false),
-                    Height = table.Column<int>(type: "int", nullable: false),
-                    Health = table.Column<int>(type: "int", nullable: false),
-                    BaseExperience = table.Column<int>(type: "int", nullable: false),
-                    PokeTypeIdOne = table.Column<int>(type: "int", nullable: false),
-                    PokeTypeIdTwo = table.Column<int>(type: "int", nullable: true),
-                    MoveOneId = table.Column<int>(type: "int", nullable: false),
-                    MoveTwoId = table.Column<int>(type: "int", nullable: false),
-                    MoveThreeId = table.Column<int>(type: "int", nullable: false),
-                    MoveFourId = table.Column<int>(type: "int", nullable: false),
-                    PlayerEntityId = table.Column<int>(type: "int", nullable: true),
-                    TrainerOpponentEntityId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pokemon", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Pokemon_Opponents_TrainerOpponentEntityId",
-                        column: x => x.TrainerOpponentEntityId,
-                        principalTable: "Opponents",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Pokemon_Players_PlayerEntityId",
-                        column: x => x.PlayerEntityId,
-                        principalTable: "Players",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Pokemon_PokemonTypes_PokeTypeIdOne",
-                        column: x => x.PokeTypeIdOne,
-                        principalTable: "PokemonTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Pokemon_PokemonTypes_PokeTypeIdTwo",
-                        column: x => x.PokeTypeIdTwo,
-                        principalTable: "PokemonTypes",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PokemonAbilities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AbilityName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AbilityEffect = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PokemonEntityId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PokemonAbilities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PokemonAbilities_Pokemon_PokemonEntityId",
-                        column: x => x.PokemonEntityId,
-                        principalTable: "Pokemon",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PokemonMoves",
                 columns: table => new
                 {
@@ -547,17 +476,11 @@ namespace PokemonCatcherGame.Server.Migrations
                     MoveRestoresHealth = table.Column<bool>(type: "bit", nullable: false),
                     HealthRestorationAmount = table.Column<int>(type: "int", nullable: false),
                     MoveAppliesAStatusCondition = table.Column<bool>(type: "bit", nullable: false),
-                    StatusConditionId = table.Column<int>(type: "int", nullable: true),
-                    PokemonEntityId = table.Column<int>(type: "int", nullable: true)
+                    StatusConditionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PokemonMoves", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PokemonMoves_Pokemon_PokemonEntityId",
-                        column: x => x.PokemonEntityId,
-                        principalTable: "Pokemon",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PokemonMoves_StatusConditions_StatusConditionId",
                         column: x => x.StatusConditionId,
@@ -596,21 +519,100 @@ namespace PokemonCatcherGame.Server.Migrations
                     DarkCanLearn = table.Column<bool>(type: "bit", nullable: false),
                     SteelCanLearn = table.Column<bool>(type: "bit", nullable: false),
                     NormalCanLearn = table.Column<bool>(type: "bit", nullable: false),
-                    IceCanLearn = table.Column<bool>(type: "bit", nullable: false),
-                    PokemonEntityId = table.Column<int>(type: "int", nullable: true)
+                    IceCanLearn = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TMs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TMs_Pokemon_PokemonEntityId",
-                        column: x => x.PokemonEntityId,
-                        principalTable: "Pokemon",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_TMs_StatusConditions_StatusConditionId",
                         column: x => x.StatusConditionId,
                         principalTable: "StatusConditions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pokemon",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PokedexNumber = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PokeNickName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Weight = table.Column<int>(type: "int", nullable: false),
+                    Height = table.Column<int>(type: "int", nullable: false),
+                    Health = table.Column<int>(type: "int", nullable: false),
+                    BaseExperience = table.Column<int>(type: "int", nullable: false),
+                    PokeTypeIdOne = table.Column<int>(type: "int", nullable: false),
+                    PokeTypeIdTwo = table.Column<int>(type: "int", nullable: true),
+                    MoveOneId = table.Column<int>(type: "int", nullable: false),
+                    MoveTwoId = table.Column<int>(type: "int", nullable: false),
+                    MoveThreeId = table.Column<int>(type: "int", nullable: false),
+                    MoveFourId = table.Column<int>(type: "int", nullable: false),
+                    AbilityId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pokemon", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pokemon_PokemonAbilities_AbilityId",
+                        column: x => x.AbilityId,
+                        principalTable: "PokemonAbilities",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pokemon_PokemonMoves_MoveFourId",
+                        column: x => x.MoveFourId,
+                        principalTable: "PokemonMoves",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pokemon_PokemonMoves_MoveOneId",
+                        column: x => x.MoveOneId,
+                        principalTable: "PokemonMoves",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pokemon_PokemonMoves_MoveThreeId",
+                        column: x => x.MoveThreeId,
+                        principalTable: "PokemonMoves",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pokemon_PokemonMoves_MoveTwoId",
+                        column: x => x.MoveTwoId,
+                        principalTable: "PokemonMoves",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pokemon_PokemonTypes_PokeTypeIdOne",
+                        column: x => x.PokeTypeIdOne,
+                        principalTable: "PokemonTypes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pokemon_PokemonTypes_PokeTypeIdTwo",
+                        column: x => x.PokeTypeIdTwo,
+                        principalTable: "PokemonTypes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlayerItemInventoryEntityTechnicalMachineMoveEntity",
+                columns: table => new
+                {
+                    PlayerInventoryId = table.Column<int>(type: "int", nullable: false),
+                    TMsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerItemInventoryEntityTechnicalMachineMoveEntity", x => new { x.PlayerInventoryId, x.TMsId });
+                    table.ForeignKey(
+                        name: "FK_PlayerItemInventoryEntityTechnicalMachineMoveEntity_PlayerItemInventories_PlayerInventoryId",
+                        column: x => x.PlayerInventoryId,
+                        principalTable: "PlayerItemInventories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerItemInventoryEntityTechnicalMachineMoveEntity_TMs_TMsId",
+                        column: x => x.TMsId,
+                        principalTable: "TMs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -640,48 +642,48 @@ namespace PokemonCatcherGame.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "PokemonAbilities",
-                columns: new[] { "Id", "AbilityEffect", "AbilityName", "PokemonEntityId" },
+                columns: new[] { "Id", "AbilityEffect", "AbilityName" },
                 values: new object[,]
                 {
-                    { 1000, "This Pokémon's damaging moves have a 10% chance to make the target flinch with each hit if they do not already cause flinching as a secondary effect. This ability does not stack with a held item. Overworld: The wild encounter rate is halved while this Pokémon is first in the party.", "Stench", null },
-                    { 1001, "The weather changes to rain when this Pokémon enters battle and does not end unless replaced by another weather condition. If multiple Pokémon with this ability, drought, sand stream, or snow warning are sent out at the same time, the abilities will activate in order of Speed, respecting trick room. Each ability's weather will cancel the previous weather, and only the weather summoned by the slowest of the Pokémon will stay.", "Drizzle", null },
-                    { 1002, "This Pokémon's Speed rises one stage after each turn.", "Speed-Boost", null },
-                    { 1003, "This Pokémon's Speed rises one stage after each turn.", "Battle-Armor", null },
-                    { 1004, "When this Pokémon is at full HP, any hit that would knock it out will instead leave it with 1 HP. Regardless of its current HP, it is also immune to the one-hit KO moves: fissure, guillotine, horn drill, and sheer cold. If this Pokémon is holding a focus sash, this ability takes precedence and the item will not be consumed.", "Sturdy", null },
-                    { 1005, "While this Pokémon is in battle, self destruct and explosion will fail and aftermath will not take effect.", "Damp", null },
-                    { 1006, "During a sandstorm, this Pokémon has 1.25xits evasion, and it does not take sandstorm damage regardless of type. The evasion bonus does not count as a stat modifier. Overworld: If the lead Pokémon has this ability, the wild encounter rate is halved in a sandstorm.", "Sand-Veil", null },
-                    { 1007, "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being paralyzed. Pokémon that are immune to electric-type moves can still be paralyzed by this ability. Overworld: If the lead Pokémon has this ability, there is a 50% chance that encounters will be with an electric Pokémon, if applicable.", "Static", null },
-                    { 1008, "Whenever an electric-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it. This ability will not take effect if this Pokémon is ground-type and thus immune to Electric moves. Electric moves will ignore this Pokémon's substitute. This effect includes non-damaging moves, i.e. thunder wave.", "Volt-Absorb", null },
-                    { 1009, "Whenever a water-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it. Water moves will ignore this Pokémon's substitute.", "Water-Absorb", null },
-                    { 1010, "Whenever a water-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it. Water moves will ignore this Pokémon's substitute.", "Water-Absorb", null },
-                    { 1011, "This Pokémon cannot be infatuated and is immune to captivate. If a Pokémon is infatuated and acquires this ability, its infatuation is cleared.", "Oblivious", null },
-                    { 1012, "This Pokémon's moves have 1.3xtheir accuracy. This ability has no effect on the one-hit KO moves (fissure, guillotine, horn drill, and sheer cold). Overworld: If the first Pokémon in the party has this ability, the chance of a wild Pokémon holding a particular item is raised from 50%, 5%, or 1% to 60%, 20%, or 5%, respectively.", "Compound-Eyes", null },
-                    { 1013, "This Pokémon cannot be asleep. This causes rest to fail altogether. If a Pokémon is asleep and acquires this ability, it will immediately wake up; this includes when regaining a lost ability upon leaving battle. This ability functions identically to vital spirit in battle.", "Insomnia", null },
-                    { 1014, "Whenever this Pokémon takes damage from a move, the Pokémon's type changes to match the move. If the Pokémon has two types, both are overridden. The Pokémon must directly take damage; for example, moves blocked by a substitute will not trigger this ability, nor will moves that deal damage indirectly, such as spikes. This ability takes effect on only the last hit of a multiple-hit attack.", "Color-Change", null },
-                    { 1015, "This Pokémon cannot be poisoned. This includes bad poison. If a Pokémon is poisoned and acquires this ability, its poison is healed; this includes when regaining a lost ability upon leaving battle.", "Immunity", null },
-                    { 1016, "This Pokémon is immune to fire-type moves. Once this Pokémon has been hit by a Fire move, its own Fire moves will inflict 1.5xas much damage until it leaves battle. This ability has no effect while the Pokémon is frozen. The Fire damage bonus is retained even if the Pokémon is frozen and thawed or the ability is lost or disabled. Fire moves will ignore this Pokémon's substitute. This ability takes effect even on non-damaging moves, i.e. will o wisp.", "Flash-Fire", null },
-                    { 1017, "This Pokémon cannot be confused. If a Pokémon is confused and acquires this ability, its confusion will immediately be healed.", "Own-Tempo", null },
-                    { 1018, "When this Pokémon enters battle, the opponent's Attack is lowered by one stage. In a double battle, both opponents are affected. This ability also takes effect when acquired during a battle, but will not take effect again if lost and reobtained without leaving battle. This ability has no effect on an opponent that has a substitute. Overworld: If the first Pokémon in the party has this ability, any random encounter with a Pokémon five or more levels lower than it has a 50% chance of being skipped.", "Intimidate", null },
-                    { 1019, "Whenever a move makes contact with this Pokémon, the move's user takes 1/8 of its maximum HP in damage. This ability functions identically to iron barbs.", "Rough-Skin", null },
-                    { 1020, "This Pokémon is immune to ground-type moves, spikes, toxic spikes, and arena trap. This ability is disabled during gravity or ingrain, or while holding an iron ball. This ability is not disabled during roost.", "Levitate", null },
-                    { 1021, "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being paralyzed, poisoned, or put to sleep, chosen at random. Nothing is done to compensate if the move's user is immune to one of these ailments; there is simply a lower chance that the move's user will be affected.", "Effect-Spore", null },
-                    { 1022, "Whenever this Pokémon is burned, paralyzed, or poisoned, the Pokémon who gave this Pokémon that ailment is also given the ailment. This ability passes back bad poison when this Pokémon is badly poisoned. This ability cannot pass on a status ailment that the Pokémon did not directly receive from another Pokémon, such as the poison from toxic spikes or the burn from a flame orb. Overworld: If the lead Pokémon has this ability, wild Pokémon have a 50% chance of having the lead Pokémon's nature, and a 50% chance of being given a random nature as usual, including the lead Pokémon's nature. This does not work on Pokémon received outside of battle or roaming legendaries.", "Synchronize", null },
-                    { 1023, "This Pokémon is cured of any major status ailment when it is switched out for another Pokémon. If this ability is acquired during battle, the Pokémon is cured upon leaving battle before losing the temporary ability.", "Natural-Cure", null },
-                    { 1024, "This Pokémon's Speed is doubled during strong sunlight. This bonus does not count as a stat modifier.", "Chlorophyll", null },
-                    { 1025, "When this Pokémon enters battle, it copies a random opponent's ability. This ability cannot copy flower gift, forecast, illusion, imposter, multitype, trace, wonder guard, or zen mode.", "Trace", null },
-                    { 1026, "This Pokémon's Attack is doubled while in battle. This bonus does not count as a stat modifier. This ability functions identically to pure power.", "Huge-Power", null },
-                    { 1027, "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being poisoned.", "Poison-Point", null },
-                    { 1028, "This Pokémon cannot flinch.", "Inner-Focus", null },
-                    { 1029, "This Pokémon cannot be frozen. If a Pokémon is frozen and acquires this ability, it will immediately thaw out; this includes when regaining a lost ability upon leaving battle. Overworld: If any Pokémon in the party has this ability, each egg in the party has its hatch counter decreased by 2 (rather than 1) each step cycle, making eggs hatch roughly twice as quickly. This effect does not stack if multiple Pokémon have this ability or flame body.", "Magma-Armor", null },
-                    { 1030, "This Pokémon cannot be burned. If a Pokémon is burned and acquires this ability, its burn is healed; this includes when regaining a lost ability upon leaving battle.", "Water-Veil", null },
-                    { 1031, "This Pokémon heals for 1/16 of its maximum HP after each turn during rain.", "Rain-Dish", null },
-                    { 1032, "Moves targetting this Pokémon use one extra PP. This ability stacks if multiple targets have it. This ability still affects moves that fail or miss. This ability does not affect ally moves that target either the entire field or just its side, nor this Pokémon's self-targetted moves; it does, however, affect single-targetted ally moves aimed at this Pokémon, ally moves that target all other Pokémon, and opponents' moves that target the entire field. If this ability raises a move's PP cost above its remaining PP, it will use all remaining PP. When this Pokémon enters battle, all participating trainers are notified that it has this ability. Overworld: If the lead Pokémon has this ability, higher-levelled Pokémon have their encounter rate increased.", "Pressure", null },
-                    { 1033, "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being burned. Overworld: If any Pokémon in the party has this ability, each egg in the party has its hatch counter decreased by 2 (rather than 1) each step cycle, making eggs hatch roughly twice as quickly. This effect does not stack if multiple Pokémon have this ability or magma armor.", "Flame-Body", null },
-                    { 1034, "This Pokémon cannot have its accuracy lowered. This ability does not prevent any accuracy losses other than stat modifiers, such as the accuracy cut from fog; nor does it prevent other Pokémon's evasion from making this Pokémon's moves less accurate. This Pokémon can still be passed negative accuracy modifiers through heart swap. Overworld: If the first Pokémon in the party has this ability, any random encounter with a Pokémon five or more levels lower than it has a 50% chance of being skipped.", "Keen-Eye", null },
-                    { 1035, "Every second turn on which this Pokémon should attempt to use a move, it will instead do nothing (loaf around). Loafing around interrupts moves that take multiple turns the same way paralysis, flinching, etc do. Most such moves, for example bide or rollout, are simply cut off upon loafing around. Attacks with a recharge turn, such as hyper beam, do not have to recharge; attacks with a preparation turn, such as fly, do not end up being used. Moves that are forced over multiple turns and keep going through failure, such as outrage, uproar, or any move forced by encore, keep going as usual. If this Pokémon is confused, its confusion is not checked when loafing around; the Pokémon cannot hurt itself, and its confusion does not end or come closer to ending. If this Pokémon attempts to move but fails, e.g. because of paralysis or gravity, it still counts as having moved and will loaf around the next turn. If it does not attempt to move, e.g. because it is asleep or frozen, whatever it would have done will be postponed until its next attempt; that is, it will either loaf around or move as usual, depending on what it last did. This ability cannot be changed with worry seed, but it can be disabled with gastro acid, changed with role play, or traded away with skill swap.", "Truant", null },
-                    { 1036, "After each turn, this Pokémon has a 33% of being cured of any major status ailment.", "Shed-Skin", null },
-                    { 1037, "Whenever a Pokémon would heal after hitting this Pokémon with a leeching move like absorb, it instead loses as many HP as it would usually gain. dream eater is unaffected.", "Liquid-Ooze", null },
-                    { 1038, "Whenever a Pokémon would heal after hitting this Pokémon with a leeching move like absorb, it instead loses as many HP as it would usually gain. dream eater is unaffected.", "Liquid-Ooze", null }
+                    { 1000, "This Pokémon's damaging moves have a 10% chance to make the target flinch with each hit if they do not already cause flinching as a secondary effect. This ability does not stack with a held item. Overworld: The wild encounter rate is halved while this Pokémon is first in the party.", "Stench" },
+                    { 1001, "The weather changes to rain when this Pokémon enters battle and does not end unless replaced by another weather condition. If multiple Pokémon with this ability, drought, sand stream, or snow warning are sent out at the same time, the abilities will activate in order of Speed, respecting trick room. Each ability's weather will cancel the previous weather, and only the weather summoned by the slowest of the Pokémon will stay.", "Drizzle" },
+                    { 1002, "This Pokémon's Speed rises one stage after each turn.", "Speed-Boost" },
+                    { 1003, "This Pokémon's Speed rises one stage after each turn.", "Battle-Armor" },
+                    { 1004, "When this Pokémon is at full HP, any hit that would knock it out will instead leave it with 1 HP. Regardless of its current HP, it is also immune to the one-hit KO moves: fissure, guillotine, horn drill, and sheer cold. If this Pokémon is holding a focus sash, this ability takes precedence and the item will not be consumed.", "Sturdy" },
+                    { 1005, "While this Pokémon is in battle, self destruct and explosion will fail and aftermath will not take effect.", "Damp" },
+                    { 1006, "During a sandstorm, this Pokémon has 1.25xits evasion, and it does not take sandstorm damage regardless of type. The evasion bonus does not count as a stat modifier. Overworld: If the lead Pokémon has this ability, the wild encounter rate is halved in a sandstorm.", "Sand-Veil" },
+                    { 1007, "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being paralyzed. Pokémon that are immune to electric-type moves can still be paralyzed by this ability. Overworld: If the lead Pokémon has this ability, there is a 50% chance that encounters will be with an electric Pokémon, if applicable.", "Static" },
+                    { 1008, "Whenever an electric-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it. This ability will not take effect if this Pokémon is ground-type and thus immune to Electric moves. Electric moves will ignore this Pokémon's substitute. This effect includes non-damaging moves, i.e. thunder wave.", "Volt-Absorb" },
+                    { 1009, "Whenever a water-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it. Water moves will ignore this Pokémon's substitute.", "Water-Absorb" },
+                    { 1010, "Whenever a water-type move hits this Pokémon, it heals for 1/4 of its maximum HP, negating any other effect on it. Water moves will ignore this Pokémon's substitute.", "Water-Absorb" },
+                    { 1011, "This Pokémon cannot be infatuated and is immune to captivate. If a Pokémon is infatuated and acquires this ability, its infatuation is cleared.", "Oblivious" },
+                    { 1012, "This Pokémon's moves have 1.3xtheir accuracy. This ability has no effect on the one-hit KO moves (fissure, guillotine, horn drill, and sheer cold). Overworld: If the first Pokémon in the party has this ability, the chance of a wild Pokémon holding a particular item is raised from 50%, 5%, or 1% to 60%, 20%, or 5%, respectively.", "Compound-Eyes" },
+                    { 1013, "This Pokémon cannot be asleep. This causes rest to fail altogether. If a Pokémon is asleep and acquires this ability, it will immediately wake up; this includes when regaining a lost ability upon leaving battle. This ability functions identically to vital spirit in battle.", "Insomnia" },
+                    { 1014, "Whenever this Pokémon takes damage from a move, the Pokémon's type changes to match the move. If the Pokémon has two types, both are overridden. The Pokémon must directly take damage; for example, moves blocked by a substitute will not trigger this ability, nor will moves that deal damage indirectly, such as spikes. This ability takes effect on only the last hit of a multiple-hit attack.", "Color-Change" },
+                    { 1015, "This Pokémon cannot be poisoned. This includes bad poison. If a Pokémon is poisoned and acquires this ability, its poison is healed; this includes when regaining a lost ability upon leaving battle.", "Immunity" },
+                    { 1016, "This Pokémon is immune to fire-type moves. Once this Pokémon has been hit by a Fire move, its own Fire moves will inflict 1.5xas much damage until it leaves battle. This ability has no effect while the Pokémon is frozen. The Fire damage bonus is retained even if the Pokémon is frozen and thawed or the ability is lost or disabled. Fire moves will ignore this Pokémon's substitute. This ability takes effect even on non-damaging moves, i.e. will o wisp.", "Flash-Fire" },
+                    { 1017, "This Pokémon cannot be confused. If a Pokémon is confused and acquires this ability, its confusion will immediately be healed.", "Own-Tempo" },
+                    { 1018, "When this Pokémon enters battle, the opponent's Attack is lowered by one stage. In a double battle, both opponents are affected. This ability also takes effect when acquired during a battle, but will not take effect again if lost and reobtained without leaving battle. This ability has no effect on an opponent that has a substitute. Overworld: If the first Pokémon in the party has this ability, any random encounter with a Pokémon five or more levels lower than it has a 50% chance of being skipped.", "Intimidate" },
+                    { 1019, "Whenever a move makes contact with this Pokémon, the move's user takes 1/8 of its maximum HP in damage. This ability functions identically to iron barbs.", "Rough-Skin" },
+                    { 1020, "This Pokémon is immune to ground-type moves, spikes, toxic spikes, and arena trap. This ability is disabled during gravity or ingrain, or while holding an iron ball. This ability is not disabled during roost.", "Levitate" },
+                    { 1021, "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being paralyzed, poisoned, or put to sleep, chosen at random. Nothing is done to compensate if the move's user is immune to one of these ailments; there is simply a lower chance that the move's user will be affected.", "Effect-Spore" },
+                    { 1022, "Whenever this Pokémon is burned, paralyzed, or poisoned, the Pokémon who gave this Pokémon that ailment is also given the ailment. This ability passes back bad poison when this Pokémon is badly poisoned. This ability cannot pass on a status ailment that the Pokémon did not directly receive from another Pokémon, such as the poison from toxic spikes or the burn from a flame orb. Overworld: If the lead Pokémon has this ability, wild Pokémon have a 50% chance of having the lead Pokémon's nature, and a 50% chance of being given a random nature as usual, including the lead Pokémon's nature. This does not work on Pokémon received outside of battle or roaming legendaries.", "Synchronize" },
+                    { 1023, "This Pokémon is cured of any major status ailment when it is switched out for another Pokémon. If this ability is acquired during battle, the Pokémon is cured upon leaving battle before losing the temporary ability.", "Natural-Cure" },
+                    { 1024, "This Pokémon's Speed is doubled during strong sunlight. This bonus does not count as a stat modifier.", "Chlorophyll" },
+                    { 1025, "When this Pokémon enters battle, it copies a random opponent's ability. This ability cannot copy flower gift, forecast, illusion, imposter, multitype, trace, wonder guard, or zen mode.", "Trace" },
+                    { 1026, "This Pokémon's Attack is doubled while in battle. This bonus does not count as a stat modifier. This ability functions identically to pure power.", "Huge-Power" },
+                    { 1027, "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being poisoned.", "Poison-Point" },
+                    { 1028, "This Pokémon cannot flinch.", "Inner-Focus" },
+                    { 1029, "This Pokémon cannot be frozen. If a Pokémon is frozen and acquires this ability, it will immediately thaw out; this includes when regaining a lost ability upon leaving battle. Overworld: If any Pokémon in the party has this ability, each egg in the party has its hatch counter decreased by 2 (rather than 1) each step cycle, making eggs hatch roughly twice as quickly. This effect does not stack if multiple Pokémon have this ability or flame body.", "Magma-Armor" },
+                    { 1030, "This Pokémon cannot be burned. If a Pokémon is burned and acquires this ability, its burn is healed; this includes when regaining a lost ability upon leaving battle.", "Water-Veil" },
+                    { 1031, "This Pokémon heals for 1/16 of its maximum HP after each turn during rain.", "Rain-Dish" },
+                    { 1032, "Moves targetting this Pokémon use one extra PP. This ability stacks if multiple targets have it. This ability still affects moves that fail or miss. This ability does not affect ally moves that target either the entire field or just its side, nor this Pokémon's self-targetted moves; it does, however, affect single-targetted ally moves aimed at this Pokémon, ally moves that target all other Pokémon, and opponents' moves that target the entire field. If this ability raises a move's PP cost above its remaining PP, it will use all remaining PP. When this Pokémon enters battle, all participating trainers are notified that it has this ability. Overworld: If the lead Pokémon has this ability, higher-levelled Pokémon have their encounter rate increased.", "Pressure" },
+                    { 1033, "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being burned. Overworld: If any Pokémon in the party has this ability, each egg in the party has its hatch counter decreased by 2 (rather than 1) each step cycle, making eggs hatch roughly twice as quickly. This effect does not stack if multiple Pokémon have this ability or magma armor.", "Flame-Body" },
+                    { 1034, "This Pokémon cannot have its accuracy lowered. This ability does not prevent any accuracy losses other than stat modifiers, such as the accuracy cut from fog; nor does it prevent other Pokémon's evasion from making this Pokémon's moves less accurate. This Pokémon can still be passed negative accuracy modifiers through heart swap. Overworld: If the first Pokémon in the party has this ability, any random encounter with a Pokémon five or more levels lower than it has a 50% chance of being skipped.", "Keen-Eye" },
+                    { 1035, "Every second turn on which this Pokémon should attempt to use a move, it will instead do nothing (loaf around). Loafing around interrupts moves that take multiple turns the same way paralysis, flinching, etc do. Most such moves, for example bide or rollout, are simply cut off upon loafing around. Attacks with a recharge turn, such as hyper beam, do not have to recharge; attacks with a preparation turn, such as fly, do not end up being used. Moves that are forced over multiple turns and keep going through failure, such as outrage, uproar, or any move forced by encore, keep going as usual. If this Pokémon is confused, its confusion is not checked when loafing around; the Pokémon cannot hurt itself, and its confusion does not end or come closer to ending. If this Pokémon attempts to move but fails, e.g. because of paralysis or gravity, it still counts as having moved and will loaf around the next turn. If it does not attempt to move, e.g. because it is asleep or frozen, whatever it would have done will be postponed until its next attempt; that is, it will either loaf around or move as usual, depending on what it last did. This ability cannot be changed with worry seed, but it can be disabled with gastro acid, changed with role play, or traded away with skill swap.", "Truant" },
+                    { 1036, "After each turn, this Pokémon has a 33% of being cured of any major status ailment.", "Shed-Skin" },
+                    { 1037, "Whenever a Pokémon would heal after hitting this Pokémon with a leeching move like absorb, it instead loses as many HP as it would usually gain. dream eater is unaffected.", "Liquid-Ooze" },
+                    { 1038, "Whenever a Pokémon would heal after hitting this Pokémon with a leeching move like absorb, it instead loses as many HP as it would usually gain. dream eater is unaffected.", "Liquid-Ooze" }
                 });
 
             migrationBuilder.InsertData(
@@ -706,7 +708,8 @@ namespace PokemonCatcherGame.Server.Migrations
                     { 1014, "Ice" },
                     { 1015, "Dragon" },
                     { 1016, "Dark" },
-                    { 1017, "Fairy" }
+                    { 1017, "Fairy" },
+                    { 1018, "None" }
                 });
 
             migrationBuilder.InsertData(
@@ -718,7 +721,8 @@ namespace PokemonCatcherGame.Server.Migrations
                     { 1002, true, true, "Last until healed or pokemon faints.", 15.0, "Last until healed or pokemon faints.", false, false, false, false, "The pokemon is afflicted with a severe burn. Each turn, the Pokémon afflicted with the Burn loses 1/8th of it's Max HP.", "Burn" },
                     { 1003, false, false, "The affect lasts four turns, unless it is removed by an item.", 0.0, "Last for four turns.", true, false, false, false, "The Pokemon is frozen solid. The Pokémon cannot use any attacks (apart from those that thaw it)", "Freeze " },
                     { 1004, false, true, "Last until the Pokemon is healed or the Pokemon Faints.", 15.0, "Last until the Pokemon is healed or the Pokemon Faints.", false, false, true, false, "Poisons the targeted pokemon gradually lowering the Pokémon's Hit Points until the Pokémon faint.", "Poison" },
-                    { 1005, false, false, "Last for up to seven turns unless removed.", 0.0, "Last for up to seven turns unless removed.", false, false, false, true, "The targeted Pokemon is put to sleep for up to seven turns. The pokemon is not able to use any moves while asleep.", "Sleep" }
+                    { 1005, false, false, "Last for up to seven turns unless removed.", 0.0, "Last for up to seven turns unless removed.", false, false, false, true, "The targeted Pokemon is put to sleep for up to seven turns. The pokemon is not able to use any moves while asleep.", "Sleep" },
+                    { 1006, false, false, "No Status Condition is applied by this move.", 0.0, "No Status Condition is applied by this move.", false, false, false, false, "No Status Condition is applied by this move.", "No Status Condition" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -832,6 +836,11 @@ namespace PokemonCatcherGame.Server.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Pokemon_AbilityId",
+                table: "Pokemon",
+                column: "AbilityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pokemon_MoveFourId",
                 table: "Pokemon",
                 column: "MoveFourId");
@@ -852,11 +861,6 @@ namespace PokemonCatcherGame.Server.Migrations
                 column: "MoveTwoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pokemon_PlayerEntityId",
-                table: "Pokemon",
-                column: "PlayerEntityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Pokemon_PokeTypeIdOne",
                 table: "Pokemon",
                 column: "PokeTypeIdOne");
@@ -867,111 +871,19 @@ namespace PokemonCatcherGame.Server.Migrations
                 column: "PokeTypeIdTwo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pokemon_TrainerOpponentEntityId",
-                table: "Pokemon",
-                column: "TrainerOpponentEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PokemonAbilities_PokemonEntityId",
-                table: "PokemonAbilities",
-                column: "PokemonEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PokemonMoves_PokemonEntityId",
-                table: "PokemonMoves",
-                column: "PokemonEntityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PokemonMoves_StatusConditionId",
                 table: "PokemonMoves",
                 column: "StatusConditionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TMs_PokemonEntityId",
-                table: "TMs",
-                column: "PokemonEntityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TMs_StatusConditionId",
                 table: "TMs",
                 column: "StatusConditionId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_PlayerItemInventoryEntityTechnicalMachineMoveEntity_TMs_TMsId",
-                table: "PlayerItemInventoryEntityTechnicalMachineMoveEntity",
-                column: "TMsId",
-                principalTable: "TMs",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Pokemon_PokemonMoves_MoveFourId",
-                table: "Pokemon",
-                column: "MoveFourId",
-                principalTable: "PokemonMoves",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Pokemon_PokemonMoves_MoveOneId",
-                table: "Pokemon",
-                column: "MoveOneId",
-                principalTable: "PokemonMoves",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Pokemon_PokemonMoves_MoveThreeId",
-                table: "Pokemon",
-                column: "MoveThreeId",
-                principalTable: "PokemonMoves",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Pokemon_PokemonMoves_MoveTwoId",
-                table: "Pokemon",
-                column: "MoveTwoId",
-                principalTable: "PokemonMoves",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Players_AspNetUsers_UserId",
-                table: "Players");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Players_PlayerItemInventories_ItemIventoryId",
-                table: "Players");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Pokemon_Opponents_TrainerOpponentEntityId",
-                table: "Pokemon");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Pokemon_Players_PlayerEntityId",
-                table: "Pokemon");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Pokemon_PokemonMoves_MoveFourId",
-                table: "Pokemon");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Pokemon_PokemonMoves_MoveOneId",
-                table: "Pokemon");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Pokemon_PokemonMoves_MoveThreeId",
-                table: "Pokemon");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Pokemon_PokemonMoves_MoveTwoId",
-                table: "Pokemon");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -997,6 +909,9 @@ namespace PokemonCatcherGame.Server.Migrations
                 name: "Keys");
 
             migrationBuilder.DropTable(
+                name: "Opponents");
+
+            migrationBuilder.DropTable(
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
@@ -1012,7 +927,10 @@ namespace PokemonCatcherGame.Server.Migrations
                 name: "PlayerItemInventoryEntityTechnicalMachineMoveEntity");
 
             migrationBuilder.DropTable(
-                name: "PokemonAbilities");
+                name: "Players");
+
+            migrationBuilder.DropTable(
+                name: "Pokemon");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -1036,22 +954,16 @@ namespace PokemonCatcherGame.Server.Migrations
                 name: "PlayerItemInventories");
 
             migrationBuilder.DropTable(
-                name: "Opponents");
-
-            migrationBuilder.DropTable(
-                name: "Players");
+                name: "PokemonAbilities");
 
             migrationBuilder.DropTable(
                 name: "PokemonMoves");
 
             migrationBuilder.DropTable(
-                name: "Pokemon");
+                name: "PokemonTypes");
 
             migrationBuilder.DropTable(
                 name: "StatusConditions");
-
-            migrationBuilder.DropTable(
-                name: "PokemonTypes");
         }
     }
 }

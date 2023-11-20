@@ -51,7 +51,7 @@ public class PokemonDetail
     //* These are the names and descriptions of the abilities and teachable moves
     //* that the pokemon has. They are not stored in the Pokemon Table, but are
     //* instead stored in the PokemonAbility and PokemonMove tables.
-    public List<string>? AbilityName { get; set; }
-    public List<string>? AbilityDescription { get; set; }
+    public string AbilityName { get; set; } = string.Empty; //* This is the name of the ability that the pokemon has.
+    public string AbilityDescription { get; set; } = string.Empty; //* This is the description of the ability that the pokemon has.
 
 }

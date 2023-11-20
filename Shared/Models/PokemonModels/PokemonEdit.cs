@@ -40,7 +40,6 @@ public class PokemonEdit
     public int MoveThreeId { get; set; }
 
     public int? MoveFourId { get; set; }
-
-    public List<int>? AbilitiesList { get; set; }
-    public List<int>? TeachableMoves { get; set; }
+    
+    public int AbilityId { get; set; }
 }

@@ -10,7 +10,7 @@ namespace PokemonCatcherGame.Shared.Models.PokeApiPokemonModels;
 public class PokeApiPokemonDetail
 {
     [JsonPropertyName("id")]
-    public int PokedexNumber { get; set; }
+    public int Id { get; set; }
 
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;

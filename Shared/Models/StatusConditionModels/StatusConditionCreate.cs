@@ -35,5 +35,8 @@ public class StatusConditionCreate
     public bool PoisonEffect { get; set; }
 
     [Required]
+    public bool ConfusionEffect { get; set; }
+
+    [Required]
     public string ConditionDuration { get; set; } = string.Empty;
 }

@@ -14,10 +14,10 @@ public class TrainerOpponentEntity
     [Required, MinLength(4), MaxLength(100)]
     public string OpponentName { get; set; } = string.Empty;
 
-    public ICollection<PokemonEntity> UsablePokemon { get; set; }
+    // public ICollection<PokemonEntity> UsablePokemon { get; set; }
 
-    public TrainerOpponentEntity()
-    {
-        UsablePokemon = new HashSet<PokemonEntity>();
-    }
+    // public TrainerOpponentEntity()
+    // {
+    //     UsablePokemon = new HashSet<PokemonEntity>();
+    // }
 }

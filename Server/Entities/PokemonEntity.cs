@@ -54,17 +54,8 @@ public class PokemonEntity
     public int? MoveFourId { get; set; }
     public virtual PokemonMoveEntity MoveFour { get; set; }
 
-    public virtual ICollection<PokemonAbilityEntity> AbilitiesList { get; set; }
-
-    public PokemonEntity()
-    {
-        PokeTypeOne = new PokemonTypeEntity();
-        PokeTypeTwo = new PokemonTypeEntity();
-        MoveOne = new PokemonMoveEntity();
-        MoveTwo = new PokemonMoveEntity();
-        MoveThree = new PokemonMoveEntity();
-        MoveFour = new PokemonMoveEntity();
-        AbilitiesList = new HashSet<PokemonAbilityEntity>();
-    }
+    [ForeignKey(nameof(Ability))]
+    public int AbilityId { get; set; }
+    public virtual PokemonAbilityEntity Ability { get; set; }
 
 }

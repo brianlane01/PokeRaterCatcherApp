@@ -658,12 +658,7 @@ namespace PokemonCatcherGame.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PokemonEntityId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PokemonEntityId");
 
                     b.ToTable("PokemonAbilities");
 
@@ -912,6 +907,9 @@ namespace PokemonCatcherGame.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AbilityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("BaseExperience")
                         .HasColumnType("int");
 
@@ -938,8 +936,9 @@ namespace PokemonCatcherGame.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PlayerEntityId")
-                        .HasColumnType("int");
+                    b.Property<string>("PokeNickName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PokeTypeIdOne")
                         .HasColumnType("int");
@@ -950,13 +949,12 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.Property<int>("PokedexNumber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TrainerOpponentEntityId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Weight")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AbilityId");
 
                     b.HasIndex("MoveFourId");
 
@@ -966,13 +964,9 @@ namespace PokemonCatcherGame.Server.Migrations
 
                     b.HasIndex("MoveTwoId");
 
-                    b.HasIndex("PlayerEntityId");
-
                     b.HasIndex("PokeTypeIdOne");
 
                     b.HasIndex("PokeTypeIdTwo");
-
-                    b.HasIndex("TrainerOpponentEntityId");
 
                     b.ToTable("Pokemon");
                 });
@@ -1020,15 +1014,10 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.Property<int>("PokeApiMoveId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PokemonEntityId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("StatusConditionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PokemonEntityId");
 
                     b.HasIndex("StatusConditionId");
 
@@ -1141,6 +1130,11 @@ namespace PokemonCatcherGame.Server.Migrations
                         {
                             Id = 1017,
                             PokeType = "Fairy"
+                        },
+                        new
+                        {
+                            Id = 1018,
+                            PokeType = "None"
                         });
                 });
 
@@ -1296,6 +1290,21 @@ namespace PokemonCatcherGame.Server.Migrations
                             SleepEffect = true,
                             StatusConditionDescription = "The targeted Pokemon is put to sleep for up to seven turns. The pokemon is not able to use any moves while asleep.",
                             StatusConditionName = "Sleep"
+                        },
+                        new
+                        {
+                            Id = 1006,
+                            BurnEffect = false,
+                            ConditionDoesDamage = false,
+                            ConditionDuration = "No Status Condition is applied by this move.",
+                            DamageAmount = 0.0,
+                            DamageFrequency = "No Status Condition is applied by this move.",
+                            FreezeEffect = false,
+                            ParalysisEffect = false,
+                            PoisonEffect = false,
+                            SleepEffect = false,
+                            StatusConditionDescription = "No Status Condition is applied by this move.",
+                            StatusConditionName = "No Status Condition"
                         });
                 });
 
@@ -1414,9 +1423,6 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.Property<bool>("PoisonCanLearn")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("PokemonEntityId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("PsychicCanLearn")
                         .HasColumnType("bit");
 
@@ -1433,8 +1439,6 @@ namespace PokemonCatcherGame.Server.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PokemonEntityId");
 
                     b.HasIndex("StatusConditionId");
 
@@ -1596,15 +1600,14 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Server.Entities.PokemonAbilityEntity", b =>
-                {
-                    b.HasOne("Server.Entities.PokemonEntity", null)
-                        .WithMany("AbilitiesList")
-                        .HasForeignKey("PokemonEntityId");
-                });
-
             modelBuilder.Entity("Server.Entities.PokemonEntity", b =>
                 {
+                    b.HasOne("Server.Entities.PokemonAbilityEntity", "Ability")
+                        .WithMany()
+                        .HasForeignKey("AbilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Server.Entities.PokemonMoveEntity", "MoveFour")
                         .WithMany()
                         .HasForeignKey("MoveFourId")
@@ -1629,10 +1632,6 @@ namespace PokemonCatcherGame.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Entities.PlayerEntity", null)
-                        .WithMany("CaughtPokemon")
-                        .HasForeignKey("PlayerEntityId");
-
                     b.HasOne("Server.Entities.PokemonTypeEntity", "PokeTypeOne")
                         .WithMany()
                         .HasForeignKey("PokeTypeIdOne")
@@ -1643,9 +1642,7 @@ namespace PokemonCatcherGame.Server.Migrations
                         .WithMany()
                         .HasForeignKey("PokeTypeIdTwo");
 
-                    b.HasOne("Server.Entities.TrainerOpponentEntity", null)
-                        .WithMany("UsablePokemon")
-                        .HasForeignKey("TrainerOpponentEntityId");
+                    b.Navigation("Ability");
 
                     b.Navigation("MoveFour");
 
@@ -1662,10 +1659,6 @@ namespace PokemonCatcherGame.Server.Migrations
 
             modelBuilder.Entity("Server.Entities.PokemonMoveEntity", b =>
                 {
-                    b.HasOne("Server.Entities.PokemonEntity", null)
-                        .WithMany("Moves")
-                        .HasForeignKey("PokemonEntityId");
-
                     b.HasOne("Server.Entities.StatusConditionEntity", "StatusCondition")
                         .WithMany()
                         .HasForeignKey("StatusConditionId");
@@ -1675,10 +1668,6 @@ namespace PokemonCatcherGame.Server.Migrations
 
             modelBuilder.Entity("Server.Entities.TechnicalMachineMoveEntity", b =>
                 {
-                    b.HasOne("Server.Entities.PokemonEntity", null)
-                        .WithMany("TeachableMoves")
-                        .HasForeignKey("PokemonEntityId");
-
                     b.HasOne("Server.Entities.StatusConditionEntity", "StatusCondition")
                         .WithMany()
                         .HasForeignKey("StatusConditionId")
@@ -1688,28 +1677,9 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.Navigation("StatusCondition");
                 });
 
-            modelBuilder.Entity("Server.Entities.PlayerEntity", b =>
-                {
-                    b.Navigation("CaughtPokemon");
-                });
-
             modelBuilder.Entity("Server.Entities.PlayerItemInventoryEntity", b =>
                 {
                     b.Navigation("HealthItems");
-                });
-
-            modelBuilder.Entity("Server.Entities.PokemonEntity", b =>
-                {
-                    b.Navigation("AbilitiesList");
-
-                    b.Navigation("Moves");
-
-                    b.Navigation("TeachableMoves");
-                });
-
-            modelBuilder.Entity("Server.Entities.TrainerOpponentEntity", b =>
-                {
-                    b.Navigation("UsablePokemon");
                 });
 #pragma warning restore 612, 618
         }

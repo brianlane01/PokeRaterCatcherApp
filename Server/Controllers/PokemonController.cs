@@ -1,19 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using PokemonCatcherGame.Server.Services.PokemonServices;
 using PokemonCatcherGame.Shared.Models.PokemonModels;
 
-namespace PokemonCatcherGame.Server.Controllers;
+namespace Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class PokemonController : ControllerBase
 {
     private readonly IPokemonService _pokemonService;
+    
     public PokemonController(IPokemonService pokemonService)
     {
         _pokemonService = pokemonService;
@@ -39,10 +37,20 @@ public class PokemonController : ControllerBase
         return true;
     }
 
+    public async Task<List<PokemonList>> Index()
+    {
+        if (!SetUserIdInService())
+            return new List<PokemonList>();
+
+        var pokemon = await _pokemonService.GetAllPokemonAsync();
+
+        return pokemon.ToList();
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(PokemonCreate model)
     {
-        if (model == null)
+        if(model == null || !ModelState.IsValid)
             return BadRequest();
 
         if (!SetUserIdInService())
@@ -54,39 +62,31 @@ public class PokemonController : ControllerBase
             return Ok();
 
         else
-            return UnprocessableEntity();
-    }
-
-    [HttpGet]
-    public async Task<List<PokemonList>> Index()
-    {
-        if (!SetUserIdInService())
-            return new List<PokemonList>();
-
-        var pokemon = await _pokemonService.GetAllPokemonAsync();
-
-        return pokemon.ToList();
+            return BadRequest();
     }
 
     [HttpGet("{id}")]
-    public async Task<PokemonDetail?> Details(int id)
+    public async Task<IActionResult> Details(int id)
     {
         if (!SetUserIdInService())
-            return null;
+            return Unauthorized();
 
         var pokemon = await _pokemonService.GetPokemonByIdAsync(id);
 
-        return pokemon;
+        if(pokemon == null)
+            return NotFound();
+
+        return Ok(pokemon);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, PokemonEdit model)
     {
-        if (model == null)
-            return BadRequest();
-
         if (!SetUserIdInService())
             return Unauthorized();
+
+        if (model == null)
+            return BadRequest();
 
         bool wasSuccessful = await _pokemonService.UpdatePokemonAsync(model);
 
@@ -94,7 +94,7 @@ public class PokemonController : ControllerBase
             return Ok();
 
         else
-            return UnprocessableEntity();
+            return BadRequest();
     }
 
     [HttpDelete("{id}")]
@@ -102,6 +102,11 @@ public class PokemonController : ControllerBase
     {
         if (!SetUserIdInService())
             return Unauthorized();
+            
+        var pokemon = await _pokemonService.GetPokemonByIdAsync(id);
+        
+        if(pokemon == null)
+            return NotFound();
 
         bool wasSuccessful = await _pokemonService.DeletePokemonAsync(id);
 
@@ -109,6 +114,6 @@ public class PokemonController : ControllerBase
             return Ok();
 
         else
-            return UnprocessableEntity();
+            return BadRequest();
     }
 }

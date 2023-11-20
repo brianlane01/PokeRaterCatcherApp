@@ -28,6 +28,7 @@ public class StatusConditionService : IStatusConditionService
             FreezeEffect = model.FreezeEffect,
             SleepEffect = model.SleepEffect,
             PoisonEffect = model.PoisonEffect,
+            ConfusionEffect = model.ConfusionEffect,
             ConditionDuration = model.ConditionDuration
         };
 
@@ -77,6 +78,8 @@ public class StatusConditionService : IStatusConditionService
             BurnEffect = entity.BurnEffect,
             FreezeEffect = entity.FreezeEffect,
             SleepEffect = entity.SleepEffect,
+            PoisonEffect = entity.PoisonEffect,
+            ConfusionEffect = entity.ConfusionEffect,
             ConditionDuration = entity.ConditionDuration,
         };
 
@@ -102,6 +105,8 @@ public class StatusConditionService : IStatusConditionService
         entity.BurnEffect = model.BurnEffect;
         entity.FreezeEffect = model.FreezeEffect;
         entity.SleepEffect = model.SleepEffect;
+        entity.PoisonEffect = model.PoisonEffect;
+        entity.ConfusionEffect = model.ConfusionEffect;
         entity.ConditionDuration = model.ConditionDuration;
 
         return await _dbContext.SaveChangesAsync() == 1;

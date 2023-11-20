@@ -12,12 +12,13 @@ public class TechnicalMachineMoveEntity
     [Key]
     public int Id { get; set; }
 
-    [Required, MinLength(3), MaxLength(70)]
-    [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
-    public string MoveName { get; set; } = string.Empty;
+    [Required]
+    public string TMNumber { get; set; } = string.Empty;
 
     [Required, MinLength(3), MaxLength(70)]
-    [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
+    public string MoveName { get; set; } = string.Empty;
+
+    [Required, MinLength(3), MaxLength(250)]
     public string MoveDescription { get; set; } = string.Empty;
 
     [Required, Range(1, 55)]
@@ -25,6 +26,9 @@ public class TechnicalMachineMoveEntity
 
     [Required, Range(0, 200)]
     public int MovePower { get; set; }
+
+    [Required, Range(0, 100)]
+    public int MoveAccuracy { get; set; }
 
     [Required, MinLength(3), MaxLength(70)]
     public string MoveType { get; set; } = string.Empty;
@@ -61,6 +65,8 @@ public class TechnicalMachineMoveEntity
     public bool SteelCanLearn { get; set; }
     public bool NormalCanLearn { get; set; }
     public bool IceCanLearn { get; set; }
+    public bool FlyingCanLearn { get; set; }
+    
 
     public ICollection<PlayerItemInventoryEntity> PlayerInventory { get; set; }
 

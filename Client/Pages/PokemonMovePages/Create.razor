@@ -93,9 +93,9 @@ else
                 <label id="TypeSelect">Select a Type for the move:</label>
                 <InputSelect class="form-control" @bind-Value="model.MoveType" id="SelectionOfType">
                     @foreach (var type in types)
-                            {
-                                <option value="@type.Id">@type.PokeType</option>
-                            }
+                        {
+                            <option value="@type.PokeType">@type.PokeType</option>
+                        }
                 </InputSelect>
             </div>
             <br>

@@ -8,6 +8,7 @@ using PokemonCatcherGame.Server.Services.PokemonServices;
 using PokemonCatcherGame.Server.Services.PokemonTypeServices;
 using PokemonCatcherGame.Server.Services.StatusConditionServices;
 using Microsoft.AspNetCore.Identity;
+using Server.Services.PokemonAbilityServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IPokemonService, PokemonService>();
 builder.Services.AddScoped<IStatusConditionService, StatusConditionService>();
 builder.Services.AddScoped<IPokemonTypeService, PokemonTypeService>();
 builder.Services.AddScoped<IPokemonMoveService, PokemonMoveService>();
+builder.Services.AddScoped<IPokemonAbilityService, PokemonAbilityService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();

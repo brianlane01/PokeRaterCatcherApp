@@ -17,5 +17,7 @@ public class StatusConditionDetail
     public bool BurnEffect { get; set; }
     public bool FreezeEffect { get; set; }
     public bool SleepEffect { get; set; }
+    public bool PoisonEffect { get; set; }
+    public bool ConfusionEffect { get; set; }
     public string ConditionDuration { get; set; } = string.Empty;
 }

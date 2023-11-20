@@ -1,0 +1,214 @@
+@page "/Pokemon/Create"
+@inject HttpClient httpClient
+@attribute [Authorize]
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@using PokemonCatcherGame.Shared.Models.PokeApiPokemonModels
+@using PokemonCatcherGame.Shared.Models.PokemonModels
+@using PokemonCatcherGame.Shared.Models.PokemonTypeModels
+@using PokemonCatcherGame.Shared.Models.PokemonMoveModels
+@using PokemonCatcherGame.Shared.Models.PokemonAbilityModels
+@using System.Text.Json.Serialization
+@using Newtonsoft.Json
+<PageTitle>Index</PageTitle>
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/326240/pexels-photo-326240.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+<div class = "row">
+    <div class ="col mx-auto justify-content-between">
+        <form class ="form-inline" @onsubmit ="GetPokemonAsync">
+            <div class = "form-group mb-2">
+                <input type = "text" @bind-value="@searchText" class="form-control" placeholder="Search Pokemon">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2 ml-auto">Find</button>
+        </form>
+    </div>
+</div>
+
+@if(IsLoading)
+{
+    <h1 class = "text-center">Loading....</h1>
+}
+else
+{
+    if(Pokemon == null)
+    {
+        <h1 class ="text-center"> No Pokemon to display</h1>
+    }
+    else
+    {
+        <div class = "row">
+            <div class = "col mx-auto justify-content-between">
+                <div class = "card">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/@(Pokemon.Id).png" class = "card-img-top img-fluid" alt="@Pokemon.Name">
+                    <div class = "card-body">
+                        <h3 class ="card-title text-capitalize">@Pokemon.Name</h3>
+                        <h6>Id: @Pokemon.Id</h6>
+                        <h6>Height: @Pokemon.Height</h6>
+                        <h6>Weight: @Pokemon.Weight</h6>
+                        <h6>XP: @Pokemon.BaseExperience</h6>
+                    </div>
+                </div>
+                <form class = "form-inline">
+                    <button type = "button" class = "btn btn-primary mb-2" @onclick="@(() => ChangePokemonAsync(-1))">Previous</button>
+                    <button type = "button" class = "btn btn-primary mb-2" @onclick="@(() => ChangePokemonAsync(1))">Next</button>
+                </form>
+                <EditForm Model="@NewPokemon" OnValidSubmit="@HandleSubmit">
+                    <br>
+                    <div class="form-group">
+                        <label for="PokeNickName">NickName for the Pokemon?</label>
+                        <InputText id="PokeNickName" class="form-control" @bind-Value="@NewPokemon.PokeNickName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Health">Pokemon Base Health</label>
+                        <InputNumber id="Health" class="form-control" @bind-Value="@NewPokemon.Health" />
+                    </div>
+                    <div>
+                        <label id="TypeSelect">Select a Primary Type for the Pokemon:</label>
+                        <InputSelect class="form-control" @bind-Value="NewPokemon.PokeTypeIdOne">
+                            @foreach (var type in types)
+                            {
+                                <option value="@type.Id">@type.PokeType</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div>
+                        <label id="TypeSelect">Select Secondary Type for the Pokemon:</label>
+                        <InputSelect class="form-control" @bind-Value="NewPokemon.PokeTypeIdTwo">
+                            @foreach (var type in types)
+                            {
+                                <option value="@type.Id">@type.PokeType</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div>
+                        <label id="TypeSelect">Select Move One for a Pokemon:</label>
+                        <InputSelect class="form-control" @bind-Value="NewPokemon.MoveOneId">
+                            @foreach (var move in moves)
+                            {
+                                <option value="@move.Id">@move.MoveName</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div>
+                        <label id="TypeSelect">Select Move Two for a Pokemon:</label>
+                        <InputSelect class="form-control" @bind-Value="NewPokemon.MoveTwoId">
+                            @foreach (var move in moves)
+                            {
+                                <option value="@move.Id">@move.MoveName</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div>
+                        <label id="TypeSelect">Select Move Three for a Pokemon:</label>
+                        <InputSelect class="form-control" @bind-Value="NewPokemon.MoveThreeId">
+                            @foreach (var move in moves)
+                            {
+                                <option value="@move.Id">@move.MoveName</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div>
+                        <label id="TypeSelect">Select Move Four for a Pokemon:</label>
+                        <InputSelect class="form-control" @bind-Value="NewPokemon.MoveFourId">
+                            @foreach (var move in moves)
+                            {
+                                <option value="@move.Id">@move.MoveName</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div>
+                        <label id="TypeSelect">Select an Ability for the Pokemon:</label>
+                        <InputSelect class="form-control" @bind-Value="NewPokemon.AbilityId">
+                        <option vaule="">Pokemon Ability</option>
+                            @foreach (var ability in abilities)
+                            {
+                                <option value="@ability.Id">@ability.AbilityName</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <button type="submit" class="btn btn-dark bt-block mt-5">Submit</button>
+                </EditForm>
+            </div>
+        </div>
+
+        <br />  
+        <a href ="/Pokemon/Create">Create A Pokemon</a>
+    }
+}
+
+@code {
+    public PokeApiPokemonDetail Pokemon {get; set;}
+    private PokemonCreate NewPokemon = new PokemonCreate();
+
+    public string searchText;
+    public bool IsLoading {get; set;}
+    private string? errorMessage;
+
+    // This is for the dropdown list to select the moves and type for the pokemon...
+    private List<PokemonTypeList>? types; //* = new List<PokemonTypeList>();
+    private List<PokemonMoveListItem>? moves; //* = new List<PokemonMoveListItem>();
+    private List<PokemonAbilityList>? abilities; //* = new List<PokemonAbilityListItem>();
+
+        // This method is helpeing to call to the PokeApi and get the base pokemon information
+    protected async Task GetPokemonAsync()
+    {
+        IsLoading = true;
+        Pokemon = await GetPokemon(searchText);
+        IsLoading = false;
+    }
+
+    protected async Task ChangePokemonAsync(int i)
+    {
+        Pokemon = await GetPokemon((Pokemon.Id += i).ToString());
+    }
+
+        // This method is helpeing to call to the PokeApi and get the base pokemon information
+    public async Task<PokeApiPokemonDetail> GetPokemon(string name)
+    {
+        var result = JsonConvert.DeserializeObject<PokeApiPokemonDetail>(await httpClient.GetStringAsync($"https://pokeapi.co/api/v2/pokemon/{name}"));
+        if (result.Name.Length == 0)
+        {
+            return null;
+        }
+
+        return result;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        types = await httpClient.GetFromJsonAsync<List<PokemonTypeList>>("/api/PokemonType");
+        moves = await httpClient.GetFromJsonAsync<List<PokemonMoveListItem>>("/api/PokemonMove");
+        abilities = await httpClient.GetFromJsonAsync<List<PokemonAbilityList>>("/api/PokemonAbility");
+    }
+
+    private async Task HandleSubmit()
+    {
+        NewPokemon.PokedexNumber = Pokemon.Id;
+        NewPokemon.Name = Pokemon.Name;
+        NewPokemon.Height = Pokemon.Height;
+        NewPokemon.Weight = Pokemon.Weight;
+        NewPokemon.BaseExperience = Pokemon.BaseExperience;
+
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", new object[] {"Are you sure you want to Create the Pokemon:"});
+        if (confirmed)
+        {
+            Console.WriteLine("The Pokemon was created");
+            var result = await httpClient.PostAsJsonAsync<PokemonCreate>("/api/Pokemon", NewPokemon);
+            if (result.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo($"/Pokemon");
+            }
+            else
+            {
+                errorMessage = "Could not create The Pokemon right now. Please try again later.";
+            }
+        }
+    }
+}

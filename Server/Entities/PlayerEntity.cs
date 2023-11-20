@@ -25,13 +25,13 @@ public class PlayerEntity
     public int ItemIventoryId { get; set; }
     public virtual PlayerItemInventoryEntity? ItemInventory { get; set; }
 
-    //* Creates a many to many relationship that will store all the pokemon the player has 'Caught' so that the pokemon's 
-    //* info can be utilized with the player. 
-    public virtual ICollection<PokemonEntity> CaughtPokemon { get; set; }
+    // //* Creates a many to many relationship that will store all the pokemon the player has 'Caught' so that the pokemon's 
+    // //* info can be utilized with the player. 
+    // public virtual ICollection<PokemonEntity> CaughtPokemon { get; set; }
 
-    public PlayerEntity()
-    {
-        CaughtPokemon = new HashSet<PokemonEntity>();
-    }
+    // public PlayerEntity()
+    // {
+    //     CaughtPokemon = new HashSet<PokemonEntity>();
+    // }
 
 }

@@ -36,8 +36,10 @@
 
     private void CreateNewPokemonMove()
     {
-        navigation.NavigateTo("/PokemonMove/Create");    }
+        navigation.NavigateTo("/PokemonMove/Create");    
     }
+}
+
 <style>
     body{
         background-image: url('https://images.pexels.com/photos/2832382/pexels-photo-2832382.jpeg?auto=compress&cs=tinysrgb&w=1200');
@@ -45,6 +47,7 @@
         background-size:  cover;
     }
 </style>
+
 @if(_pokeMoves == null)
 {
     <p><em>Loading......</em></p>

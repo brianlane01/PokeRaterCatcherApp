@@ -46,9 +46,9 @@ public class PokemonMoveController : ControllerBase
         if (!SetUserIdInService())
             return new List<PokemonMoveListItem>();
 
-        var notes = await _pokemonMoveService.GetAllPokemonMovesAsync(page, pageSize);
+        var moves = await _pokemonMoveService.GetAllPokemonMovesAsync(page, pageSize);
             
-        return notes.ToList();
+        return moves.ToList();
     }
 
     [HttpPost]

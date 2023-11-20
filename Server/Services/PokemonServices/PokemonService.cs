@@ -35,15 +35,12 @@ public class PokemonService : IPokemonService
             MoveOneId = model.MoveOneId,
             MoveTwoId = model.MoveTwoId,
             MoveThreeId = model.MoveThreeId,
-            MoveFourId = model.MoveFourId
+            MoveFourId = model.MoveFourId,
+            AbilityId = model.AbilityId,
+            PokeNickName = model.PokeNickName,
         };
         _dbContext.Pokemon.Add(entity);
         var numberOfChanges = await _dbContext.SaveChangesAsync();
-
-        if (model.AbilitiesList != null)
-        {
-            AddAbilityToPokemon(model.AbilitiesList, entity.Id);
-        }
 
         return numberOfChanges == 1;
 
@@ -64,7 +61,6 @@ public class PokemonService : IPokemonService
     public async Task<List<PokemonList>> GetAllPokemonAsync()
     {
         var pokemonQuery = _dbContext.Pokemon
-            .OrderBy(n => n.PokedexNumber)
             .Include(c => c.PokeTypeOne)
             .Include(c => c.PokeTypeTwo)
             .Select(n =>
@@ -84,7 +80,7 @@ public class PokemonService : IPokemonService
     public async Task<PokemonDetail?> GetPokemonByIdAsync(int id)
     {
         PokemonEntity? entity = await _dbContext.Pokemon
-            .Include(c => c.AbilitiesList)
+            .Include(c => c.Ability)
             .Include(c => c.MoveOne)
             .Include(c => c.MoveTwo)
             .Include(c => c.MoveThree)
@@ -121,8 +117,8 @@ public class PokemonService : IPokemonService
                 MoveFourId = entity.MoveFourId,
                 MoveFourName = entity.MoveFour.MoveName,
                 MoveFourDescription = entity.MoveFour.MoveDescription,
-                AbilityName = entity.AbilitiesList.Select(c => c.AbilityName).ToList(),
-                AbilityDescription = entity.AbilitiesList.Select(c => c.AbilityEffect).ToList()
+                AbilityName = entity.Ability.AbilityName,
+                AbilityDescription = entity.Ability.AbilityEffect
             };
     }
 
@@ -148,32 +144,12 @@ public class PokemonService : IPokemonService
         entity.MoveTwoId = request.MoveTwoId;
         entity.MoveThreeId = request.MoveThreeId;
         entity.MoveFourId = request.MoveFourId;
+        entity.AbilityId = request.AbilityId;
         
         var numberOfChanges = await _dbContext.SaveChangesAsync();
-
-        if (request.AbilitiesList != null)
-        {
-            AddAbilityToPokemon(request.AbilitiesList, entity.Id);
-        }
 
         return numberOfChanges == 1;
     }
 
     public void SetUserId(string userId) => _userId = userId;
-
-    public void AddAbilityToPokemon(List<int> abilityIds, int pokeId)
-    {
-        var newPokemon = _dbContext.Pokemon.Include(c => c.AbilitiesList).Single(c => c.Id == pokeId);
-        foreach (var abilityId in abilityIds)
-        {
-            var newAbility = _dbContext.PokemonAbilities.Find(abilityId);
-            if (newAbility != null)
-            {
-                newPokemon.AbilitiesList.Add(newAbility);
-            }
-        }
-
-        _dbContext.SaveChanges();
-    }
-
 }

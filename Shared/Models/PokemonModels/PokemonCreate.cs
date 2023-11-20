@@ -46,6 +46,6 @@ public class PokemonCreate
 
     public int? MoveFourId { get; set; }
 
-    public List<int>? AbilitiesList { get; set; }
-    public List<int>? TeachableMoves { get; set; }
+    [Required]
+    public int AbilityId { get; set; }
 }

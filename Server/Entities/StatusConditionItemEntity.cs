@@ -32,6 +32,9 @@ public class StatusConditionItemEntity
     [Required]
     public bool RemovesBurn { get; set; }
 
+    [Required]
+    public bool RemovesConfusion { get; set; }
+
     public ICollection<PlayerItemInventoryEntity> PlayerInventory { get; set; }
 
     public StatusConditionItemEntity()
