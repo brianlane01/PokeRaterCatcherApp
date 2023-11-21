@@ -6,7 +6,7 @@
 @inject NavigationManager navigation
 
 @code{
-    private List<PokemonList> _pokemon;
+    private List<PokemonList>? _pokemon;
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,6 +43,7 @@ else
                 <th>Pokemon NickName</th>
                 <th>Pokemon Type One</th>
                 <th>Pokemon Type Two</th>
+                <th>What would you like to do?</th>
             </tr>
         </thead>
         <tbody>
@@ -51,10 +52,21 @@ else
                 <tr>
                     <td class ="text-center">@pokemon.Id</td>
                     <td class ="text-center">@pokemon.PokedexNumber</td>
-                    <td>@pokemon.Name</td>
+                    <td class = "text-capitalize">@pokemon.Name</td>
                     <td>@pokemon.PokeNickName</td>
                     <td>@pokemon.PokeTypeNameOne</td>
                     <td>@pokemon.PokeTypeNameTwo</td>
+                    <td>
+                        <div style="margin-bottom: 3px;">
+                            <a href=@($"Pokemon/{pokemon.Id}")>Get More Details</a>
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <a href=@($"Pokemon/Edit/{pokemon.Id}")>Edit</a>
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <a href=@($"Pokemon/Delete/{pokemon.Id}")>Delete</a>
+                        </div>
+                    </td>
                 </tr>
             }
 

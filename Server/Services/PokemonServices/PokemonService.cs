@@ -104,6 +104,8 @@ public class PokemonService : IPokemonService
                 BaseExperience = entity.BaseExperience,
                 Health = entity.Health,
                 PokeTypeIdOne = entity.PokeTypeIdOne,
+                PokeTypeNameOne = entity.PokeTypeOne.PokeType,
+                PokeTypeNameTwo = entity.PokeTypeTwo.PokeType,
                 PokeTypeIdTwo = entity.PokeTypeIdTwo,
                 MoveOneId = entity.MoveOneId,
                 MoveOneName = entity.MoveOne.MoveName,
@@ -133,13 +135,14 @@ public class PokemonService : IPokemonService
             return false;
 
         entity.Id = request.Id;
+        entity.Name = request.Name;
         entity.PokeNickName = request.PokeNickName;
-        entity.Height = request.Height;
-        entity.Weight = request.Weight;
-        entity.BaseExperience = request.BaseExperience;
-        entity.Health = request.Health;
-        entity.PokeTypeIdOne = request.PokeTypeIdOne;
-        entity.PokeTypeIdTwo = request.PokeTypeIdTwo;
+        // entity.Height = request.Height;
+        // entity.Weight = request.Weight;
+        // entity.BaseExperience = request.BaseExperience;
+        // entity.Health = request.Health;
+        // entity.PokeTypeIdOne = request.PokeTypeIdOne;
+        // entity.PokeTypeIdTwo = request.PokeTypeIdTwo;
         entity.MoveOneId = request.MoveOneId;
         entity.MoveTwoId = request.MoveTwoId;
         entity.MoveThreeId = request.MoveThreeId;

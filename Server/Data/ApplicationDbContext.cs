@@ -16,7 +16,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
     }
 
-    public DbSet<HealthItemEntity> HealthRestoratinItems { get; set; }
+    public DbSet<HealthItemEntity> HealthRestorationItems { get; set; }
     public DbSet<PlayerEntity> Players { get; set; }
     public DbSet<RejuvenationItemEntity> ReviveItems { get; set; }
     public DbSet<PlayerItemInventoryEntity> PlayerItemInventories { get; set; }

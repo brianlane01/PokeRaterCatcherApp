@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokemonCatcherGame.Server.Data;
 using PokemonCatcherGame.Server.Entities;
@@ -68,6 +69,21 @@ public class PokemonMoveService : IPokemonMoveService
         return await moveQuery
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<List<PokemonMoveListItem>> GetAllPokemonMovesForPokemonCreateAsync()
+    {
+        var moveQuery = _dbContext.PokemonMoves
+            .Select(n => 
+                new PokemonMoveListItem
+                {
+                    Id = n.Id,
+                    MoveName = n.MoveName,
+                    MoveDescription = n.MoveDescription,
+                });
+        
+        return await moveQuery
             .ToListAsync();
     }
 

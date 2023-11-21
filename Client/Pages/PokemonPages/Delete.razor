@@ -1,0 +1,76 @@
+@page "/Pokemon/Delete/{PokemonId:int}"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+@using PokemonCatcherGame.Shared.Models.PokemonModels
+
+@code{
+    [Parameter]
+    public int PokemonId { get; set; }
+
+    public PokemonDetail? Pokemon { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Pokemon = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{PokemonId}");
+    }
+
+    private async void HandleClick()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the Pokemon: " + Pokemon?.Name);
+        if (confirmed)
+        {
+            var result = await httpClient.DeleteAsync($"api/Pokemon/{PokemonId}");
+            if (result.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo("/Pokemon");
+            }
+            else
+            {
+                ErrorMessage = "Something went wrong deleting the Pokemon.";
+            }
+        }
+    }
+
+    private async Task Cancel()
+    {
+        await jsRuntime.InvokeVoidAsync("confirm", "Are you sure you want to cancel?");
+    }
+}
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/7794399/pexels-photo-7794399.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+<h3> Pokmon Delete Request</h3>
+
+@if(Pokemon != null)
+{
+    <div class="container page-background-class">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span class="text-warning">Pokemon Id: @Pokemon.Id</span>
+            </div>
+            <div class="card body">
+                <span class="text-warning">Pokemon Name: @Pokemon.Name</span>
+                <span class="text-warning">Pokemon Primary Type: @Pokemon.PokeTypeNameOne</span>
+                <span class="text-warning">Pokemon Secondary Type: @Pokemon.PokeTypeNameTwo</span>
+                <p class="text-warning">Pokemon PokeDex Number: @Pokemon.PokedexNumber</p>
+            </div>
+        </div>
+    </div>
+    <br />
+    <a href=@($"/Pokemon/{PokemonId}") class="btn btn-success text-black">Pokemon Details</a>
+    <button class="btn btn-danger" @onclick="HandleClick">Delete</button>
+}
+else
+{
+    <p>There was an error loading the Pokemon Move</p>
+}

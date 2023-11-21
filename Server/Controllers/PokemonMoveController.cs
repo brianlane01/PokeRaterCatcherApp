@@ -51,6 +51,17 @@ public class PokemonMoveController : ControllerBase
         return moves.ToList();
     }
 
+    [HttpGet("ForPokemonCreate")]
+    public async Task<List<PokemonMoveListItem>> GetAllMovesForPokemonCreate()
+    {
+        if (!SetUserIdInService())
+            return new List<PokemonMoveListItem>();
+
+        var moves = await _pokemonMoveService.GetAllPokemonMovesForPokemonCreateAsync();
+            
+        return moves.ToList();
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(PokemonMoveCreate model)
     {

@@ -14,5 +14,6 @@ public interface IPokemonMoveService
     Task<PokemonMoveDetailDb?> GetPokemonMoveByIdAsync(int id);
     Task<bool> UpdatePokemonMoveAsync(PokemonMoveEdit request);
     Task<bool> DeletePokemonMoveAsync(int id);
+    Task<List<PokemonMoveListItem>> GetAllPokemonMovesForPokemonCreateAsync();
     void SetUserId(string userId);
 }

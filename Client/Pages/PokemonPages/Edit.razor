@@ -1,0 +1,165 @@
+@page "/Pokemon/Edit/{PokemonId:int}"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+@using PokemonCatcherGame.Shared.Models.PokemonModels
+@using PokemonCatcherGame.Shared.Models.PokemonMoveModels
+@using PokemonCatcherGame.Shared.Models.PokemonAbilityModels
+
+@code{
+    [Parameter]
+    public int PokemonId { get; set; }
+
+    public PokemonEdit? Pokemon = new PokemonEdit();
+    
+    private List<PokemonMoveListItem>? moves; //* = new List<PokemonMoveListItem>();
+
+    private List<PokemonAbilityList>? abilities; //* = new List<PokemonAbilityListItem>();
+    
+    public string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Pokemon = await httpClient.GetFromJsonAsync<PokemonEdit>($"api/Pokemon/{PokemonId}");
+        moves = await httpClient.GetFromJsonAsync<List<PokemonMoveListItem>>($"api/PokemonMove/ForPokemonCreate");
+        abilities = await httpClient.GetFromJsonAsync<List<PokemonAbilityList>>($"api/PokemonAbility");
+    }
+
+    private async Task EditPokemon()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to update " + Pokemon.Name + "?");
+        if(confirmed)
+        {
+            var response = await httpClient.PutAsJsonAsync($"api/Pokemon/{PokemonId}", Pokemon);
+            if (response.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo("/Pokemon");
+            }
+            else
+            {
+                ErrorMessage = "Could not update the Pokemon Information.";
+            }
+        }
+    }
+
+    private async Task DeletePokemon()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete" + Pokemon.Name + "?");
+        if (confirmed)
+        {
+            var response = await httpClient.DeleteAsync($"api/Pokemon/{PokemonId}");
+            if (response.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo("/Pokemon");
+            }
+            else
+            {
+                ErrorMessage = "Could not delete the Pokemon.";
+            }
+        }
+    }
+
+    private async Task Cancel()
+    {
+        navigationManager.NavigateTo("/Pokemon");
+    }
+}
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+<h3>Edit @Pokemon.Name</h3>
+
+@if(ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ErrorMessage
+    </div>
+}
+
+@if(moves == null && Pokemon == null && abilities == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container">
+        <EditForm Model="@Pokemon" OnValidSubmit="@EditPokemon">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label>Update @Pokemon.Name's NickName:</label>
+                <InputText class="form-control" @bind-Value="Pokemon.PokeNickName" />
+                <div>
+                    <label id="TypeSelect">Select Move One for a Pokemon:</label>
+                    @if (Pokemon != null && moves != null)
+                    {
+                        <InputSelect class="form-control" @bind-Value="Pokemon.MoveOneId">
+                            @foreach (var move in moves)
+                            {
+                                <option value="@move.Id">@move.MoveName</option>
+                            }
+                        </InputSelect>
+                    }
+                </div>
+                <div>
+                    <label id="TypeSelect">Select Move Two for a Pokemon:</label>
+                    @if (Pokemon != null && moves != null)
+                    {
+                        <InputSelect class="form-control" @bind-Value="Pokemon.MoveTwoId">
+                            @foreach (var move in moves)
+                            {
+                                <option value="@move.Id">@move.MoveName</option>
+                            }
+                        </InputSelect>
+                    }
+                </div>
+                <div>
+                    <label id="TypeSelect">Select Move Three for a Pokemon:</label>
+                    @if (Pokemon != null && moves != null)
+                    {
+                        <InputSelect class="form-control" @bind-Value="Pokemon.MoveThreeId">
+                            @foreach (var move in moves)
+                            {
+                                <option value="@move.Id">@move.MoveName</option>
+                            }
+                        </InputSelect>
+                    }
+                </div>
+                <div>
+                    <label id="TypeSelect">Select Move Four for a Pokemon:</label>
+                    @if (Pokemon != null && moves != null)
+                    {
+                        <InputSelect class="form-control" @bind-Value="Pokemon.MoveFourId">
+                            @foreach (var move in moves)
+                            {
+                                <option value="@move.Id">@move.MoveName</option>
+                            }
+                        </InputSelect>
+                    }
+                </div>
+                <div>
+                    <label id="TypeSelect">Select an Ability for the Pokemon:</label>
+                    @if (Pokemon != null && moves != null && abilities != null)
+                    {
+                        <InputSelect class="form-control" @bind-Value="Pokemon.AbilityId">
+                            @foreach (var ability in abilities)
+                            {
+                                <option value="@ability.Id">@ability.AbilityName</option>
+                            }
+                        </InputSelect>
+                    }
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark bt-block mt-5">Submit</button> 
+            <button type="submit" class="btn btn-dark bt-block mt-5" @onclick="DeletePokemon">Delete</button>
+            <button type="submit" class="btn btn-dark bt-block mt-5" @onclick="Cancel">Cancel</button>
+        </EditForm>
+    </div>
+}

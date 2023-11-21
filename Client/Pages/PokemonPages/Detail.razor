@@ -1,0 +1,101 @@
+@page "/Pokemon/{PokemonId:int}"
+@using PokemonCatcherGame.Shared.Models.PokemonModels
+@using PokemonCatcherGame.Shared.Models.PokemonMoveModels
+@using PokemonCatcherGame.Shared.Models.PokemonTypeModels
+@using PokemonCatcherGame.Shared.Models.PokemonAbilityModels
+@attribute [Authorize]
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+
+@code{
+    [Parameter]
+    public int PokemonId { get; set; }
+
+    public PokemonDetail? Pokemon { get; set; } 
+
+    protected override async Task OnInitializedAsync()
+    {
+        Pokemon = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{PokemonId}");
+    }
+
+    private void NavigateToPokemon()
+    {
+        navigationManager.NavigateTo("/Pokemon");
+    }
+}
+
+<h3 class="text-capitalize">Pokemon Details for @Pokemon?.Name</h3>
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/1629236/pexels-photo-1629236.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+@if(Pokemon == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class ="Container-xxl p-3 mb-2 bg-success text-b0dy-tertiary">
+        <div class="card">
+            <div class="card-header justify-content-between text-center bg-secondary">
+                <h4 class="card-title text-white text-capitalize">Details for @Pokemon?.Name</h4>
+            </div>
+            <div class="card-body fw-bolder">
+                <h4 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's PokeDex Number: @Pokemon?.PokedexNumber</h4>
+                <h4 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's NickName: @Pokemon?.PokeNickName</h4>
+                <h4 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's Primary Type is @Pokemon?.PokeTypeNameOne</h4>
+                @if(Pokemon?.PokeTypeIdTwo == 1018)
+                {
+                    <h4 class="text-left text-black fw-bolder">@Pokemon?.Name does not have a Secondary Type.</h4>
+                }
+                else
+                {
+                    <h4 class="text-left text-black fw-bolder">@Pokemon?.Name's Secondary Type is @Pokemon?.PokeTypeNameTwo</h4>
+                }
+                <div>
+                    <h4 class="text-left text-black fw-bolder">@Pokemon?.Name's Primary Ability is @Pokemon?.AbilityName</h4>
+                    <h6 class="text-left text-black fw-bolder">@Pokemon?.Name's Primary Ability Description:</h6>
+                    <p>@Pokemon?.AbilityDescription</p>
+                </div>
+            </div>
+            <div class ="card-footer justify-content-between text-center bg-secondary">
+                <span class="text-capitalize">@Pokemon?.Name has a weight of @Pokemon?.Weight</span>
+                <br>
+                <span class="text-capitalize">@Pokemon?.Name has a height of @Pokemon?.Height</span>
+                <br>
+                <span class="text-capitalize">@Pokemon?.Name gives you @Pokemon?.BaseExperience experienc points when defeated.</span>
+                <br>
+                <span class="text-capitalize">@Pokemon?.Name's base health is @Pokemon?.Health</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+                <div class="card-header justify-content-between text-center bg-secondary">
+                    <h4 class="card-title text-white text-capitalize">Details for @Pokemon?.Name's Attacks</h4>
+                </div>
+                <div class="card-body fw-bolder">
+                    <h4 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's Primary Attack is @Pokemon?.MoveOneName</h4>
+                    <h6 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's Primary Attack Description:</h6>
+                  
+                    <p>@Pokemon?.MoveOneDescription</p>
+                    <h4 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's Secondary Attack is @Pokemon?.MoveTwoName</h4>
+                    <h6 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's Secondary Attack Description:</h6>
+                    <p>@Pokemon?.MoveTwoDescription</p>
+                    <h4 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's Third Attack is @Pokemon?.MoveThreeName</h4>
+                    <h6 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's Third Attack Description:</h6>
+                    
+                    <p>@Pokemon?.MoveThreeDescription</p>
+                    <h4 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's Fourth Attack is @Pokemon?.MoveFourName</h4>
+                    <h6 class="text-left text-black fw-bolder text-capitalize">@Pokemon?.Name's Fourth Attack Description:</h6>
+                    
+                    <p>@Pokemon?.MoveFourDescription</p>
+                </div>
+            </div>
+}
