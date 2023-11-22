@@ -22,7 +22,7 @@ public class PlayerEntity
     public virtual ApplicationUser? User {get; set;}
 
     [ForeignKey(nameof(ItemInventory))]
-    public int ItemIventoryId { get; set; }
+    public int? ItemInventoryId { get; set; }
     public virtual PlayerItemInventoryEntity? ItemInventory { get; set; }
 
     // //* Creates a many to many relationship that will store all the pokemon the player has 'Caught' so that the pokemon's 

@@ -14,6 +14,8 @@ public class PlayerItemInventoryEntity
     [Required]
     public string NameOfPlayer { get; set; } = string.Empty;
 
+    public virtual List<PlayerEntity> Players { get; set; } 
+
     //* Creates Many to Many relationships so that I can utilize the various items stored in these other tables as a player's Inventory....
     public ICollection<HealthItemEntity> HealthItems { get; set; } 
     public ICollection<RejuvenationItemEntity> ReviveItems { get; set; }
