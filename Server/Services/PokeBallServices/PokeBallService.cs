@@ -49,6 +49,7 @@ public class PokeBallService : IPokeBallService
     public async Task<List<PokeBallListItem>> GetAllPokeBallsAsync(int page, int pageSize)
     {
         var pokeBallQuery = _dbContext.PokeBalls
+            .OrderBy(entity => entity.Id)
             .Select(entity => new PokeBallListItem
             {
                 Id = entity.Id,

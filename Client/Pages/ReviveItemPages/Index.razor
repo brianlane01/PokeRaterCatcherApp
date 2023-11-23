@@ -1,0 +1,109 @@
+@page "/ReviveItem"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+@using PokemonCatcherGame.Shared.Models.RejuvenationItemModels
+
+<PageTitle>AllReviveItems</PageTitle>
+<h2>Revive Items for Pokémon</h2>
+
+@code {
+    private List<RejuvenationItemList>? ReviveItems = new List<RejuvenationItemList>();
+    private string? errorMessage;
+
+    private int currentPage = 1;
+    private const int PageSize = 10;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            ReviveItems = await httpClient.GetFromJsonAsync<List<RejuvenationItemList>>($"api/RejuvenationItem?page={currentPage}&pageSize={PageSize}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadData();
+        }
+    }
+
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadData();
+    }
+
+    private void CreateNewReviveItem()
+    {
+        navigationManager.NavigateTo("/ReviveItem/Create");
+    }
+}
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/2832382/pexels-photo-2832382.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+@if(ReviveItems == null)
+{
+    <p><em>Loading . . . . . .</em></p>
+}
+else
+{
+    <div>
+        <table class="table table-striped table-dark table-hover table-bordered border-danger">
+            <thead>
+                <tr class="text-center">
+                    <th>Revive Item Id</th>
+                    <th>Revive Item Name</th>
+                    <th>Revive Item Description</th>
+                    <th>What would you like to do?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var reviveItem in ReviveItems)
+                {
+                    <tr class="text-center">
+                        <td>@reviveItem.Id</td>
+                        <td>@reviveItem.RejuvenationItemName</td>
+                        <td>@reviveItem.RejuvenationItemDescription</td>
+                        <td>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"ReviveItem/{reviveItem.Id}")>Get More Details</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"ReviveItem/Edit/{reviveItem.Id}")>Edit Revive Item</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"ReviveItem/Delete/{reviveItem.Id}")>Delete Revive Item</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+                <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
+                <button class="btn btn-danger"  @onclick="NextPage" disabled="@(ReviveItems.Count() < 10)">Next</button>
+            </div>
+        <br>
+        <button class="btn btn-danger" @onclick="CreateNewReviveItem">Create A New Revive Item</button>
+    </div>
+}

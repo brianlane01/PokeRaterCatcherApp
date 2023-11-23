@@ -15,7 +15,7 @@ public class PlayerService : IPlayerService
 {
     private readonly ApplicationDbContext _dbContext;
 
-    private string _userId;
+    private string? _userId;
 
     public PlayerService(ApplicationDbContext dbContext)
     {
@@ -24,6 +24,10 @@ public class PlayerService : IPlayerService
     
     public async Task<bool> CreatePlayerAsync(PlayerCreate model)
     {
+        if (_userId == null)
+        {
+            throw new InvalidOperationException("UserId is not set.");
+        }
         PlayerEntity entity = new()
         {
             Name = model.Name,
@@ -43,7 +47,7 @@ public class PlayerService : IPlayerService
         return numberOfChanges == 1;
     }
 
-    public async Task<List<PlayerIndex>> GetAllPlayersAsync()
+    public async Task<List<PlayerIndex>> GetAllPlayersAsync(int page, int pageSize)
     {
         var playerQuery = _dbContext.Players
             .Where(c => c.UserId == _userId)
@@ -54,7 +58,10 @@ public class PlayerService : IPlayerService
                 UserId = c.UserId,
             });
 
-        return await playerQuery.ToListAsync();
+        return await playerQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
     }
 
     public async Task<PlayerDetail?> GetPlayerByIdAsync(int id)
@@ -99,18 +106,39 @@ public class PlayerService : IPlayerService
         _dbContext.SaveChanges();
     }
 
-    public Task<bool> UpdatePlayerAsync(PlayerEdit request)
+    public async Task<bool> UpdatePlayerAsync(PlayerEdit request)
     {
-        throw new NotImplementedException();
+        var entity = await _dbContext.Players.FindAsync(request.Id);
+
+        if (entity is null)
+            return false;
+        
+        entity.Id = request.Id;
+        entity.Name = request.Name;
+        entity.UserId = _userId;
+        entity.ItemInventoryId = request.ItemInventoryId;
+
+        var numberOfChanges = await _dbContext.SaveChangesAsync();
+
+        if (request.CaughtPokemon != null)
+        {
+            AddPokemonToPlayer(request.CaughtPokemon, entity.Id);
+        }
+
+        return numberOfChanges == 1;
     }
 
-    public Task<bool> DeletePlayerAsync(int id)
+    public async Task<bool> DeletePlayerAsync(int id)
     {
-        throw new NotImplementedException();
+        var entity = await _dbContext.Players.FindAsync(id);
+
+        if (entity is null)
+            return false;
+        
+        _dbContext.Players.Remove(entity);
+
+        return await _dbContext.SaveChangesAsync() == 1;
     }
 
-    public void SetUserId(string userId)
-    {
-        throw new NotImplementedException();
-    }
+    public void SetUserId(string userId) => _userId = userId;
 }

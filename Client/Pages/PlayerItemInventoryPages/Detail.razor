@@ -1,0 +1,49 @@
+@page "/PlayerInventory/{PlayerInventoryId:int}"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+@using PokemonCatcherGame.Shared.Models.PlayerItemInventoryModels
+@using PokemonCatcherGame.Shared.Models.PlayerModels
+@using PokemonCatcherGame.Shared.Models.HealthItemModels
+@using PokemonCatcherGame.Shared.Models.RejuvenationItemModels
+@using PokemonCatcherGame.Shared.Models.TechnicalMachineMovesModels
+@using PokemonCatcherGame.Shared.Models.PokeBallModels
+@using PokemonCatcherGame.Shared.Models.StatusConditionItemModels
+
+<h3>Player Inventory</h3>
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/1629236/pexels-photo-1629236.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+@if(PlayerInventory == null)
+{
+    <p><em>Loading. . . . . </em></p>
+}
+else
+{
+
+}
+
+@code {
+    [Parameter]
+    public int PlayerInventoryId { get; set; }
+
+    public PlayerInventoryDetail? PlayerInventory { get; set; } 
+
+    protected override async Task OnInitializedAsync()
+    {
+        PlayerInventory = await httpClient.GetFromJsonAsync<PlayerInventoryDetail>($"api/PlayerInventory/{PlayerInventoryId}");
+    }
+
+    private void NavigateToPlayerInventoryList()
+    {
+        navigationManager.NavigateTo("/PlayerInventory");
+    }
+
+}

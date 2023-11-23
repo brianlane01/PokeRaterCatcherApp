@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Shared.Models.TechnicalMachineMovesModels;
+namespace PokemonCatcherGame.Shared.Models.TechnicalMachineMovesModels;
 
 public class TMDetail
 {
@@ -42,6 +42,10 @@ public class TMDetail
 
     //* Establishes a Relationship with the StatusConditions Table so that the PokemonMoves can use the information stored in that Table..
     public int StatusConditionId { get; set; }
+
+    public string StatusConditionName { get; set; } = string.Empty;
+
+    public string StatusConditionDescription { get; set; } = string.Empty;
 
     //* Checks to determine what types of pokemon can learn the move
     public bool PsychicCanLearn { get; set; } 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Shared.Models.TechnicalMachineMovesModels;
+namespace PokemonCatcherGame.Shared.Models.TechnicalMachineMovesModels;
 
 public class TMIndex
 {

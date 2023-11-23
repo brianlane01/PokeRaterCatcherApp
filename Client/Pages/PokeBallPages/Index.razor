@@ -1,0 +1,174 @@
+@page "/PokeBalls"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+@using PokemonCatcherGame.Shared.Models.PokeBallModels
+
+<PageTitle>AllPokeBalls</PageTitle>
+<h2>Types of Poke Balls used to Catch Pokemon</h2>
+
+<div id="pokeBallTable">
+    @if(PokeBalls == null)
+    {
+        <p><em>Loading . . . . . .</em></p>
+    }
+    else
+    {
+        <table class="table table-striped table-dark table-hover table-bordered border-danger">
+            <thead>
+                <tr class="text-center">
+                    <th>Poke Ball Id</th>
+                    <th>Poke Ball Name</th>
+                    <th>Poke Ball Description</th>
+                    <th>What would you like to do?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var pokeBall in PokeBalls)
+                {
+                    <tr class="text-center">
+                        <td>@pokeBall.Id</td>
+                        <td>@pokeBall.NameOfBall</td>
+                        <td>@pokeBall.DescriptionOfPokeBall</td>
+                        <td>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"PokeBalls/{pokeBall.Id}")>Get More Details</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"PokeBalls/Edit/{pokeBall.Id}")>Edit Poke Ball</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"PokeBalls/Delete/{pokeBall.Id}")>Delete Poke Ball</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
+            <button class="btn btn-danger"  @onclick="NextPage" disabled="@(PokeBalls.Count() < 10)">Next</button>
+        </div>
+    }
+</div>
+
+@code {
+    private List<PokeBallListItem>? PokeBalls = new List<PokeBallListItem>();
+    private string? errorMessage;
+
+    private int currentPage = 1;
+    private const int PageSize = 10;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            PokeBalls = await httpClient.GetFromJsonAsync<List<PokeBallListItem>>($"api/PokeBall?page={currentPage}&pageSize={PageSize}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadData();
+        }
+    }
+    
+    private async Task CallJavaScriptFunction()
+    {
+        await jsRuntime.InvokeVoidAsync("initializeTable", currentPage);
+    }
+
+            private async Task NextPage()
+            {
+                currentPage++;
+                await LoadData();
+                await jsRuntime.InvokeVoidAsync("updateTable", PageSize);
+            }
+
+            private void CreateNewPokeBall()
+            {
+                navigationManager.NavigateTo("/PokeBalls/Create");
+            }
+        }
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/2832382/pexels-photo-2832382.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        
+        if (firstRender)
+        {
+            await jsRuntime.InvokeVoidAsync("initializeTable", currentPage);
+        }
+    }
+}
+
+<script>
+    function initializeTable(currentPage) {
+        window.updateTable = function (pageSize) {
+            fetch(`/api/PokeBall?page=${currentPage}&pageSize=${pageSize}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector("#pokeBallTable tbody");
+                    tableBody.innerHTML = "";
+
+                    data.forEach(pokeBall => {
+                        const row = document.createElement("tr");
+                        row.classList.add("text-center");
+
+                        const idCell = document.createElement("td");
+                        idCell.textContent = pokeBall.Id;
+                        row.appendChild(idCell);
+
+                        const nameCell = document.createElement("td");
+                        nameCell.textContent = pokeBall.NameOfBall;
+                        row.appendChild(nameCell);
+
+                        const descriptionCell = document.createElement("td");
+                        descriptionCell.textContent = pokeBall.DescriptionOfPokeBall;
+                        row.appendChild(descriptionCell);
+
+                        const actionsCell = document.createElement("td");
+                        const getDetailsLink = document.createElement("a");
+                        getDetailsLink.href = `PokeBalls/${pokeBall.Id}`;
+                        getDetailsLink.textContent = "Get More Details";
+                        actionsCell.appendChild(getDetailsLink);
+
+                        const editLink = document.createElement("a");
+                        editLink.href = `PokeBalls/Edit/${pokeBall.Id}`;
+                        editLink.textContent = "Edit Poke Ball";
+                        actionsCell.appendChild(editLink);
+
+                        const deleteLink = document.createElement("a");
+                        deleteLink.href = `PokeBalls/Delete/${pokeBall.Id}`;
+                        deleteLink.textContent = "Delete Poke Ball";
+                        actionsCell.appendChild(deleteLink);
+
+                        row.appendChild(actionsCell);
+
+                        tableBody.appendChild(row);
+                    });
+                });
+        };
+    }
+</script>

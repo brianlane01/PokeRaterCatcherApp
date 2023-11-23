@@ -1,0 +1,109 @@
+@page "/TMs"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+@using PokemonCatcherGame.Shared.Models.TechnicalMachineMovesModels
+
+<PageTitle>AllTMs</PageTitle>
+<h2>TMs for teaching Pokémon New Moves</h2>
+
+@code {
+    private List<TMIndex>? NewMoves = new List<TMIndex>();
+    private string? errorMessage;
+
+    private int currentPage = 1;
+    private const int PageSize = 10;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            NewMoves = await httpClient.GetFromJsonAsync<List<TMIndex>>($"api/TM?page={currentPage}&pageSize={PageSize}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadData();
+        }
+    }
+
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadData();
+    }
+
+    private void CreateNewTM()
+    {
+        navigationManager.NavigateTo("/TMs/Create");
+    }
+}
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/2832382/pexels-photo-2832382.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+@if(NewMoves == null)
+{
+    <p><em>Loading . . . . . .</em></p>
+}
+else
+{
+    <div>
+        <table class="table table-striped table-dark table-hover table-bordered border-danger">
+            <thead>
+                <tr class="text-center">
+                    <th>TM Id</th>
+                    <th>TM Name</th>
+                    <th>TM Description</th>
+                    <th>What would you like to do?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var newMove in NewMoves)
+                {
+                    <tr class="text-center">
+                        <td>@newMove.Id</td>
+                        <td>@newMove.MoveName</td>
+                        <td>@newMove.MoveDescription</td>
+                        <td>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"TMs/{newMove.Id}")>Get More Details</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"TMs/Edit/{newMove.Id}")>Edit Health Item</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"TMs/Delete/{newMove.Id}")>Delete Health Item</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+                <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
+                <button class="btn btn-danger"  @onclick="NextPage" disabled="@(NewMoves.Count() < 10)">Next</button>
+            </div>
+        <br>
+        <button class="btn btn-danger" @onclick="CreateNewTM">Create A New TM</button>
+    </div>
+}

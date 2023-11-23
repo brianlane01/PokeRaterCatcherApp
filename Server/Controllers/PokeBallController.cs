@@ -121,10 +121,10 @@ public class PokeBallController : ControllerBase
             
         var pokeBall = await _pokeBallService.GetPokeBallByIdAsync(id);
 
-        bool wasSuccessful = await _pokeBallService.DeletePokeBallAsync(id);
-
-        if(pokeBall is null)
+        if (pokeBall is null)
             return NotFound();
+
+        bool wasSuccessful = await _pokeBallService.DeletePokeBallAsync(id);
 
         if (wasSuccessful)
             return Ok();

@@ -1,0 +1,611 @@
+@page "/PlayerInventory/Create"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+@using PokemonCatcherGame.Shared.Models.HealthItemModels
+@using PokemonCatcherGame.Shared.Models.PlayerItemInventoryModels
+@using PokemonCatcherGame.Shared.Models.PokeBallModels
+@using PokemonCatcherGame.Shared.Models.RejuvenationItemModels
+@using PokemonCatcherGame.Shared.Models.StatusConditionItemModels 
+@using PokemonCatcherGame.Shared.Models.TechnicalMachineMovesModels
+
+<PageTitle>CreateInventory</PageTitle>
+
+<style>
+body{
+    background-image: url('https://images.pexels.com/photos/326240/pexels-photo-326240.jpeg?auto=compress&cs=tinysrgb&w=1200');
+    background-repeat: no-repeat;
+    background-size:  cover;
+}
+</style>
+
+<h1>Create Inventory For Player</h1>
+
+@if (IsLoading)
+{
+    <h1 class="text-center">Loading....</h1>
+}
+else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null && StatusConditionItems != null && TechnicalMachineMoves != null)
+{
+    <div class="container">
+        <EditForm Model="@CreateInventory" OnValidSubmit="@CreateNewInventory">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label for="PlayerName">Player Name</label>
+                <InputText class="form-control" id="PlayerName" @bind-Value="CreateInventory.NameOfPlayer" />
+            </div>
+            <br>
+            <div class="form-control" id="pokeBallTable">
+                <p>Please choose 10 Poke Balls to add to your Inventory.</p>
+                <p>Each Poke Ball has a different catch rate.</p>
+            <table class="table table-striped table-dark table-hover table-bordered border-danger">
+            <thead>
+                <tr class="text-center">
+                    <th>Poke Ball Id</th>
+                    <th>Poke Ball Name</th>
+                    <th>Poke Ball Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var pokeBall in PokeBalls)
+                {
+                    <tr class="text-center">
+                        <td>@pokeBall.Id</td>
+                        <td>@pokeBall.NameOfBall</td>
+                        <td>@pokeBall.DescriptionOfPokeBall</td>
+                    </tr>
+                }
+            </tbody>
+            
+                <button class="btn btn-danger"  @onclick="PreviousForPokeBallPage" disabled="@(currentPageForPokeBalls == 1)">Previous</button>
+                <button class="btn btn-danger"  @onclick="NextPageForPokeBalls" disabled="@(PokeBalls.Count() < 10)">Next</button>
+        </table>
+        <label for="PokeBallId">Please Select the Poke Ball Id</label>
+        <InputText class="form-control" id="PokeBallIds" @bind-Value="PokeBallIds" />
+        </div>
+        <br>
+        <div class="form-control" id="healthItemTable">
+            <p>Please choose 10 Health Items to add to your Inventory.</p>
+            <p>Each Health Item has a different effect.</p>
+            <table class="table table-striped table-dark table-hover table-bordered border-danger">
+                <thead>
+                    <tr class="text-center">
+                        <th>Health Item Id</th>
+                        <th>Health Item Name</th>
+                        <th>Health Item Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var healthItem in HealthItems)
+                    {   
+                        <tr class="text-center">
+                            <td>@healthItem.Id</td>
+                            <td>@healthItem.HealthItemName</td>
+                            <td>@healthItem.HealthItemDescription</td>
+                        </tr>
+                    }
+                </tbody>
+                <div class="button">
+                    <button class="btn btn-danger"  @onclick="PreviousPageForHealthItem" disabled="@(currentPageForHealthItems == 1)">Previous</button>
+                    <button class="btn btn-danger"  @onclick="NextPageForHealthItems" disabled="@(PokeBalls.Count() < 10)">Next</button>
+                </div>
+            </table>
+            <label for="HealthItemId">Please Select the Health Item Id</label>
+            <InputText class="form-control" id="HealthItemIds" @bind-Value="HealthItemIds" />
+        </div>
+        <br>
+        <div class="form-group" id="reviveTable">
+            <p>Please choose 10 Revive Items to add to your Inventory.</p>
+            <p>Each Rejuvenation Item has a different effect.</p>
+            <table class="table table-striped table-dark table-hover table-bordered border-danger">
+                <thead>
+                    <tr class="text-center">
+                        <th>Rejuvenation Item Id</th>
+                        <th>Rejuvenation Item Name</th>
+                        <th>Rejuvenation Item Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var rejuvenationItem in RejuvenationItems)
+                    {   
+                        <tr class="text-center">
+                            <td>@rejuvenationItem.Id</td>
+                            <td>@rejuvenationItem.RejuvenationItemName</td>
+                            <td>@rejuvenationItem.RejuvenationItemDescription</td>
+                        </tr>
+                    }
+                </tbody>
+                <button class="btn btn-danger"  @onclick="PreviousPageForRevives" disabled="@(currentPageReviveItems == 1)">Previous</button>
+                <button class="btn btn-danger"  @onclick="NextPageReviveItems" disabled="@(RejuvenationItems.Count() < 10)">Next</button>
+            </table>
+            <label for="ReviveItemId">Please Select the Revive Item Id</label>
+            <InputText class="form-control" id="ReviveItemIds" @bind-Value="ReviveItemIds" />
+        </div>
+        <br>
+        <div class="form-control" id="statusConditionTable">
+            <p>Please choose 10 Status Condition Items to add to your Inventory.</p>
+            <p>Each Status Condition Item has a different effect.</p>
+            <table class="table table-striped table-dark table-hover table-bordered border-danger">
+                <thead>
+                    <tr class="text-center">
+                        <th>Status Condition Item Id</th>
+                        <th>Status Condition Item Name</th>
+                        <th>Status Condition Item Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var statusConditionItem in StatusConditionItems)
+                    {   
+                        <tr class="text-center">
+                            <td>@statusConditionItem.Id</td>
+                            <td>@statusConditionItem.StatusConditionItemName</td>
+                            <td>@statusConditionItem.StatusConditionItemDescription</td>
+                        </tr>
+                    }
+                </tbody>
+                <button class="btn btn-danger"  @onclick="PreviousPageForStatusItem" disabled="@(currentPage == 1)">Previous</button>
+                <button class="btn btn-danger"  @onclick="NextPageForStatusConditionItem" disabled="@(StatusConditionItems.Count() < 10)">Next</button>
+            </table>
+            <label for="StatusCondition">Please Select the Status Condition Item Id</label>
+            <InputText class="form-control" id="StatusConditionItemIds" @bind-Value="StatusConditionItemIds" />
+        </div>
+        <br>
+        <div class="form-control" id="tmTable">
+            <p>Please choose 10 Technical Machine Moves to add to your Inventory.</p>
+            <p>Each Technical Machine Move has a different effect.</p>
+            <table class="table table-striped table-dark table-hover table-bordered border-danger">
+                <thead>
+                    <tr class="text-center">
+                        <th>Technical Machine Move Id</th>
+                        <th>Technical Machine Move Name</th>
+                        <th>Technical Machine Move Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var technicalMachineMove in TechnicalMachineMoves)
+                    {   
+                        <tr class="text-center">
+                            <td>@technicalMachineMove.Id</td>
+                            <td>@technicalMachineMove.MoveName</td>
+                            <td>@technicalMachineMove.MoveDescription</td>
+                        </tr>
+                    }
+                </tbody>
+                <button class="btn btn-danger"  @onclick="PreviousPageForTMs" disabled="@(currentPageTMs == 1)">Previous</button>
+                <button class="btn btn-danger"  @onclick="NextPageForTMs" disabled="@(TechnicalMachineMoves.Count() < 10)">Next</button>
+            </table>
+            <label for="TechnicalMachineMove">Please Select the Technical Machine Move Id</label>
+            <InputText class="form-control" id="TechnicalMachineMoveIds" @bind-Value="TechnicalMachineMoveIds" />
+        </div>
+        <button type="submit" class="btn btn-dark bt-block mt-5">Submit</button> 
+        </EditForm>
+    </div>
+}
+
+@code{
+    private PlayerInventoryCreate CreateInventory = new PlayerInventoryCreate();
+    private List<HealthItemList>? HealthItems;
+    private List<PokeBallListItem>? PokeBalls;
+    private List<RejuvenationItemList>? RejuvenationItems;
+    private List<StatusConditionItemList>? StatusConditionItems;
+    private List<TMIndex>? TechnicalMachineMoves;
+    private string? errorMessage;
+    private bool IsLoading { get; set; }
+    public string? PokeBallIds { get; set; }
+    public string? HealthItemIds { get; set; }
+    public string? ReviveItemIds { get; set; }
+    public string? StatusConditionItemIds { get; set; }
+    public string? TechnicalMachineMoveIds { get; set; }
+    private int currentPageForPokeBalls = 1;
+    private int currentPageForHealthItems = 1;
+    private int currentPageReviveItems = 1;
+    private int currentPage = 1;
+    public int currentPageStatusItems = 1;
+
+    private int currentPageTMs = 1;
+    private const int PageSize = 10;
+    private const int PageSizeForPokeBalls = 10;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataForPokeBalls();
+        await LoadDataForHealthItems();
+        await LoadDataForReviveItems();
+        await LoadDataForStatusConditionItems();
+        await LoadDataForTMs();
+        await CallJavaScriptFunction();
+    }
+
+    private async Task LoadDataForPokeBalls()
+    {
+        IsLoading = true;
+        try
+        {
+            PokeBalls = await httpClient.GetFromJsonAsync<List<PokeBallListItem>>($"api/PokeBall?page={currentPageForPokeBalls}&pageSize={PageSizeForPokeBalls}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task LoadDataForTMs()
+    {
+        IsLoading = true;
+        try
+        {
+            TechnicalMachineMoves = await httpClient.GetFromJsonAsync<List<TMIndex>>($"api/TM?page={currentPageTMs}&pageSize={PageSize}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task LoadDataForHealthItems()
+    {
+        IsLoading = true;
+        try
+        {
+            HealthItems = await httpClient.GetFromJsonAsync<List<HealthItemList>>($"api/HealthItem?page={currentPageForHealthItems}&pageSize={PageSize}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task LoadDataForReviveItems()
+    {
+        IsLoading = true;
+        try
+        {
+            RejuvenationItems = await httpClient.GetFromJsonAsync<List<RejuvenationItemList>>($"api/RejuvenationItem?page={currentPageReviveItems}&pageSize={PageSize}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+    private async Task LoadDataForStatusConditionItems()
+    {
+        IsLoading = true;
+        try
+        {
+            StatusConditionItems = await httpClient.GetFromJsonAsync<List<StatusConditionItemList>>($"api/StatusConditionItem?page={currentPage}&pageSize={PageSize}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task PreviousForPokeBallPage()
+    {
+        if (currentPageForPokeBalls > 1)
+        {
+            currentPageForPokeBalls--;
+            await LoadDataForPokeBalls();
+        }
+    }
+
+    private async Task PreviousPageForHealthItem()
+    {
+        if (currentPageForHealthItems > 1)
+        {
+            currentPageForHealthItems--;
+            await LoadDataForHealthItems();
+        }
+    }
+
+    private async Task PreviousPageForRevives()
+    {
+        if (currentPageReviveItems > 1)
+        {
+            currentPageReviveItems--;
+            await LoadDataForReviveItems();
+        }
+    }
+
+    private async Task PreviousPageForStatusItem()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadDataForStatusConditionItems();
+        }
+    }
+
+    private async Task PreviousPageForTMs()
+    {
+        if (currentPageTMs > 1)
+        {
+            currentPageTMs--;
+            await LoadDataForTMs();
+        }
+    }
+
+    private async Task CallJavaScriptFunction()
+    {
+        await jsRuntime.InvokeVoidAsync("initializePokeBallTable", currentPageForPokeBalls);
+        await jsRuntime.InvokeVoidAsync("initializeHealthItemTable", currentPageForHealthItems);
+        await jsRuntime.InvokeVoidAsync("initializeTMsTable", currentPageTMs);
+        await jsRuntime.InvokeVoidAsync("initializeReviveTable", currentPageReviveItems);
+        await jsRuntime.InvokeVoidAsync("initializeStatusConditionTable", currentPage);
+    }
+
+    private async Task NextPageForPokeBalls()
+    {
+        currentPageForPokeBalls++;
+        await LoadDataForPokeBalls();
+        await jsRuntime.InvokeVoidAsync("updateTable", "pokeBallTable", PageSizeForPokeBalls);
+    }
+
+    private async Task NextPageForHealthItems()
+    {
+        currentPageForHealthItems++;
+        await LoadDataForHealthItems();
+        await jsRuntime.InvokeVoidAsync("updateTable", "healthItemTable", PageSize);
+    }
+
+    private async Task NextPageReviveItems()
+    {
+        currentPageReviveItems++;
+        await LoadDataForReviveItems();
+        await jsRuntime.InvokeVoidAsync("updateTable", "reviveTable", PageSize);
+    }
+
+    private async Task NextPageForStatusConditionItem()
+    {
+        currentPage++;
+        await LoadDataForStatusConditionItems();
+        await jsRuntime.InvokeVoidAsync("updateTable", "statusConditionTable", PageSize);
+    }
+
+    private async Task NextPageForTMs()
+    {
+        currentPageTMs++;
+        await LoadDataForTMs();
+        await jsRuntime.InvokeVoidAsync("updateTable", "tmTable", PageSize);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if (firstRender)
+        {
+            await jsRuntime.InvokeVoidAsync("initializePokeBallTable", currentPageForPokeBalls);
+            await jsRuntime.InvokeVoidAsync("initializeHealthItemTable", currentPageForHealthItems);
+            await jsRuntime.InvokeVoidAsync("initializeTMsTable", currentPageTMs);
+            await jsRuntime.InvokeVoidAsync("initializeReviveTable", currentPageReviveItems);
+            await jsRuntime.InvokeVoidAsync("initializeStatusConditionTable", currentPage);
+        }
+    }
+
+    private async Task CreateNewInventory()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", new object[] { "Are you sure you want to Create the Pokemon Move:" });
+        if (confirmed)
+        {
+            try
+            {
+                if (PokeBallIds != null && HealthItemIds != null && ReviveItemIds != null && StatusConditionItemIds != null && TechnicalMachineMoveIds != null)
+                {
+                    CreateInventory.PokeBalls = PokeBallIds.Split(',').Select(int.Parse).ToList();
+                    CreateInventory.HealthItems = HealthItemIds.Split(',').Select(int.Parse).ToList();
+                    CreateInventory.ReviveItems = ReviveItemIds.Split(',').Select(int.Parse).ToList();
+                    CreateInventory.StatusConditionItems = StatusConditionItemIds.Split(',').Select(int.Parse).ToList();
+                    CreateInventory.TMs = TechnicalMachineMoveIds.Split(',').Select(int.Parse).ToList();
+
+                    var createInventoryResponse = await httpClient.PostAsJsonAsync("api/PlayerInventory", CreateInventory);
+                    if (createInventoryResponse.IsSuccessStatusCode)
+                    {
+                        await jsRuntime.InvokeVoidAsync("alert", "Inventory Created");
+                        navigationManager.NavigateTo("/PlayerInventory");
+                    }
+                    else
+                    {
+                        await jsRuntime.InvokeVoidAsync("alert", "Inventory Not Created");
+                    }
+                    navigationManager.NavigateTo("/PlayerInventory");
+                }
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
+        }
+    }
+}
+
+<script>
+function initializePokeBallTable(currentPage) {
+    window.updateTable = function (pokeBallTable, pageSize) {
+        fetch(`/api/PokeBall?page=${currentPageForPokeBalls}&pageSize=${PageSizeForPokeBalls}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector(`#${tableId} tbody`);
+                tableBody.innerHTML = "";
+
+                data.forEach(pokeBall => {
+                    const row = document.createElement("tr");
+                    row.classList.add("text-center");
+
+                    const idCell = document.createElement("td");
+                    idCell.textContent = pokeBall.Id;
+                    row.appendChild(idCell);
+
+                    const nameCell = document.createElement("td");
+                    nameCell.textContent = pokeBall.NameOfBall;
+                    row.appendChild(nameCell);
+
+                    const descriptionCell = document.createElement("td");
+                    descriptionCell.textContent = pokeBall.DescriptionOfPokeBall;
+                            row.appendChild(descriptionCell);
+
+                    row.appendChild(actionsCell);
+
+                    tableBody.appendChild(row);
+                });
+            });
+    };
+}
+</script>
+
+<script>
+function initializeHealthItemTable(currentPage) {
+    window.updateTable = function (tableId, pageSize) {
+        fetch(`/api/HealthItem?page=${currentPageForHealthItems}&pageSize=${pageSize}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector(`#${tableId} tbody`);
+                tableBody.innerHTML = "";
+
+                data.forEach(healthItem => {
+                    const row = document.createElement("tr");
+                    row.classList.add("text-center");
+
+                    const idCell = document.createElement("td");
+                    idCell.textContent = healthItem.Id;
+                    row.appendChild(idCell);
+
+                    const nameCell = document.createElement("td");
+                    nameCell.textContent = healthItem.HealthItemName;
+                    row.appendChild(nameCell);
+
+                    const descriptionCell = document.createElement("td");
+                    descriptionCell.textContent = healthItem.HealthItemDescription;
+                    row.appendChild(descriptionCell);
+
+                    row.appendChild(actionsCell);
+
+                    tableBody.appendChild(row);
+                });
+            });
+        };
+    }
+</script>
+
+<script>
+function initializeReviveTable(currentPage) {
+    window.updateTable = function (tableId, pageSize) {
+        fetch(`/api/RejuvenationItem?page=${currentPageReviveItems}&pageSize=${pageSize}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector(`#${tableId} tbody`);
+                tableBody.innerHTML = "";
+
+                data.forEach(rejuvenationItem => {
+                    const row = document.createElement("tr");
+                    row.classList.add("text-center");
+
+                    const idCell = document.createElement("td");
+                    idCell.textContent = rejuvenationItem.Id;
+                    row.appendChild(idCell);
+
+                    const nameCell = document.createElement("td");
+                    nameCell.textContent = rejuvenationItem.RejuvenationItemName;
+                    row.appendChild(nameCell);
+
+                    const descriptionCell = document.createElement("td");
+                    descriptionCell.textContent = rejuvenationItem.RejuvenationItemDescription;
+                    row.appendChild(descriptionCell);
+
+                    row.appendChild(actionsCell);
+
+                    tableBody.appendChild(row);
+                });
+            });
+    };
+}
+</script>
+
+<script>
+function initializeStatusConditionTable(currentPage) {
+    window.updateTable = function (tableId, pageSize) {
+        fetch(`/api/StatusConditionItem?page=${currentPage}&pageSize=${pageSize}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector(`#${tableId} tbody`);
+                tableBody.innerHTML = "";
+
+                data.forEach(statusConditionItem => {
+                    const row = document.createElement("tr");
+                    row.classList.add("text-center");
+
+                    const idCell = document.createElement("td");
+                    idCell.textContent = statusConditionItem.Id;
+                    row.appendChild(idCell);
+
+                    const nameCell = document.createElement("td");
+                    nameCell.textContent = statusConditionItem.StatusConditionItemName;
+                    row.appendChild(nameCell);
+
+                    const descriptionCell = document.createElement("td");
+                    descriptionCell.textContent = statusConditionItem.StatusConditionItemDescription;
+                    row.appendChild(descriptionCell);
+
+                    row.appendChild(actionsCell);
+
+                    tableBody.appendChild(row);
+                });
+            });
+    };
+}
+</script>
+
+<script>
+function initializeTMsTable(currentPage) {
+    window.updateTable = function (tableId, pageSize) {
+        fetch(`/api/TM?page=${currentPageTMs}&pageSize=${pageSize}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector(`#${tableId} tbody`);
+                tableBody.innerHTML = "";
+
+                data.forEach(tm => {
+                    const row = document.createElement("tr");
+                    row.classList.add("text-center");
+
+                    const idCell = document.createElement("td");
+                    idCell.textContent = tm.Id;
+                    row.appendChild(idCell);
+
+                    const nameCell = document.createElement("td");
+                    nameCell.textContent = tm.MoveName;
+                    row.appendChild(nameCell);
+
+                    const descriptionCell = document.createElement("td");
+                    descriptionCell.textContent = tm.MoveDdescription;
+                    row.appendChild(descriptionCell);
+
+                    row.appendChild(actionsCell);
+
+                    tableBody.appendChild(row);
+                });
+            });
+    };
+}
+</script>

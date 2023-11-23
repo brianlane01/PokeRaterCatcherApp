@@ -9,7 +9,7 @@ namespace Server.Services.PlayerServices;
 public interface IPlayerService
 {
     Task<bool> CreatePlayerAsync(PlayerCreate model);
-    Task<List<PlayerIndex>> GetAllPlayersAsync();
+    Task<List<PlayerIndex>> GetAllPlayersAsync(int page, int pageSize);
     Task<PlayerDetail?> GetPlayerByIdAsync(int id);
     Task<bool> UpdatePlayerAsync (PlayerEdit request);
     Task<bool> DeletePlayerAsync(int id);

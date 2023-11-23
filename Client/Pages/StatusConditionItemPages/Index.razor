@@ -1,0 +1,109 @@
+@page "/StatusConditionItem"
+@inject IJSRuntime jsRuntime
+@inject NavigationManager navigationManager
+@inject HttpClient httpClient
+@attribute [Authorize]
+@using PokemonCatcherGame.Shared.Models.StatusConditionItemModels
+
+<PageTitle>AllStatusConditionItems</PageTitle>
+<h2>Status Condition Items for Pokémon</h2>
+
+@code {
+    private List<StatusConditionItemList>? StatusItems = new List<StatusConditionItemList>();
+    private string? errorMessage;
+
+    private int currentPage = 1;
+    private const int PageSize = 10;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            StatusItems = await httpClient.GetFromJsonAsync<List<StatusConditionItemList>>($"api/StatusConditionItem?page={currentPage}&pageSize={PageSize}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadData();
+        }
+    }
+
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadData();
+    }
+
+    private void CreateNewStatusItem()
+    {
+        navigationManager.NavigateTo("/StatusConditionItem/Create");
+    }
+}
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/2832382/pexels-photo-2832382.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+@if(StatusItems == null)
+{
+    <p><em>Loading . . . . . .</em></p>
+}
+else
+{
+    <div>
+        <table class="table table-striped table-dark table-hover table-bordered border-danger">
+            <thead>
+                <tr class="text-center">
+                    <th>Health Item Id</th>
+                    <th>Health Item Name</th>
+                    <th>Health Item Description</th>
+                    <th>What would you like to do?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var statusItem in StatusItems)
+                {
+                    <tr class="text-center">
+                        <td>@statusItem.Id</td>
+                        <td>@statusItem.StatusConditionItemName</td>
+                        <td>@statusItem.StatusConditionItemDescription</td>
+                        <td>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"StatusConditionItem/{statusItem.Id}")>Get More Details</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"StatusConditionItem/Edit/{statusItem.Id}")>Edit Status Removal Item</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a href=@($"StatusConditionItem/Delete/{statusItem.Id}")>Delete Status Removal Item</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+                <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
+                <button class="btn btn-danger"  @onclick="NextPage" disabled="@(StatusItems.Count() < 10)">Next</button>
+            </div>
+        <br>
+        <button class="btn btn-danger" @onclick="CreateNewStatusItem">Create A New Status Removal Item</button>
+    </div>
+}
