@@ -529,7 +529,7 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
 @code{
     [Parameter]
     public int PlayerInventoryId { get; set; }
-    private PlayerInventoryEdit EditInventory = new PlayerInventoryEdit();
+    private PlayerInventoryEdit? EditInventory = new PlayerInventoryEdit();
     private List<HealthItemList>? HealthItems;
     private List<PokeBallListItem>? PokeBalls;
     private List<RejuvenationItemList>? RejuvenationItems;
