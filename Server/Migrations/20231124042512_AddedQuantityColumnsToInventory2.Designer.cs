@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PokemonCatcherGame.Server.Data;
 
@@ -11,9 +12,11 @@ using PokemonCatcherGame.Server.Data;
 namespace PokemonCatcherGame.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231124042512_AddedQuantityColumnsToInventory2")]
+    partial class AddedQuantityColumnsToInventory2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -670,13 +673,7 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.Property<int>("NumberOfFineRemendy")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfFreshWater")
-                        .HasColumnType("int");
-
                     b.Property<int>("NumberOfFullHeals")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfFullRestore")
                         .HasColumnType("int");
 
                     b.Property<int>("NumberOfGreatBalls")

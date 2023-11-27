@@ -1,4 +1,4 @@
-@page "/PlayerInventory/Create"
+@page "/PlayerInventory/Edit/{PlayerInventoryId:int}"
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRuntime
@@ -10,7 +10,7 @@
 @using PokemonCatcherGame.Shared.Models.StatusConditionItemModels 
 @using PokemonCatcherGame.Shared.Models.TechnicalMachineMovesModels
 
-<PageTitle>CreateInventory</PageTitle>
+<PageTitle>EditInventory</PageTitle>
 
 <style>
 body{
@@ -20,7 +20,7 @@ body{
 }
 </style>
 
-<h1>Create Inventory For Player</h1>
+<h1>Update Inventory For Player</h1>
 
 @if (IsLoading)
 {
@@ -29,12 +29,12 @@ body{
 else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null && StatusConditionItems != null && TechnicalMachineMoves != null)
 {
     <div class="container">
-        <EditForm Model="@CreateInventory" OnValidSubmit="@CreateNewInventory">
+        <EditForm Model="@EditInventory" OnValidSubmit="@CreateNewInventory">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="form-group">
                 <label for="PlayerName">Player Name</label>
-                <InputText class="form-control" id="PlayerName" @bind-Value="CreateInventory.NameOfPlayer" />
+                <InputText class="form-control" id="PlayerName" @bind-Value="EditInventory.NameOfPlayer" />
             </div>
             <br>
             <div class="form-control" id="pokeBallTable">
@@ -59,112 +59,112 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
                         @if(pokeBall.Id == 1001)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfPokeBalls" min="0" max="20" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfPokeBalls)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfPokeBalls" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfPokeBalls)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1002)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfGreatBalls" min="0" max="15" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfGreatBalls)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfGreatBalls" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfGreatBalls)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1003)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfUltraBalls" min="0" max="10" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfUltraBalls)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfUltraBalls" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfUltraBalls)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1004)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfMasterBalls" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfMasterBalls)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfMasterBalls" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfMasterBalls)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1005)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfSafariBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfSafariBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfSafariBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfSafariBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1006)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfNetBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfNetBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfNetBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfNetBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1007)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfDiveBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfDiveBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfDiveBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfDiveBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1008)
                         {
-                            <td><InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfNestBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfNestBall)" />
+                            <td><InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfNestBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfNestBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1009)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfRepeatBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfRepeatBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfRepeatBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfRepeatBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1010)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfTimerBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfTimerBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfTimerBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfTimerBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1011)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfLuxuryBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfLuxuryBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfLuxuryBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfLuxuryBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1012)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfPremierBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfPremierBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfPremierBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfPremierBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1013)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfDuskBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfDuskBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfDuskBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfDuskBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1014)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfHealBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfHealBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfHealBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfHealBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1015)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfQuickBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfQuickBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfQuickBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfQuickBall)" />
                             </td>
                         }
                         else if(pokeBall.Id == 1016)
                         {
                             <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfCherishBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfCherishBall)" />
+                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="EditInventory.NumberOfCherishBall" min="0" max="999" />
+                                <ValidationMessage For="@(() => EditInventory.NumberOfCherishBall)" />
                             </td>
                         }
                         else
@@ -206,99 +206,99 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
                             @if(healthItem.Id == 1001)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfPotions" min="0" max="20" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfPotions)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfPotions" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfPotions)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1002)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfSuperPotions" min="0" max="15" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfSuperPotions)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfSuperPotions" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfSuperPotions)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1003)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfHyperPotions" min="0" max="10" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfHyperPotions)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfHyperPotions" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfHyperPotions)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1004)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfMaxPotions" min="0" max="5" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfMaxPotions)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfMaxPotions" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfMaxPotions)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1005)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfFullRestore" min="0" max="5" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfFullRestore)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfFullRestore" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfFullRestore)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1006)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfEnergyPowder" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfEnergyPowder)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfEnergyPowder" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfEnergyPowder)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1007)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfEnergyRoot" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfEnergyRoot)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfEnergyRoot" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfEnergyRoot)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1008)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfHealPowder" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfHealPowder)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfHealPowder" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfHealPowder)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1009)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfFreshWater" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfFreshWater)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfFreshWater" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfFreshWater)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1010)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfSodaPop" min="0 " max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfSodaPop)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfSodaPop" min="0 " max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfSodaPop)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1011)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfLemonade" min="0 " max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfLemonade)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfLemonade" min="0 " max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfLemonade)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1012)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfMoomooMilk" min="0 " max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfMoomooMilk)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfMoomooMilk" min="0 " max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfMoomooMilk)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1013)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfBerryJuice" min="0 " max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfBerryJuice)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfBerryJuice" min="0 " max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfBerryJuice)" />
                                 </td>
                             }
                             else if(healthItem.Id == 1014)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="CreateInventory.NumberOfFineRemendy" min="0 " max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfFineRemendy)" />
+                                    <InputNumber class="form-control" id="healthItemQuantity" @bind-Value="EditInventory.NumberOfFineRemendy" min="0 " max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfFineRemendy)" />
                                 </td>
                             }
                         </tr>
@@ -335,29 +335,29 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
                             @if(rejuvenationItem.Id == 1001)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="reviveItemQuantity" @bind-Value="CreateInventory.NumberOfRevives" min="0" max="20" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfRevives)" />
+                                    <InputNumber class="form-control" id="reviveItemQuantity" @bind-Value="EditInventory.NumberOfRevives" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfRevives)" />
                                 </td>
                             }
                             else if(rejuvenationItem.Id == 1002)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="reviveItemQuantity" @bind-Value="CreateInventory.NumberOfMaxRevives" min="0" max="4" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfMaxRevives)" />
+                                    <InputNumber class="form-control" id="reviveItemQuantity" @bind-Value="EditInventory.NumberOfMaxRevives" min="0" max="4" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfMaxRevives)" />
                                 </td>
                             }
                             else if(rejuvenationItem.Id == 1003)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="reviveItemQuantity" @bind-Value="CreateInventory.NumberOfRevivalHerb" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfRevivalHerb)" />
+                                    <InputNumber class="form-control" id="reviveItemQuantity" @bind-Value="EditInventory.NumberOfRevivalHerb" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfRevivalHerb)" />
                                 </td>
                             }
                             else if(rejuvenationItem.Id == 1004)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="reviveItemQuantity" @bind-Value="CreateInventory.NumberOfSacredAsh" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfSacredAsh)" />
+                                    <InputNumber class="form-control" id="reviveItemQuantity" @bind-Value="EditInventory.NumberOfSacredAsh" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfSacredAsh)" />
                                 </td>
                             }
                         </tr>
@@ -392,92 +392,92 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
                             @if(statusConditionItem.Id == 1001)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfAntidotes" min="0" max="5" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfAntidotes)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfAntidotes" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfAntidotes)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1002)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfBurnHeals" min="0" max="5" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfBurnHeals)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfBurnHeals" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfBurnHeals)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1003)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfIceHeals" min="0" max="5" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfIceHeals)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfIceHeals" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfIceHeals)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1004)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfParalyzeHeals" min="0" max="5" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfParalyzeHeals)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfParalyzeHeals" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfParalyzeHeals)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1005)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfAwakening" min="0" max="5" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfAwakening)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfAwakening" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfAwakening)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1006)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfFullHeals" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfFullHeals)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfFullHeals" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfFullHeals)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1007)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfFullRestore" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfFullRestore)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfFullRestore" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfFullRestore)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1008)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfLavaCookie" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfLavaCookie)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfLavaCookie" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfLavaCookie)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1009)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfOldGateau" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfOldGateau)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfOldGateau" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfOldGateau)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1010)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfCasteliacone" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfCasteliacone)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfCasteliacone" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfCasteliacone)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1011)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfRageCandyBar" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfRageCandyBar)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfRageCandyBar" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfRageCandyBar)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1012)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfShalourSable" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfShalourSable)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfShalourSable" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfShalourSable)" />
                                 </td>
                             }
                             else if(statusConditionItem.Id == 1013)
                             {
                                 <td>
-                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="CreateInventory.NumberOfLumioseGalette" min="0" max="1" />
-                                    <ValidationMessage For="@(() => CreateInventory.NumberOfLumioseGalette)" />
+                                    <InputNumber class="form-control" id="statusConditionItemQuantity" @bind-Value="EditInventory.NumberOfLumioseGalette" min="0" max="999" />
+                                    <ValidationMessage For="@(() => EditInventory.NumberOfLumioseGalette)" />
                                 </td>
                             }
                             else
@@ -527,7 +527,9 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
 }
 
 @code{
-    private PlayerInventoryCreate CreateInventory = new PlayerInventoryCreate();
+    [Parameter]
+    public int PlayerInventoryId { get; set; }
+    private PlayerInventoryEdit EditInventory = new PlayerInventoryEdit();
     private List<HealthItemList>? HealthItems;
     private List<PokeBallListItem>? PokeBalls;
     private List<RejuvenationItemList>? RejuvenationItems;
@@ -556,12 +558,18 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
     
     protected override async Task OnInitializedAsync()
     {
+        await LoadDataForPlayerInventory();
         await LoadDataForPokeBalls();
         await LoadDataForHealthItems();
         await LoadDataForReviveItems();
         await LoadDataForStatusConditionItems();
         await LoadDataForTMs();
         await CallJavaScriptFunction();
+    }
+
+    private async Task LoadDataForPlayerInventory()
+    {
+        EditInventory = await httpClient.GetFromJsonAsync<PlayerInventoryEdit>($"api/PlayerInventory/{PlayerInventoryId}");
     }
 
     private async Task LoadDataForPokeBalls()
@@ -761,14 +769,14 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
             {
                 if (PokeBallIds != null && HealthItemIds != null && ReviveItemIds != null && StatusConditionItemIds != null && TechnicalMachineMoveIds != null)
                 {
-                    CreateInventory.PokeBalls = PokeBallIds.Split(',').Select(int.Parse).ToList();
-                    CreateInventory.HealthItems = HealthItemIds.Split(',').Select(int.Parse).ToList();
-                    CreateInventory.ReviveItems = ReviveItemIds.Split(',').Select(int.Parse).ToList();
-                    CreateInventory.StatusConditionItems = StatusConditionItemIds.Split(',').Select(int.Parse).ToList();
-                    CreateInventory.TMs = TechnicalMachineMoveIds.Split(',').Select(int.Parse).ToList();
+                    EditInventory.PokeBalls = PokeBallIds.Split(',').Select(int.Parse).ToList();
+                    EditInventory.HealthItems = HealthItemIds.Split(',').Select(int.Parse).ToList();
+                    EditInventory.ReviveItems = ReviveItemIds.Split(',').Select(int.Parse).ToList();
+                    EditInventory.StatusConditionItems = StatusConditionItemIds.Split(',').Select(int.Parse).ToList();
+                    EditInventory.TMs = TechnicalMachineMoveIds.Split(',').Select(int.Parse).ToList();
 
-                    var createInventoryResponse = await httpClient.PostAsJsonAsync("api/PlayerInventory", CreateInventory);
-                    if (createInventoryResponse.IsSuccessStatusCode)
+                    var EditInventoryResponse = await httpClient.PostAsJsonAsync("api/PlayerInventory", EditInventory);
+                    if (EditInventoryResponse.IsSuccessStatusCode)
                     {
                         await jsRuntime.InvokeVoidAsync("alert", "Inventory Created");
                         navigationManager.NavigateTo("/PlayerInventory");

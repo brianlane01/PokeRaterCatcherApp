@@ -36,7 +36,7 @@ public class StatusConditionItemEntity
     public bool RemovesConfusion { get; set; }
 
     public ICollection<PlayerItemInventoryEntity> PlayerInventory { get; set; }
-
+    
     public StatusConditionItemEntity()
     {
         PlayerInventory = new HashSet<PlayerItemInventoryEntity>();

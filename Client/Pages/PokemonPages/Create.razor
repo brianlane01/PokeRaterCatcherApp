@@ -231,8 +231,6 @@ else
         bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", new object[] {"Are you sure you want to Create the Pokemon:"});
         if (confirmed)
         {
-            Console.WriteLine("The Pokemon was created");
-
             if (NewPokemon != null)
             {
                 var result = await httpClient.PostAsJsonAsync<PokemonCreate>("/api/Pokemon", NewPokemon);

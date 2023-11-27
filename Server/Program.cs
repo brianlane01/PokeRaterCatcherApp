@@ -17,6 +17,7 @@ using Server.Services.PlayerServices;
 using Server.Services.RejuvenationItemServices;
 using Server.Services.PokeBallServices;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -50,6 +51,7 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
 
