@@ -29,12 +29,15 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<StatusConditionItemEntity> StatusConditionItems { get; set; }
     public DbSet<TechnicalMachineMoveEntity> TMs { get; set; }
     public DbSet<TrainerOpponentEntity> Opponents { get; set; }
-    public DbSet<InventoryForScrEntity> InventoryForScrs { get; set; } //* This is the join table for the Many to Many relationship between PlayerItemInventoryEntity and StatusConditionItemEntity
-
+    public DbSet<InventoryHealthItemEntity> InventoryHealthItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<InventoryHealthItemEntity>()
+            .HasKey(i => new { i.PlayerInventoryId, i.HealthItemId });
+
         modelBuilder.Entity<PokemonAbilityEntity>().HasData(
             new PokemonAbilityEntity
             {

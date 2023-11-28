@@ -66,7 +66,6 @@ public class TechnicalMachineMoveEntity
     public bool NormalCanLearn { get; set; }
     public bool IceCanLearn { get; set; }
     public bool FlyingCanLearn { get; set; }
-    
 
     public ICollection<PlayerItemInventoryEntity> PlayerInventory { get; set; }
 
