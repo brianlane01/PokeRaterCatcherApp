@@ -1,0 +1,348 @@
+@page "/PlayerInventory/Delete/{PlayerInventoryId:int}"
+@inject HttpClient httpClient
+@attribute [Authorize]
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@using PokemonCatcherGame.Shared.Models.PlayerItemInventoryModels
+@using PokemonCatcherGame.Shared.Models.PlayerModels
+@using PokemonCatcherGame.Shared.Models.HealthItemModels
+@using PokemonCatcherGame.Shared.Models.RejuvenationItemModels
+@using PokemonCatcherGame.Shared.Models.TechnicalMachineMovesModels
+@using PokemonCatcherGame.Shared.Models.PokeBallModels
+@using PokemonCatcherGame.Shared.Models.StatusConditionItemModels
+@using Microsoft.Fast.Components.FluentUI
+
+@code{
+    [Parameter]
+    public int PlayerInventoryId { get; set; }
+
+    public PlayerInventoryDetail PlayerInventory { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    @** This is a dictionary that will be used to store the quantity of each item in the inventory. *@
+    Dictionary<string, int?> quantityMap;
+
+    @** These Properties and the method are used to generate the accordion functionality on the page *@
+    string activeId = "accordion-1";
+    FluentAccordionItem? changed;
+    
+    private void HandleOnAccordionItemChange(FluentAccordionItem item)
+    {
+        changed = item;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            PlayerInventory = await httpClient.GetFromJsonAsync<PlayerInventoryDetail>($"api/PlayerInventory/{PlayerInventoryId}");
+            
+            if(PlayerInventory != null)
+            {
+                SetQuantityMap();
+            }
+            else
+            {
+                NavigateToPlayerInventoryList();
+            }
+        }
+        catch (Exception)
+        {
+            ErrorMessage = "Something went wrong. Please try again later.";
+        }
+    }
+
+    @*? This method is used to set the quantity map for the inventory. *@
+    @*? It is used to display the quantity of each item in the inventory. *@
+    private void SetQuantityMap()
+    { 
+        if(PlayerInventory != null)
+        {
+            quantityMap = new Dictionary<string, int?>
+            {  
+                { "Potion", PlayerInventory.NumberOfPotions},
+                { "Super Potion", PlayerInventory.NumberOfSuperPotions},
+                { "Hyper Potion", PlayerInventory.NumberOfHyperPotions},
+                { "Max Potion", PlayerInventory.NumberOfMaxPotions},
+                { "Revive", PlayerInventory.NumberOfRevives},
+                { "Max Revive", PlayerInventory.NumberOfMaxRevives},
+                { "Poke Ball", PlayerInventory.NumberOfPokeBalls},
+                { "Great Ball", PlayerInventory.NumberOfGreatBalls},
+                { "Ultra Ball", PlayerInventory.NumberOfUltraBalls},
+                { "Master Ball", PlayerInventory.NumberOfMasterBalls},
+                { "Antidote", PlayerInventory.NumberOfAntidotes},
+                { "Paralyze Heal", PlayerInventory.NumberOfParalyzeHeals},
+                { "Awakening", PlayerInventory.NumberOfAwakening},
+                { "Burn Heal", PlayerInventory.NumberOfBurnHeals},
+                { "Ice Heal", PlayerInventory.NumberOfIceHeals},
+                { "Full Heal", PlayerInventory.NumberOfFullHeals},
+                { "Energy Powder", PlayerInventory.NumberOfEnergyPowder},
+                { "Energy Root", PlayerInventory.NumberOfEnergyRoot},
+                { "Heal Powder", PlayerInventory.NumberOfHealBall},
+                { "Revival Herb", PlayerInventory.NumberOfRevivalHerb},
+                { "Soda Pop", PlayerInventory.NumberOfSodaPop},
+                { "Lemonade", PlayerInventory.NumberOfLemonade},
+                { "Moomoo Milk", PlayerInventory.NumberOfMoomooMilk},
+                { "Berry Juice", PlayerInventory.NumberOfBerryJuice},
+                { "Sacred Ash", PlayerInventory.NumberOfSacredAsh},
+                { "Rage Candy Bar", PlayerInventory.NumberOfRageCandyBar},
+                { "Lava Cookie", PlayerInventory.NumberOfLavaCookie},
+                { "Casteliacone", PlayerInventory.NumberOfCasteliacone},
+                { "Old Gateau", PlayerInventory.NumberOfOldGateau},
+                { "Shalour Sable", PlayerInventory.NumberOfShalourSable},
+                { "Lumiose Galette", PlayerInventory.NumberOfLumioseGalette},
+                { "Fine Remendy", PlayerInventory.NumberOfFineRemendy},
+                { "Safari Ball", PlayerInventory.NumberOfSafariBall},
+                { "Premier Ball", PlayerInventory.NumberOfPremierBall},
+                { "Repeat Ball", PlayerInventory.NumberOfRepeatBall},
+                { "Timer Ball", PlayerInventory.NumberOfTimerBall},
+                { "Nest Ball", PlayerInventory.NumberOfNestBall},
+                { "Net Ball", PlayerInventory.NumberOfNetBall},
+                { "Dive Ball", PlayerInventory.NumberOfDiveBall},
+                { "Luxury Ball", PlayerInventory.NumberOfLuxuryBall},
+                { "Heal Ball", PlayerInventory.NumberOfHealBall},
+                { "Quick Ball", PlayerInventory.NumberOfQuickBall},
+                { "Dusk Ball", PlayerInventory.NumberOfDuskBall},
+                { "Cherish Ball", PlayerInventory.NumberOfCherishBall},
+                { "Full Restore", PlayerInventory.NumberOfFullRestore},
+                // ... other items as needed...
+            };
+        }
+    }
+
+    private void NavigateToPlayerInventoryList()
+    {
+        navigationManager.NavigateTo("/PlayerInventory/");
+    }
+
+    private async void HandleClick()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete the Inventory belonging to  " + PlayerInventory?.NameOfPlayer);
+        if (confirmed)
+        {
+            var result = await httpClient.DeleteAsync($"api/PlayerInventory/{PlayerInventoryId}");
+            if (result.IsSuccessStatusCode)
+            {
+                await jsRuntime.InvokeVoidAsync("alert", "Inventory Deleted");
+                
+            }
+            else
+            {
+                ErrorMessage = "Something went wrong deleting the Inventory.";
+            }
+            navigationManager.NavigateTo("/PlayerInventory");
+        }
+    }
+
+    private async Task EditAsync()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to edit the Inventory belonging to  " + PlayerInventory?.NameOfPlayer);
+        if (confirmed)
+        {
+            var result = await httpClient.DeleteAsync($"api/PlayerInventory/{PlayerInventoryId}");
+            if (result.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo("/PlayerInventory");
+            }
+            else
+            {
+                ErrorMessage = "Something went wrong the Edit Inventory request.";
+            }
+        }
+    }
+
+    private async Task Cancel()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to cancel?");
+        if (confirmed)
+        {
+            navigationManager.NavigateTo("/PlayerInventory");
+        }
+    }
+
+
+}
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/7794399/pexels-photo-7794399.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+<h1 class="text-center">Delete Player Inventory</h1>
+
+@if(PlayerInventory != null)
+{
+    <div class="container">
+        <div class="card">
+            <div class="card-header justify-content-between text-center bg-secondary">
+                <h4 class="card-title">Details for @PlayerInventory.NameOfPlayer's Inventory</h4>
+                <h6 class="card-title">Please review Inventory before delete.</h6>
+            </div>
+            <div class="card-body fw-bolder">
+                <div class="card" id="pokeBallDropdown">
+                    <div class="card-body fw-bolder">
+                        <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                            <FluentAccordionItem Heading="Pokémon Balls in Inventory">
+                                <ChildContent>
+                                    <div>
+                                        <dl>
+                                            @if(PlayerInventory.PokeBallNames != null && PlayerInventory.PokeBallDescriptions != null)
+                                            {   
+                                                @for (int i = 0; i < PlayerInventory.PokeBallNames.Count; i++)
+                                                {
+                                                    <dt>
+                                                        @PlayerInventory.PokeBallNames[i]
+                                                    </dt>
+                                                    <dd>
+                                                        @PlayerInventory.PokeBallDescriptions[i]
+                                                        <dd>
+                                                            Quantity: @quantityMap.GetValueOrDefault(PlayerInventory.PokeBallNames[i], 0)
+                                                        </dd>
+                                                    </dd>
+                                                }
+                                            }
+                                        </dl>
+                                    </div>
+                                </ChildContent>
+                            </FluentAccordionItem>
+                        </FluentAccordion>
+                    </div>
+                </div>
+                <div class="card" id="HealthItemPanel">
+                    <div class="card-body fw-bolder" id="healthItemDropDown">
+                        <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                            <FluentAccordionItem Heading="Health Restoration Items in Inventory">
+                                <ChildContent>
+                                    <div>
+                                        <dl>
+                                            @if(PlayerInventory.HealthItemNames != null && PlayerInventory.HealthItemDescriptions != null)
+                                            {   
+                                                @for (int i = 0; i < PlayerInventory.HealthItemNames.Count; i++)
+                                                {
+                                                    <dt>
+                                                        @PlayerInventory.HealthItemNames[i]
+                                                    </dt>
+                                                    <dd>
+                                                        @PlayerInventory.HealthItemDescriptions[i]
+                                                        <dd>
+                                                            Quantity: @quantityMap.GetValueOrDefault(PlayerInventory.HealthItemNames[i], 0)
+                                                        </dd>
+                                                    </dd>
+                                                }
+                                            }
+                                        </dl>
+                                    </div>
+                                </ChildContent>
+                            </FluentAccordionItem>
+                        </FluentAccordion>
+                    </div>
+                </div>
+                <br>
+                <div class="card" id="TMsPanel">
+                    <div class="card-body fw-bolder" id="tmDropDown">
+                        <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                            <FluentAccordionItem Expanded="false" Heading="TMs For Teachine New Moves" style=" background-color: rgb(246, 142, 15)">
+                                <ChildContent>
+                                <div>
+                                    <dl>
+                                        @if(PlayerInventory.TMNumbers != null && PlayerInventory.MoveDescriptions != null && PlayerInventory.MoveNames != null)
+                                        {   
+                                            @for (int i = 0; i < PlayerInventory.TMNumbers.Count; i++)
+                                            {
+                                                <dt>
+                                                    @PlayerInventory.TMNumbers[i]
+                                                </dt>
+                                                <dd id="moveName">
+                                                    @PlayerInventory.MoveNames[i]
+                                                </dd>
+                                                <dd id="moveDescription">
+                                                    @PlayerInventory.MoveDescriptions[i]
+                                                </dd>
+                                            }
+                                        }
+                                    </dl>
+                                </div>
+                                </ChildContent>
+                            </FluentAccordionItem>
+                        </FluentAccordion>
+                    </div>
+                </div>
+                <br>
+                <div class="card" id="StatusItemPanel">
+                    <div class="card-body flex-lg-wrap" id="statusItemDropDown">
+                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                        <FluentAccordionItem Expanded="false" Heading="Status Condition Removal Items">
+                            <ChildContent>
+                                <div class="text-danger">
+                                    <div>
+                                        <dl>
+                                            @if(PlayerInventory.StatusConditionItemNames != null && PlayerInventory.StatusConditionItemDescriptions != null)
+                                            {   
+                                                @for (int i = 0; i < PlayerInventory.StatusConditionItemNames.Count; i++)
+                                                {
+                                                    <dt>
+                                                        @PlayerInventory.StatusConditionItemNames[i]
+                                                    </dt>
+                                                    <dd>
+                                                        @PlayerInventory.StatusConditionItemDescriptions[i]
+                                                        <dd>
+                                                            Quantity: @quantityMap.GetValueOrDefault(PlayerInventory.StatusConditionItemNames[i], 0)
+                                                        </dd>
+                                                    </dd>
+                                                }
+                                            }
+                                        </dl>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </FluentAccordionItem>
+                    </FluentAccordion>
+                    </div>
+                </div>
+                <br>
+                <div class="card" id="ReviveItemPanel">
+                    <div class="card-body flex-lg-wrap" id="rejuvenationItemDropDown">
+                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                        <FluentAccordionItem Expanded="false" Heading="Revive Items in Inventory">
+                            <ChildContent>
+                                <div class="text-danger">
+                                    <div>
+                                        <dl>
+                                            @if(PlayerInventory.ReviveItemNames != null && PlayerInventory.ReviveItemDescriptions != null)
+                                            {   
+                                                @for (int i = 0; i < PlayerInventory.ReviveItemNames.Count; i++)
+                                                {
+                                                    <dt>
+                                                        @PlayerInventory.ReviveItemNames[i]
+                                                    </dt>
+                                                    <dd>
+                                                        @PlayerInventory.ReviveItemDescriptions[i]
+                                                        <dd>
+                                                            Quantity: @quantityMap.GetValueOrDefault(PlayerInventory.ReviveItemNames[i], 0)
+                                                        </dd>
+                                                    </dd>
+                                                }
+                                            }
+                                        </dl>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </FluentAccordionItem>
+                    </FluentAccordion>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="text-center" id="inventoryDeleteButtons">
+        <p>What do you want to do with the inventory?</p>
+        <button class="btn btn-success" @onclick="HandleClick">Delete Inventory</button>
+        <button class="btn btn-success" @onclick="EditAsync">Edit Inventory</button>
+        <button class="btn btn-success" @onclick="Cancel">Cancel</button>
+    </div>
+}

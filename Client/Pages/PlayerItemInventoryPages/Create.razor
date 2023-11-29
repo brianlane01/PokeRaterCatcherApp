@@ -40,148 +40,157 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
             <div class="form-control" id="pokeBallTable">
                 <p>Please choose some Pokémon Balls to add to your Inventory.</p>
                 <p>Each Poke Ball has a different catch rate.</p>
-            <table class="table table-striped table-dark table-hover table-bordered border-danger">
-            <thead>
-                <tr class="text-center">
-                    <th>Poke Ball Id        </th>
-                    <th>Poke Ball Name</th>
-                    <th>Poke Ball Description</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach(var pokeBall in PokeBalls)
-                {
-                    <tr class="text-center">
-                        <td>@pokeBall.Id</td>
-                        <td>@pokeBall.NameOfBall</td>
-                        <td>@pokeBall.DescriptionOfPokeBall</td>
-                        @if(pokeBall.Id == 1001)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfPokeBalls" min="0" max="20" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfPokeBalls)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1002)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfGreatBalls" min="0" max="15" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfGreatBalls)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1003)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfUltraBalls" min="0" max="10" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfUltraBalls)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1004)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfMasterBalls" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfMasterBalls)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1005)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfSafariBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfSafariBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1006)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfNetBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfNetBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1007)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfDiveBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfDiveBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1008)
-                        {
-                            <td><InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfNestBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfNestBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1009)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfRepeatBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfRepeatBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1010)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfTimerBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfTimerBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1011)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfLuxuryBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfLuxuryBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1012)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfPremierBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfPremierBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1013)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfDuskBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfDuskBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1014)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfHealBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfHealBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1015)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfQuickBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfQuickBall)" />
-                            </td>
-                        }
-                        else if(pokeBall.Id == 1016)
-                        {
-                            <td>
-                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfCherishBall" min="0" max="1" />
-                                <ValidationMessage For="@(() => CreateInventory.NumberOfCherishBall)" />
-                            </td>
-                        }
-                        else
-                        {
-                            <td>Unable to enter a quantity at this time </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-            <br>
-            <div class="button" id="pokeBallButton">
-                <button class="btn btn-danger btn-lg"  @onclick="PreviousForPokeBallPage" disabled="@(currentPageForPokeBalls == 1)">Previous</button>
-                <button class="btn btn-danger btn-lg"  @onclick="NextPageForPokeBalls" disabled="@(PokeBalls.Count() < 10)">Next</button>
+            <div class = "card">
+                <div class="card-body fw-bolder">
+                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                        <FluentAccordionItem Heading="Pokémon Balls that can be added to the Inventory">
+                            <ChildContent>
+                            <table class="table table-striped table-dark table-hover table-bordered border-danger">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>Add Item To Inventory</th>
+                                    <th>Poke Ball Id</th>
+                                    <th>Poke Ball Name</th>
+                                    <th>Poke Ball Description</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var pokeBall in PokeBalls)
+                                {
+                                    <tr class="text-center">
+                                        <td>
+                                            <input type="checkbox" class="form-check-input" checked="@IsPokeBallSelected(pokeBall.Id)" 
+                                                @onchange="() => TogglePokeBallSelection(pokeBall.Id)" />
+                                        </td>
+                                        <td>@pokeBall.Id</td>
+                                        <td>@pokeBall.NameOfBall</td>
+                                        <td>@pokeBall.DescriptionOfPokeBall</td>
+                                        @if(pokeBall.Id == 1001)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfPokeBalls" min="0" max="20" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfPokeBalls)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1002)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfGreatBalls" min="0" max="15" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfGreatBalls)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1003)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfUltraBalls" min="0" max="10" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfUltraBalls)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1004)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfMasterBalls" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfMasterBalls)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1005)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfSafariBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfSafariBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1006)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfNetBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfNetBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1007)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfDiveBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfDiveBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1008)
+                                        {
+                                            <td><InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfNestBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfNestBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1009)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfRepeatBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfRepeatBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1010)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfTimerBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfTimerBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1011)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfLuxuryBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfLuxuryBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1012)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfPremierBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfPremierBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1013)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfDuskBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfDuskBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1014)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfHealBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfHealBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1015)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfQuickBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfQuickBall)" />
+                                            </td>
+                                        }
+                                        else if(pokeBall.Id == 1016)
+                                        {
+                                            <td>
+                                                <InputNumber class="form-control" id="pokeBallQuantity" @bind-Value="CreateInventory.NumberOfCherishBall" min="0" max="1" />
+                                                <ValidationMessage For="@(() => CreateInventory.NumberOfCherishBall)" />
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>Unable to enter a quantity at this time </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                            <br>
+                        </table>
+                            </ChildContent>
+                        </FluentAccordionItem>
+                </FluentAccordion>
             </div>
-        </table>
-        <label for="PokeBallId">Please Enter the Ids of the Pokémon Balls seperated by comma{,} to add the item to your inventory.</label>
-        <InputText class="form-control" id="PokeBallIds" @bind-Value="PokeBallIds" />
+        </div>
         </div>
         <br>
         <div class="form-control" id="healthItemTable">
@@ -190,7 +199,8 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
             <table class="table table-striped table-dark table-hover table-bordered border-danger">
                 <thead>
                     <tr class="text-center">
-                        <th>Health     Item      Id</th>
+                        <th>Add Item To Inventory</th>
+                        <th>Health Item Id</th>
                         <th>Health Item Name</th>
                         <th>Health Item Description</th>
                         <th>Quantity to Add to Inventory</th>
@@ -200,6 +210,10 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
                     @foreach(var healthItem in HealthItems)
                     {   
                         <tr class="text-center">
+                            <td>
+                                            <input type="checkbox" class="form-check-input" checked="@IsHealthItemSelected(healthItem.Id)" 
+                                                @onchange="() => ToggleHealthItemSelection(healthItem.Id)" />
+                                        </td>
                             <td>@healthItem.Id</td>
                             <td>@healthItem.HealthItemName</td>
                             <td>@healthItem.HealthItemDescription</td>
@@ -309,8 +323,6 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
                     <button class="btn btn-danger"  @onclick="NextPageForHealthItems" disabled="@(HealthItems.Count() < 10)">Next</button>
                 </div>
             </table>
-            <label for="HealthItemId">Please Enter the Ids of the Health Items seperated by comma{,} to add the item to your inventory.</label>
-            <InputText class="form-control" id="HealthItemIds" @bind-Value="HealthItemIds" />
         </div>
         <br>
         <div class="form-group" id="reviveTable">
@@ -534,12 +546,13 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
     private List<StatusConditionItemList>? StatusConditionItems;
     private List<TMIndex>? TechnicalMachineMoves;
 
-    
+    private Dictionary<int, bool> PokeBallIdsDictionary = new Dictionary<int, bool>();
+    private Dictionary<int, bool> HealthItemIdsDictionary = new Dictionary<int, bool>();
+    private List<int> SelectedPokeBallIds = new List<int>();
+
     private string? errorMessage;
     private bool IsLoading { get; set; }
 
-    public string? PokeBallIds { get; set; }
-    public string? HealthItemIds { get; set; }
     public string? ReviveItemIds { get; set; }
     public string? StatusConditionItemIds { get; set; }
     public string? TechnicalMachineMoveIds { get; set; }
@@ -550,9 +563,10 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
     private int currentPage = 1;
     public int currentPageStatusItems = 1;
     private int currentPageTMs = 1;
-
     private const int PageSize = 10;
-    private const int PageSizeForPokeBalls = 10;
+
+    string activeId = "accordion-1";
+    FluentAccordionItem? changed;
     
     protected override async Task OnInitializedAsync()
     {
@@ -569,7 +583,8 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
         IsLoading = true;
         try
         {
-            PokeBalls = await httpClient.GetFromJsonAsync<List<PokeBallListItem>>($"api/PokeBall?page={currentPageForPokeBalls}&pageSize={PageSizeForPokeBalls}");
+            PokeBalls = await httpClient.GetFromJsonAsync<List<PokeBallListItem>>($"api/PokeBall/ForInventory");
+            PokeBallIdsDictionary = PokeBalls.ToDictionary(p => p.Id, p => false);    
         }
         catch (Exception e)
         {
@@ -604,6 +619,7 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
         try
         {
             HealthItems = await httpClient.GetFromJsonAsync<List<HealthItemList>>($"api/HealthItem?page={currentPageForHealthItems}&pageSize={PageSize}");
+            HealthItemIdsDictionary = HealthItems.ToDictionary(p => p.Id, p => false);
         }
         catch (Exception e)
         {
@@ -649,14 +665,14 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
         }
     }
 
-    private async Task PreviousForPokeBallPage()
+    @* private async Task PreviousForPokeBallPage()
     {
         if (currentPageForPokeBalls > 1)
         {
             currentPageForPokeBalls--;
             await LoadDataForPokeBalls();
         }
-    }
+    } *@
 
     private async Task PreviousPageForHealthItem()
     {
@@ -703,12 +719,12 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
         await jsRuntime.InvokeVoidAsync("initializeStatusConditionTable", currentPage);
     }
 
-    private async Task NextPageForPokeBalls()
+    @* private async Task NextPageForPokeBalls()
     {
         currentPageForPokeBalls++;
         await LoadDataForPokeBalls();
         await jsRuntime.InvokeVoidAsync("updateTable", "pokeBallTable", PageSizeForPokeBalls);
-    }
+    } *@
 
     private async Task NextPageForHealthItems()
     {
@@ -751,18 +767,66 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
         }
     }
 
+    private void HandleOnAccordionItemChange(FluentAccordionItem item)
+    {
+        changed = item;
+    }
+
+    private bool IsPokeBallSelected(int pokeBallId)
+    {
+        return PokeBallIdsDictionary.TryGetValue(pokeBallId, out var selected) && selected;
+    }
+
+    private void TogglePokeBallSelection(int pokeBallId)
+    {
+        if (PokeBallIdsDictionary.ContainsKey(pokeBallId))
+        {
+            PokeBallIdsDictionary[pokeBallId] = !PokeBallIdsDictionary[pokeBallId];
+        }
+        else
+        {
+            PokeBallIdsDictionary.Add(pokeBallId, true);
+        }
+        StateHasChanged(); // Add this line to trigger a re-render after the state change
+    }
+
+    private bool IsHealthItemSelected(int healthItemId)
+    {
+        return HealthItemIdsDictionary.TryGetValue(healthItemId, out var selected) && selected;
+    }
+
+    private void ToggleHealthItemSelection(int healthItemId)
+    {
+        if (HealthItemIdsDictionary.ContainsKey(healthItemId))
+        {
+            HealthItemIdsDictionary[healthItemId] = !HealthItemIdsDictionary[healthItemId];
+        }
+        else
+        {
+            HealthItemIdsDictionary.Add(healthItemId, true);
+        }
+        StateHasChanged(); // Add this line to trigger a re-render after the state change
+    }
 
     private async Task CreateNewInventory()
     {
-        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", new object[] { "Are you sure you want to Create the Pokemon Move:" });
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", new object[] { "Are you sure you want to Create the new Inventory:" });
         if (confirmed)
         {
             try
             {
-                if (PokeBallIds != null && HealthItemIds != null && ReviveItemIds != null && StatusConditionItemIds != null && TechnicalMachineMoveIds != null)
+                if (ReviveItemIds != null && StatusConditionItemIds != null && TechnicalMachineMoveIds != null)
                 {
-                    CreateInventory.PokeBalls = PokeBallIds.Split(',').Select(int.Parse).ToList();
-                    CreateInventory.HealthItems = HealthItemIds.Split(',').Select(int.Parse).ToList();
+                    CreateInventory.PokeBalls = PokeBallIdsDictionary
+                        .Where(kv => kv.Value)
+                        .Select(kv => kv.Key)
+                        .ToList();
+
+                    CreateInventory.HealthItems= HealthItemIdsDictionary
+                        .Where(kv => kv.Value)
+                        .Select(kv => kv.Key)
+                        .ToList();
+
                     CreateInventory.ReviveItems = ReviveItemIds.Split(',').Select(int.Parse).ToList();
                     CreateInventory.StatusConditionItems = StatusConditionItemIds.Split(',').Select(int.Parse).ToList();
                     CreateInventory.TMs = TechnicalMachineMoveIds.Split(',').Select(int.Parse).ToList();
@@ -792,7 +856,7 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
 function initializePokeBallTable(currentPage) {
     const pokeBallIdsDictionary = {};
     window.updateTable = function (pokeBallTable, pageSize) {
-        fetch(`/api/PokeBall?page=${currentPageForPokeBalls}&pageSize=${PageSizeForPokeBalls}`)
+        fetch(`/api/PokeBall?page=${currentPageForPokeBalls}&pageSize=${PageSize}`)
             .then(response => response.json())
             .then(data => {
                 const tableBody = document.querySelector(`#${tableId} tbody`);
@@ -801,6 +865,27 @@ function initializePokeBallTable(currentPage) {
                 data.forEach(pokeBall => {
                     const row = document.createElement("tr");
                     row.classList.add("text-center");
+
+                    const checkIdCell = document.createElement("td");
+                    const checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.value = pokeBall.Id;
+                        checkbox.addEventListener("change", function() {
+                            if (this.checked) {
+                                // Add the ID to a list or perform any other necessary action
+                                // For example, you can add the ID to an array:
+                                selectedIds.push(pokeBall.Id);
+                            } else {
+                                // Remove the ID from the list or perform any other necessary action
+                                // For example, you can remove the ID from the array:
+                                const index = selectedIds.indexOf(rejuvenationItem.Id);
+                                if (index > -1) {
+                                    selectedIds.splice(index, 1);
+                                }
+                            }
+                        });
+                        checkIdCell.appendChild(checkbox);
+                        row.appendChild(checkIdCell);
 
                     const idCell = document.createElement("td");
                     idCell.textContent = pokeBall.Id;
