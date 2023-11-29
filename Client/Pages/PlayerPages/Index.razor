@@ -1,0 +1,107 @@
+@page "/Player"
+@using PokemonCatcherGame.Shared.Models.PlayerModels
+@attribute [Authorize]
+@inject HttpClient httpClient
+@inject NavigationManager NavigationManager
+@inject IJSRuntime jsRuntime
+
+<style>
+    body{
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKntbkegkCm191Hr-dVV3Y-DBFgZIIv1jSW4LIV7W6lroWmqvpubQ7Txa_kFOknnhy2bs&usqp=CAU');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+@if(AllPlayers == null)
+{
+    <p><em>Loading . . . . . . </em></p>
+}
+else
+{
+    <div>
+    <br />
+    <table class="table table-striped table-dark table-hover table-bordered border-danger">
+        <thead>
+            <tr class="text-center">
+                <th class="text-center">Player's Unique Id</th>
+                <th>Player Name</th>
+                <th>User Id who Player belongs</th>
+                <th>Player's Inventory Id</th>
+                <th>What would you like to do with the Player:</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var player in AllPlayers)
+            {
+                <tr class="text-center">
+                    <td class="text-center">
+                        <strong>@player.Id</strong>
+                    </td>
+                    <td class="text-capitalize">
+                        <strong>@player.Name</strong>
+                    </td>
+                    <td>
+                        <strong>@player.UserId</strong>
+                    </td>
+                    <td>
+                        <div style="margin-bottom: 3px;">
+                            <a href=@($"Player/{player.Id}")>Get More Details</a>
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <a href=@($"Player/Edit/{player.Id}")>Edit Inventory</a>
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <a href=@($"Player/Delete/{player.Id}")>Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
+        <button class="btn btn-danger"  @onclick="NextPage" disabled="@(AllPlayers.Count() < 10)">Next</button>
+    </div>
+    <br>
+    <button class="btn btn-danger" @onclick="CreateNewPlayer">Create A New Player</button>
+    </div>
+}
+
+
+@code{
+    private int currentPage = 1;
+    private const int PageSize = 10;
+    private List<PlayerIndex>? AllPlayers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        AllPlayers = await httpClient.GetFromJsonAsync<List<PlayerIndex>>($"api/Player?page={currentPage}&pageSize={PageSize}");
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadData();
+        }
+    }
+
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadData();
+    }
+
+    private void CreateNewPlayer()
+    {
+        NavigationManager.NavigateTo("/Player/Create");    
+    }
+
+}

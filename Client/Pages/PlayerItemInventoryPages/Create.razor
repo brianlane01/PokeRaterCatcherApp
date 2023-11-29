@@ -49,7 +49,6 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
                             <thead>
                                 <tr class="text-center">
                                     <th>Add Item To Inventory</th>
-                                    <th>Poke Ball Id</th>
                                     <th>Poke Ball Name</th>
                                     <th>Poke Ball Description</th>
                                     <th>Quantity</th>
@@ -63,7 +62,6 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
                                             <input type="checkbox" class="form-check-input" checked="@IsPokeBallSelected(pokeBall.Id)" 
                                                 @onchange="() => TogglePokeBallSelection(pokeBall.Id)" />
                                         </td>
-                                        <td>@pokeBall.Id</td>
                                         <td>@pokeBall.NameOfBall</td>
                                         <td>@pokeBall.DescriptionOfPokeBall</td>
                                         @if(pokeBall.Id == 1001)
