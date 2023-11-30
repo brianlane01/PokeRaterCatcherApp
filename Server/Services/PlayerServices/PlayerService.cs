@@ -73,7 +73,16 @@ public class PlayerService : IPlayerService
                 .ThenInclude(p => p.PokeTypeOne)
             .Include(c => c.CaughtPokemon)
                 .ThenInclude(p => p.PokeTypeTwo)   
-            .Include(c => c.ItemInventory)
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.PokeBalls)
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.HealthItems)
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.ReviveItems)
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.RemoveStatusConditionItems)
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.TMs)
             .SingleOrDefaultAsync(c => c.Id == id && c.UserId == _userId);
 
         if (entity is null)

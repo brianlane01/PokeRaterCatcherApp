@@ -171,5 +171,10 @@ public class PokemonService : IPokemonService
         return numberOfChanges == 1;
     }
 
+    public async Task<int> GetPokemonTotalCountAsync()
+    {
+        return await _dbContext.Pokemon.CountAsync();
+    }
+
     public void SetUserId(string userId) => _userId = userId;
 }

@@ -126,4 +126,11 @@ public class PokemonController : ControllerBase
         else
             return BadRequest();
     }
+
+    [HttpGet("TotalCount")]
+    public async Task<IActionResult> GetTotalCount()
+    {
+        var totalCount = await _pokemonService.GetPokemonTotalCountAsync();
+        return Ok(totalCount);
+    }
 }

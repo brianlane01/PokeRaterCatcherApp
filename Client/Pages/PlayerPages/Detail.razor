@@ -1,0 +1,147 @@
+@page "/Player/{PlayerId:int}"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+
+<h3>Player Details</h3>
+
+<div class="container">
+    @if (Player == null)
+    {
+        <p class="text-center"><em>Loading...</em></p>
+    }
+    else
+    {
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="card-title">@Player?.Name</h3>
+                <p class="card-text">User ID: @Player?.UserId</p>
+                <p class="card-text">Item Inventory ID: @Player?.ItemInventoryId</p>
+
+                <h4 class="card-subtitle mb-2 text-muted mt-4">Pokemon Details:</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Player.PokemonIds != null)
+                        {
+                            @for (int i = 0; i < Player.PokemonIds.Count(); i++)
+                            {
+                                <tr>
+                                    <td>@Player.PokemonNames?[i]</td>
+                                    <td>@Player.PokemonIds[i]</td>
+                                    <td>@($"{Player.PokemonTypeOne?[i]}{(Player.PokemonTypeTwo != null && Player.PokemonTypeTwo.Count > i ? $" / {Player.PokemonTypeTwo[i]}" : "")}")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+                <h4 class="card-subtitle mb-2 text-muted mt-4">Health Items:</h4>
+                <ul class="list-group">
+                    @foreach ( var item in Player?.HealthItems)
+                    {
+                        <li class="list-group-item">@item</li>
+                    }
+                </ul>
+
+                <h4 class="card-subtitle mb-2 text-muted mt-4">Poke Balls:</h4>
+                <ul class="list-group">
+                    @foreach (var ball in Player?.PokeBalls)
+                    {
+                        <li class="list-group-item">@ball</li>
+                    }
+                </ul>
+
+                <h4 class="card-subtitle mb-2 text-muted mt-4">Revive Items:</h4>
+                <ul class="list-group">
+                    @foreach (var item in Player?.ReviveItems)
+                    {
+                        <li class="list-group-item">@item</li>
+                    }
+                </ul>
+
+                <h4 class="card-subtitle mb-2 text-muted mt-4">Status Condition Items:</h4>
+                <ul class="list-group">
+                    @foreach (var item in Player?.StatusConditionItems)
+                    {
+                        <li class="list-group-item">@item</li>
+                    }
+                </ul>
+
+                <h4 class="card-subtitle mb-2 text-muted mt-4">TMs:</h4>
+                <ul class="list-group">
+                    @foreach (var tm in Player?.TMs)
+                    {
+                        <li class="list-group-item">@tm</li>
+                    }
+                </ul>
+
+                @if (!string.IsNullOrEmpty(ErrorMessage))
+                {
+                    <p class="text-danger mt-4">@ErrorMessage</p>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code{
+    [Parameter]
+    public int PlayerId { get; set; }
+
+    public PlayerDetail? Player { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Player = await httpClient.GetFromJsonAsync<PlayerDetail>($"api/Player/{PlayerId}");
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    }
+
+    private async Task DeletePlayer()
+    {
+        bool confirm = await jsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete {Player?.Name}?");
+        if (confirm)
+        {
+            try
+            {
+                await httpClient.DeleteAsync($"api/Player/{PlayerId}");
+                navigationManager.NavigateTo("/Players");
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+        }
+    }
+
+    private async Task EditPlayerAsync()
+    {
+        bool confirm = await jsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to edit {Player?.Name}?");
+        if (confirm)
+        {
+            try
+            {
+                navigationManager.NavigateTo("/Players");
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+        }
+    }
+}

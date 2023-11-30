@@ -10,6 +10,7 @@
     
     private int currentPage = 1;
     private const int PageSize = 10;
+    private int _totalPokemonCount;
 
     private async Task PreviousPage()
     {
@@ -29,6 +30,12 @@
     private async Task LoadData()
     {
         _pokemon = await httpClient.GetFromJsonAsync<List<PokemonList>>($"api/Pokemon?page={currentPage}&pageSize={PageSize}");
+        _totalPokemonCount = await httpClient.GetFromJsonAsync<int>("api/Pokemon/TotalCount");
+    }
+
+    private bool IsLastPage()
+    {
+        return currentPage * PageSize >= _totalPokemonCount;
     }
 
     protected override async Task OnInitializedAsync()
@@ -97,7 +104,7 @@ else
     </table>
     <div>
         <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
-        <button class="btn btn-danger"  @onclick="NextPage" disabled="@(_pokemon.Count() < 10)">Next</button>
+        <button class="btn btn-danger"  @onclick="NextPage" disabled="@(IsLastPage())">Next</button>
     </div>
     <br>
     <div>
