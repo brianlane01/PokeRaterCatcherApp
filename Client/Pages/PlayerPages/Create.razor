@@ -1,0 +1,426 @@
+@page "/Player/Create"
+@attribute [Authorize]
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@using PokemonCatcherGame.Shared.Models.PlayerItemInventoryModels
+@using PokemonCatcherGame.Shared.Models.PlayerModels
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/7794399/pexels-photo-7794399.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+<h3>Create Player to begin your Pokémon Adventure</h3>
+
+@if (ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ErrorMessage
+    </div>
+}
+else
+{
+    <div class="container" id="containerForPlayerCreation">
+        <div class="card" id="cardForPlayerAndInventory">
+            <EditForm Model="@CreateInventory" OnValidSubmit="@CreatePlayerAsync">
+                <DataAnnotationsValidator />
+                <validationSummary />
+                <div class="form-group" id="enterPlayerName">
+                    <div class="row">
+                        <label id="labelForName">What name do you want your character to have?</label>
+                        <br>
+                        <br>
+                        <div class="col-md-5" id="nameField">
+                            <InputText class="form-control" @bind-Value="CreateInventory.NameOfPlayer" />
+                        </div>
+                    </div>
+                </div>
+                <br>
+    <div class="container" id="containerForInventoryItems">
+        <div class="card" id="inventoryDropDown">
+            <div class="card-header justify-content-between text-center" id="inventoryCardTitle">
+                <h4 class="card-title">Details for @CreateInventory.NameOfPlayer's Inventory</h4>
+            </div>
+            <div class="card-body fw-bolder" >
+                <div class="card-body fw-bolder" id="accordionInventory">
+                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                        <FluentAccordionItem Heading="Let's Review your inventory that will be utilized as you start your adventure:">
+                            <ChildContent>
+                                <p>
+                                    As you begin your Pokémon adventure you will be given a set of items to help you on your journey.
+                                    These items will be stored in your inventory and can be used at certain times.
+                                </p> 
+                                <p>
+                                    You will be given a set of Poké Balls to help you catch Pokémon. You will also be given a set of
+                                    Health Items to help you heal your Pokémon. There will be a set of Status Condition Items
+                                    to help you heal your Pokémon from status conditions. Revive Items will be helpful as you start so we will give you a few of those
+                                    to help you revive your Pokémon. You will also be given a set of TMs to help you teach your Pokémon
+                                    new moves.
+                                </p>
+                                <br>
+                                <div id="pokeBalls">
+                                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                                        <FluentAccordionItem Heading="Poké Balls you will start with:">
+                                            <h4>Poké Balls</h4>
+                                            <p>
+                                                Poké Balls are used to catch Pokémon. There are different types of Poké Balls that have different
+                                                catch rates. The higher the catch rate the easier it is to catch a Pokémon. The Poké Balls you will be given are:
+                                            </p>
+                                            <ul>
+                                                <li>Poké Ball</li>
+                                                <li>Great Ball</li>
+                                                <li>Ultra Ball</li>
+                                            </ul>
+                                            <p>
+                                                You will be given 20 Poké Balls, 10 Great Balls, and 5 Ultra Balls.
+                                            </p>
+                                        </FluentAccordionItem>
+                                    </FluentAccordion>
+                                </div>
+                                <br>
+                                <div id="healthItemsCard">
+                                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                                        <FluentAccordionItem Heading="These are the health restoration items you will begin with:">
+                                            <ChildContent>
+                                                <div id="healthItems">
+                                                    <h4>Health Items</h4>
+                                                    <p>
+                                                        Health Items are used to heal your Pokémon. There are different types of Health Items that heal
+                                                        different amounts of health. The Health Items you will be given are:
+                                                    </p>
+                                                    <ul>
+                                                        <li>Potion</li>
+                                                        <li>Super Potion</li>
+                                                        <li>Hyper Potion</li>
+                                                        <li>Max Potion</li>
+                                                    </ul>
+                                                    <p>
+                                                        You will be given 20 Potions, 10 Super Potions, 6 Hyper Potions, and 2 Max Potions.
+                                                    </p>
+                                                </div>
+                                            </ChildContent>
+                                        </FluentAccordionItem>
+                                    </FluentAccordion>
+                                </div>  
+                                <br>
+                                <div id="reviveItemsCard">
+                                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                                        <FluentAccordionItem Heading="These are the revive items you will begin with:">
+                                            <ChildContent>
+                                                <div id="reviveItems">
+                                                    <h4>Revive Items</h4>
+                                                    <p>
+                                                        Revive Items are used to revive your Pokémon. There are different types of Revive Items that revive
+                                                        different amounts of health. The Revive Items you will be given are:
+                                                    </p>
+                                                    <ul>
+                                                        <li>Revive</li>
+                                                        <li>Max Revive</li>
+                                                    </ul>
+                                                    <p>
+                                                        You will be given 20 Revives and 4 Max Revives.
+                                                    </p>
+                                                </div>
+                                            </ChildContent>
+                                        </FluentAccordionItem>
+                                    </FluentAccordion>
+                                </div>  
+                                <br>
+                                <div id="statusConditionItemsCard">
+                                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                                        <FluentAccordionItem Heading="These are the status condition items you will begin with:">
+                                            <ChildContent>
+                                                <div id="statusConditionItems">
+                                                    <h4>Status Condition Items</h4>
+                                                    <p>
+                                                        Status Condition Items are used to heal your Pokémon from status conditions. There are different types of Status Condition Items that heal
+                                                        different status conditions. The Status Condition Items you will be given are:
+                                                    </p>
+                                                    <ul>
+                                                        <li>Antidote</li>
+                                                        <li>Awakening</li>
+                                                        <li>Burn Heal</li>
+                                                        <li>Ice Heal</li>
+                                                        <li>Paralyze Heal</li>
+                                                    </ul>
+                                                    <p>
+                                                        You will be given 5 of each Status Condition Item.
+                                                    </p>
+                                                </div>
+                                            </ChildContent>
+                                        </FluentAccordionItem>
+                                    </FluentAccordion>
+                                </div>
+                                <br>
+                                <div id="tmsCard">
+                                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+                                        <FluentAccordionItem Heading="These are the TMs you will begin with:">
+                                            <ChildContent>
+                                                <div id="tms">
+                                                    <h4>TMs</h4>
+                                                    <p>
+                                                        TMs are used to teach your Pokémon new moves. There are different types of TMs that teach
+                                                        different moves. The TMs you will be given are:
+                                                    </p>
+                                                    <ul>
+                                                        <li>TM01 - Mega Punch</li>
+                                                        <li>TM02 - Razor Wind</li>
+                                                        <li>TM03 - Swords Dance</li>
+                                                    </ul>
+                                                    <p>
+                                                        You will be given 1 of each TM.
+                                                    </p>
+                                                </div>
+                                            </ChildContent>
+                                        </FluentAccordionItem>
+                                    </FluentAccordion>
+                                </div>
+                            </ChildContent>
+                        </FluentAccordionItem>
+                    </FluentAccordion>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container" id="containerForCreatePlayer">
+        <div class="card" id="addPokemonWhole">
+                <h4 class="card-title" id="pokeCardTitle">Now its time to make the most important decision on your new adventure ....</h4>
+                    <div id="pokeDropDown">
+                    <FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange" >
+                        <h6 id="pokesSubTitle">Please select three Pokémon to help you on this journey from the list below.</h6>
+                        <FluentAccordionItem Heading="🐲 〶 Starter Pokémon ⏅ 🐉" >
+                            <ChildContent>
+                                <table class = "table table-dark table-hover table-bordered " id="pokeTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Add to Party</th>
+                                            <th>Pokédex Number</th>
+                                            <th>Pokémon Name</th>
+                                            <th>Pokémon NickName</th>
+                                            <th>Pokémon Type One</th>
+                                            <th>Pokémon Type Two</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Pokemon != null)
+                                        {
+                                            @foreach (var pokemon in Pokemon)
+                                            {
+                                                if (pokemon.PokedexNumber == 4 || pokemon.PokedexNumber == 7 || pokemon.PokedexNumber == 25 || pokemon.PokedexNumber == 1 ||
+                                                    pokemon.PokedexNumber == 152 || pokemon.PokedexNumber == 155 || pokemon.PokedexNumber == 158 || pokemon.PokedexNumber == 252 ||
+                                                    pokemon.PokedexNumber == 255 || pokemon.PokedexNumber == 258 || pokemon.PokedexNumber == 387 || pokemon.PokedexNumber == 390 ||
+                                                    pokemon.PokedexNumber == 393 || pokemon.PokedexNumber == 495 || pokemon.PokedexNumber == 498 || pokemon.PokedexNumber == 501 ||
+                                                    pokemon.PokedexNumber == 650 || pokemon.PokedexNumber == 653 || pokemon.PokedexNumber == 656 || pokemon.PokedexNumber == 722 ||
+                                                    pokemon.PokedexNumber == 725 || pokemon.PokedexNumber == 728 || pokemon.PokedexNumber == 810 || pokemon.PokedexNumber == 813 ||
+                                                    pokemon.PokedexNumber == 816 || pokemon.PokedexNumber == 133)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <input type="checkbox" class="form-check-input" checked="@IsPokemonSelected(pokemon.Id)" 
+                                                                    @onchange="() => TogglePokemonSelection(pokemon.Id)" 
+                                                                    disabled="@(selectedCount >= 3 && !IsPokemonSelected(pokemon.Id))" />
+                                                        </td>
+                                                        <td>@pokemon.PokedexNumber</td>
+                                                        <td>@pokemon.Name</td>
+                                                        <td>@pokemon.PokeNickName</td>
+                                                        <td>@pokemon.PokeTypeNameOne</td>
+                                                        <td>@pokemon.PokeTypeNameTwo</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </ChildContent>
+                        </FluentAccordionItem>
+                    </FluentAccordion>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <button type="submit" class="btn btn-dark bt-block">Submit</button> 
+        </EditForm>
+    </div>
+</div>
+}
+
+@code {
+    private PlayerInventoryCreate CreateInventory = new PlayerInventoryCreate();
+    private PlayerCreate CreatePlayer = new PlayerCreate();
+    private List<PokemonList>? Pokemon;
+
+    private string? ErrorMessage;
+
+    private int currentPage = 1;
+    private const int PageSize = 10;
+
+    string activeId = "accordion-1";
+
+    FluentAccordionItem? changed;
+
+    private Dictionary<int, bool> PokemonDictionary = new Dictionary<int, bool>();
+
+    private int selectedCount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await LoadData();
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.Message;
+        }
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            Pokemon = await httpClient.GetFromJsonAsync<List<PokemonList>>($"api/Pokemon/ForPlayerCreate");
+            if (Pokemon != null)
+            {
+                Pokemon = Pokemon.OrderBy(p => p.PokedexNumber).ToList();
+                PokemonDictionary = Pokemon.ToDictionary(p => p.Id, p => false); 
+            }
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.Message;
+        }
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadData();
+        }
+    }
+
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadData();
+    }
+
+    private void HandleOnAccordionItemChange(FluentAccordionItem item)
+    {
+        changed = item;
+    }
+
+    private bool IsPokemonSelected(int pokemonId)
+    {
+        return PokemonDictionary.TryGetValue(pokemonId, out var selected) && selected;
+    }
+
+    private void TogglePokemonSelection(int pokemonId)
+    {
+        if (PokemonDictionary.ContainsKey(pokemonId))
+        {
+            bool currentSelection = PokemonDictionary[pokemonId];
+        
+            if (currentSelection && selectedCount > 0)
+            {
+            // If the Pokémon is currently selected, and there are selected Pokémon,
+            // toggle the selection and decrement the count.
+            PokemonDictionary[pokemonId] = !currentSelection;
+            selectedCount--;
+            }
+            else if (!currentSelection && selectedCount < 3)
+            {
+            // If the Pokémon is not currently selected, and the limit is not reached,
+            // toggle the selection and increment the count.
+            PokemonDictionary[pokemonId] = !currentSelection;
+            selectedCount++;
+            }
+
+            StateHasChanged(); // Add this line to trigger a re-render after the state change
+        }
+        else if(selectedCount == 3)
+        {
+            jsRuntime.InvokeVoidAsync("alert", "You can only choose three Pokémon at the start of your adventure");
+        }
+    }
+
+    private async Task CreatePlayerAsync()
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", new object[] { "Are you sure you want to Create the new Player and Inventory:" });
+        if (confirmed)
+        {
+            try
+            {
+                
+                CreateInventory.PokeBalls = new List<int> { 1001, 1002, 1003 };
+                CreateInventory.NumberOfPokeBalls = 20;
+                CreateInventory.NumberOfGreatBalls = 10;
+                CreateInventory.NumberOfUltraBalls = 5;
+
+                CreateInventory.HealthItems = new List<int> { 1001, 1002, 1003, 1004 };
+                CreateInventory.NumberOfPotions = 20;
+                CreateInventory.NumberOfSuperPotions = 10;
+                CreateInventory.NumberOfHyperPotions = 6;
+                CreateInventory.NumberOfMaxPotions = 2;
+
+                CreateInventory.StatusConditionItems = new List<int> { 1001, 1002, 1003, 1004, 1005 };
+                CreateInventory.NumberOfAntidotes = 5;
+                CreateInventory.NumberOfAwakening = 5;
+                CreateInventory.NumberOfBurnHeals = 5;
+                CreateInventory.NumberOfIceHeals = 5;
+                CreateInventory.NumberOfParalyzeHeals = 5;
+
+                CreateInventory.ReviveItems = new List<int> { 1001, 1002 };
+                CreateInventory.NumberOfRevives = 20;
+                CreateInventory.NumberOfMaxRevives = 4;
+
+                CreateInventory.TMs = new List<int> { 1029, 1001, 1040 };
+
+
+                var createInventoryResponse = await httpClient.PostAsJsonAsync("api/PlayerInventory", CreateInventory);
+                if (createInventoryResponse.IsSuccessStatusCode)
+                {
+                    // Get the created PlayerInventory's Id
+                    var createdInventory = await createInventoryResponse.Content.ReadFromJsonAsync<PlayerInventoryDetail>();
+                    int inventoryId = createdInventory.Id;
+
+                    // Assign the PlayerInventory Id to the Player
+                    CreatePlayer.ItemInventoryId = inventoryId;
+                    CreatePlayer.Name = CreateInventory.NameOfPlayer;
+                    CreatePlayer.CaughtPokemon = PokemonDictionary
+                        .Where(kv => kv.Value)
+                        .Select(kv => kv.Key)
+                        .ToList();
+
+                    // Create Player
+                    var createPlayerResponse = await httpClient.PostAsJsonAsync("api/Player", CreatePlayer);
+                    if (createPlayerResponse.IsSuccessStatusCode)
+                    {
+                        await jsRuntime.InvokeVoidAsync("alert", "Player and Inventory Created");
+                        navigationManager.NavigateTo("/Player");
+                    }
+                    else
+                    {
+                        await jsRuntime.InvokeVoidAsync("alert", "Player Not Created");
+                    }
+                }
+                else
+                {
+                    await jsRuntime.InvokeVoidAsync("alert", "Inventory Not Created");
+                }
+            }
+            catch (Exception e)
+            {
+                ErrorMessage = e.Message;
+            }
+        }
+    }
+
+}

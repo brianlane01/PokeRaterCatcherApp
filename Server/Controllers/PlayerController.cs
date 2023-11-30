@@ -18,12 +18,12 @@ public class PlayerController : ControllerBase
 
     private string? GetUserId()
     {
-        string userIdClaim = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
+        var userIdClaim = User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier);
 
         if (userIdClaim == null)
             return null;
 
-        return userIdClaim;
+        return userIdClaim.Value;
     }
 
     private bool SetUserIdInService()
@@ -58,7 +58,7 @@ public class PlayerController : ControllerBase
 
         bool wasSuccessful = await _playerService.CreatePlayerAsync(model);
 
-        if (!wasSuccessful)
+        if (wasSuccessful)
             return Ok();
         else 
             return UnprocessableEntity();

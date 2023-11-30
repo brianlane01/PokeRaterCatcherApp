@@ -9,7 +9,8 @@ namespace PokemonCatcherGame.Server.Services.PokemonServices;
 public interface IPokemonService
 {
     Task<bool> CreatePokemonAsync(PokemonCreate model);
-    Task<List<PokemonList>> GetAllPokemonAsync();
+    Task<List<PokemonList>> GetAllPokemonAsync(int page, int pageSize);
+    Task<List<PokemonList>> GetAllPokemonForPlayerStartAsync();
     Task<PokemonDetail?> GetPokemonByIdAsync(int id);
     Task<bool> UpdatePokemonAsync(PokemonEdit request);
     Task<bool> DeletePokemonAsync(int id);

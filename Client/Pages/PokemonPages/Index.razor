@@ -7,10 +7,33 @@
 
 @code{
     private List<PokemonList>? _pokemon;
+    
+    private int currentPage = 1;
+    private const int PageSize = 10;
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadData();
+        }
+    }
+
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _pokemon = await httpClient.GetFromJsonAsync<List<PokemonList>>($"api/Pokemon?page={currentPage}&pageSize={PageSize}");
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        _pokemon = await httpClient.GetFromJsonAsync<List<PokemonList>>("/api/Pokemon");
+        await LoadData();
     }
 
     private void CreateNewPokemon()
@@ -72,6 +95,10 @@ else
 
         </tbody>
     </table>
+    <div>
+        <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
+        <button class="btn btn-danger"  @onclick="NextPage" disabled="@(_pokemon.Count() < 10)">Next</button>
+    </div>
     <br>
     <div>
         <button class="btn btn-danger" @onclick="CreateNewPokemon">Create A New Pokemon </button>

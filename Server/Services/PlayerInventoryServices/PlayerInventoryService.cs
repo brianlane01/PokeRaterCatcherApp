@@ -20,7 +20,7 @@ public class PlayerInventoryService : IPlayerInventoryService
         _dbContext = dbContext;
     }
 
-    public async Task<bool> CreatePlayerInventoryAsync(PlayerInventoryCreate model)
+    public async Task<PlayerInventoryDetail?> CreatePlayerInventoryAsync(PlayerInventoryCreate model)
     {
         PlayerItemInventoryEntity entity = new()
         {
@@ -75,7 +75,7 @@ public class PlayerInventoryService : IPlayerInventoryService
 
         _dbContext.PlayerItemInventories.Add(entity);
 
-        var numberOfChanges = await _dbContext.SaveChangesAsync();
+        var inventoryAdded = await _dbContext.SaveChangesAsync();
 
         if (model.HealthItems != null && model.HealthItems.Count > 0)
         {
@@ -102,7 +102,9 @@ public class PlayerInventoryService : IPlayerInventoryService
             AddTMsToInventory(model.TMs, entity.Id);
         }
 
-        return numberOfChanges == 1;
+        PlayerInventoryDetail? response = await GetPlayerInventoryByIdAsync(entity.Id);
+
+        return response;
     }
 
     public async Task<List<PlayerInventoryIndex>> GetAllPlayerInventoriesAsync(int page, int pageSize)

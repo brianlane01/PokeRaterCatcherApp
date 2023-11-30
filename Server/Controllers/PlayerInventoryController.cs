@@ -81,10 +81,10 @@ public class PlayerInventoryController : ControllerBase
         if (!SetUserIdInService())
             return Unauthorized();
 
-        bool wasSuccessful = await _playerInventoryService.CreatePlayerInventoryAsync(model);
+        var response = await _playerInventoryService.CreatePlayerInventoryAsync(model);
 
-        if (wasSuccessful)
-            return Ok();
+        if (response != null)
+            return Ok(response);
 
         else
             return UnprocessableEntity();

@@ -8,7 +8,7 @@ namespace Server.Services.PlayerInventoryServices;
 
 public interface IPlayerInventoryService
 {
-    Task<bool> CreatePlayerInventoryAsync(PlayerInventoryCreate model);
+    Task<PlayerInventoryDetail?> CreatePlayerInventoryAsync(PlayerInventoryCreate model);
     Task<List<PlayerInventoryIndex>> GetAllPlayerInventoriesAsync(int page, int pageSize);
     Task<List<PlayerInventoryIndex>> GetAllPlayerInventoriesForPlayerAsync();
     Task<PlayerInventoryDetail?> GetPlayerInventoryByIdAsync(int id);

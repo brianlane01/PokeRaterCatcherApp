@@ -56,6 +56,7 @@ public class PlayerService : IPlayerService
                 Id = c.Id,
                 Name = c.Name,
                 UserId = c.UserId,
+                ItemInventoryId = c.ItemInventoryId ?? 0,
             });
 
         return await playerQuery
@@ -68,6 +69,10 @@ public class PlayerService : IPlayerService
     {
         var entity = await _dbContext.Players
             .Include(c => c.CaughtPokemon)
+            .Include(c => c.CaughtPokemon)
+                .ThenInclude(p => p.PokeTypeOne)
+            .Include(c => c.CaughtPokemon)
+                .ThenInclude(p => p.PokeTypeTwo)   
             .Include(c => c.ItemInventory)
             .SingleOrDefaultAsync(c => c.Id == id && c.UserId == _userId);
 
@@ -79,6 +84,7 @@ public class PlayerService : IPlayerService
             Id = entity.Id,
             Name = entity.Name,
             UserId = entity.UserId,
+            ItemInventoryId = entity.ItemInventoryId ?? 0,
             PokemonNames = entity.CaughtPokemon.Select(c => c.Name).ToList(),
             PokemonIds = entity.CaughtPokemon.Select(c => c.Id).ToList(),
             PokemonTypeOne = entity.CaughtPokemon.Select(c => c.PokeTypeOne.PokeType).ToList(),
@@ -112,7 +118,7 @@ public class PlayerService : IPlayerService
 
         if (entity is null)
             return false;
-        
+
         entity.Id = request.Id;
         entity.Name = request.Name;
         entity.UserId = _userId;

@@ -1,0 +1,89 @@
+@page "/Player/Delete/{PlayerId:int}"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/7794399/pexels-photo-7794399.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
+@if(Player != null)
+{
+    <h3>Delete Player with Name: @Player.Name</h3>
+
+    <div class="container page-background-class">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <span class="text-warning">Player Id: @Player.Id</span>
+            </div>
+            <div class="card body">
+                <p class="card-text">
+                    Please confirm that you want to delete this player. Once you delete this player, all the data 
+                    associated with this player will be deleted. This action cannot be undone. All progress in the 
+                    game will be lost and can not be recovered.
+                </p>
+                <br />
+                <p>
+                    If you just want to make changes to the player you can go back to the player details page by clicking on the Player Details button below.
+                    Once there you can select edit to make changes to the player. 
+                </p>
+            </div>
+        </div>
+    </div>
+    <br />
+    <a href=@($"/Player/{PlayerId}") class="btn btn-success text-black">Player Details</a>
+    <button class="btn btn-danger" @onclick="DeletePlayer">Delete</button>
+
+}
+else
+{
+    <h3>Player not found</h3>
+}
+
+@code{
+    [Parameter]
+    public int PlayerId { get; set; }
+
+    public PlayerDetail? Player { get; set; }
+
+    public string? ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Player = await httpClient.GetFromJsonAsync<PlayerDetail>($"api/Player/{PlayerId}");
+        }
+        catch (Exception)
+        {
+            ErrorMessage = "Something went wrong";
+        }
+    }
+
+    private async Task DeletePlayer()
+    {
+        try
+        {
+            bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete {Player?.Name} ?");
+            
+            if (confirmed)
+            {
+                await httpClient.DeleteAsync($"api/Player/{PlayerId}");
+                navigationManager.NavigateTo("/Player");
+            }
+            else
+            {
+                navigationManager.NavigateTo("/Player");
+            }
+        }
+        catch (Exception)
+        {
+            ErrorMessage = "Something went wrong";
+        }
+    }
+}

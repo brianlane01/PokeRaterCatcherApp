@@ -30,4 +30,6 @@ public class PlayerDetail
     public List<string>? StatusConditionItems {get; set;}
 
     public List<string>? TMs {get; set;}
+
+    public int? ItemInventoryId { get; set; }
 }

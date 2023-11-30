@@ -58,7 +58,7 @@ public class PokemonService : IPokemonService
         return await _dbContext.SaveChangesAsync() == 1;
     }
 
-    public async Task<List<PokemonList>> GetAllPokemonAsync()
+    public async Task<List<PokemonList>> GetAllPokemonAsync(int page, int pageSize)
     {
         var pokemonQuery = _dbContext.Pokemon
             .Include(c => c.PokeTypeOne)
@@ -74,7 +74,30 @@ public class PokemonService : IPokemonService
                     PokeTypeNameTwo = n.PokeTypeTwo.PokeType,
                 });
 
-        return await pokemonQuery.ToListAsync();
+        return await pokemonQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<List<PokemonList>> GetAllPokemonForPlayerStartAsync()
+    {
+        var pokemonQuery = _dbContext.Pokemon
+            .Include(c => c.PokeTypeOne)
+            .Include(c => c.PokeTypeTwo)
+            .Select(n =>
+                new PokemonList
+                {
+                    Id = n.Id,
+                    PokedexNumber = n.PokedexNumber,
+                    Name = n.Name,
+                    PokeNickName = n.PokeNickName,
+                    PokeTypeNameOne = n.PokeTypeOne.PokeType,
+                    PokeTypeNameTwo = n.PokeTypeTwo.PokeType,
+                });
+
+        return await pokemonQuery
+            .ToListAsync();
     }
 
     public async Task<PokemonDetail?> GetPokemonByIdAsync(int id)
@@ -137,12 +160,6 @@ public class PokemonService : IPokemonService
         entity.Id = request.Id;
         entity.Name = request.Name;
         entity.PokeNickName = request.PokeNickName;
-        // entity.Height = request.Height;
-        // entity.Weight = request.Weight;
-        // entity.BaseExperience = request.BaseExperience;
-        // entity.Health = request.Health;
-        // entity.PokeTypeIdOne = request.PokeTypeIdOne;
-        // entity.PokeTypeIdTwo = request.PokeTypeIdTwo;
         entity.MoveOneId = request.MoveOneId;
         entity.MoveTwoId = request.MoveTwoId;
         entity.MoveThreeId = request.MoveThreeId;

@@ -37,12 +37,22 @@ public class PokemonController : ControllerBase
         return true;
     }
 
-    public async Task<List<PokemonList>> Index()
+    public async Task<List<PokemonList>> Index(int page = 1, int pageSize = 10)
     {
         if (!SetUserIdInService())
             return new List<PokemonList>();
 
-        var pokemon = await _pokemonService.GetAllPokemonAsync();
+        var pokemon = await _pokemonService.GetAllPokemonAsync(page, pageSize);
+
+        return pokemon.ToList();
+    }
+    [HttpGet("ForPlayerCreate")]
+    public async Task<List<PokemonList>> GetPokemonForPlayerStart()
+    {
+        if (!SetUserIdInService())
+            return new List<PokemonList>();
+
+        var pokemon = await _pokemonService.GetAllPokemonForPlayerStartAsync();
 
         return pokemon.ToList();
     }

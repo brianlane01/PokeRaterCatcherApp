@@ -1,0 +1,127 @@
+#labelForName{
+    padding: 1rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: bolder ;
+    font-size: large;
+    color: rgb(18, 19, 19);
+}
+
+#nameField{
+    padding-left: 4rem;
+    padding-bottom: 1rem;
+}
+
+#addPokemonWhole{
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: .5rem;
+    background-color: rgba(9, 197, 226, 0.436);
+    border: 5px solid rgb(11, 104, 59);
+    background-image: url("https://images.pexels.com/photos/1000366/pexels-photo-1000366.jpeg?auto=compress&cs=tinysrgb&w=1200");
+    border-radius: 2rem;
+}
+
+#pokeCardTitle{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    padding: auto;
+    color: rgb(3, 3, 3);
+    font-weight: bolder;
+}
+
+
+#cardForPlayerAndInventory {
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-ytoB5IwEW6m6D1TQHIh0QFnA2g2iHn_j1g&usqp=CAU");
+    background-repeat: repeat;
+    background-size: contain;
+    background-color: rgb(6, 6, 6);
+    border-color: midnightblue;
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: 1rem;
+}
+
+#pokeDropDown{
+    margin-top: 10px;
+    margin-bottom: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    background-color: transparent;
+}
+
+#pokesSubTitle{
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+    color: rgb(2, 2, 2);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: x-large;
+    font-weight: bolder;
+    
+}
+
+#pokeTable{
+    margin-left: 5px;
+    padding: 1rem;
+    background-color: rgba(9, 197, 226, 0.436);
+    border: 5px solid rgb(11, 104, 59);
+    color: rgb(23, 177, 194);
+    text-align: center;
+    font-size: larger;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url("https://images.pexels.com/photos/1000366/pexels-photo-1000366.jpeg?auto=compress&cs=tinysrgb&w=1200");
+}
+
+#enterPlayerName{
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: 1rem;
+    background-color: rgba(9, 197, 226, 0.436);
+    border: 5px solid rgb(43, 45, 44);
+    border-radius: 2rem;
+    background-image: url("https://images.pexels.com/photos/1000366/pexels-photo-1000366.jpeg?auto=compress&cs=tinysrgb&w=1200");
+}
+
+#containerForInventoryItems{
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: 1rem;
+    background-color: rgba(9, 197, 226, 0.436);
+    border: 5px solid rgb(43, 45, 44);
+    border-radius: 2rem;
+    background-image: url("https://images.pexels.com/photos/1000366/pexels-photo-1000366.jpeg?auto=compress&cs=tinysrgb&w=1200");
+}   
+
+#inventoryCardTitle{
+    margin-top: 3rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(3, 3, 3);
+    font-weight: bolder;
+    background-color: rgb(246, 142, 5);
+    border-radius: 5rem;
+}
+
+#inventoryDropDown{
+    margin-top: 10px;
+    margin-bottom: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTl4iIhStJz3p6VxCvLmuL-wxnX8XGuBGyvXw&usqp=CAU");
+    border: 7px solid rgb(43, 45, 44);
+    border-radius: 1rem;
+}
+
+#accordionInventory{
+    margin-left: 5px;
+    margin-bottom: 3rem;
+    padding: 1rem;
+    text-align: center;
+    font-size: larger;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+#inputName{
+    margin-bottom: 3rem;
+}

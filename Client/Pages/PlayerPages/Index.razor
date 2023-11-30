@@ -45,11 +45,14 @@ else
                         <strong>@player.UserId</strong>
                     </td>
                     <td>
+                        <strong>@player.ItemInventoryId</strong>
+                    </td>
+                    <td>
                         <div style="margin-bottom: 3px;">
                             <a href=@($"Player/{player.Id}")>Get More Details</a>
                         </div>
                         <div style="margin-bottom: 3px;">
-                            <a href=@($"Player/Edit/{player.Id}")>Edit Inventory</a>
+                            <a href=@($"Player/Edit/{player.Id}")>Edit Player</a>
                         </div>
                         <div style="margin-bottom: 3px;">
                             <a href=@($"Player/Delete/{player.Id}")>Delete</a>
