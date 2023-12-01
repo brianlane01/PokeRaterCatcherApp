@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor.Services;
 using PokemonCatcherGame.Client;
 
 
@@ -22,5 +23,6 @@ builder.Services.AddHttpClient("pokeApi", client =>
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("PokemonCatcherGame.ServerAPI"));
 
 builder.Services.AddApiAuthorization();
+builder.Services.AddMudServices();
 
 await builder.Build().RunAsync();

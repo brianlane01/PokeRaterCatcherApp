@@ -1,9 +1,233 @@
 ﻿@page "/"
+@inject IJSRuntime JSRuntime
 
-<PageTitle>Index</PageTitle>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to Pokémon Universe</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
 
-<h1>Hello, world!</h1>
+        header {
+            background-color: #ffcc00;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+        }
 
-Welcome to your new app.
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+        h2 {
+            color: #ffcc00;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .pokemon-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .pokemon-image {
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .carousel-container {
+            overflow: hidden;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            margin: 10% auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Pokémon Universe</h1>
+    </header>
+
+    <section>
+        <h2>What is Pokémon?</h2>
+        <p>
+            Pokémon, short for "Pocket Monsters," are captivating creatures with diverse abilities and unique personalities. Trainers, like you, venture into the vast regions of the Pokémon world to capture and befriend these extraordinary creatures. Your mission? To become a skilled Pokémon Trainer, build a strong team, and ultimately claim the prestigious title of Pokémon Master!
+        </p>
+
+        <h2>The Pokémon Journey</h2>
+        <p>
+            Embark on a thrilling adventure as you explore lush forests, scale towering mountains, and navigate sprawling cities. Along the way, encounter Pokémon of various types—fire, water, grass, electric, and many more. Each Pokémon is a potential ally on your quest, and every encounter is an opportunity for growth and connection.
+        </p>
+
+        <h2>Battling and Training</h2>
+        <p>
+            Engage in epic Pokémon battles, where strategy and skill determine the outcome. Train your Pokémon to unlock their full potential, evolving them into more powerful forms. Form bonds with your Pokémon as you face challenges, triumph over Gym Leaders, and strive to conquer the Pokémon League.
+        </p>
+
+        <div class="carousel-container">
+            <Carousel>
+            <div class="carousel">
+                <CarouselItem ImageUrl="image1.jpg" Caption="Caption 1">
+                <div class="pokemon-card">
+                    <div class="pokemon-image">
+                        <img src="https://cdn.pixabay.com/photo/2023/06/19/09/15/pokemon-8073929_640.jpg" alt="Pikachu">
+                    </div>
+                </div>
+                </CarouselItem>
+                <CarouselItem>
+                <div class="pokemon-card">
+                    <div class="pokemon-image">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-K_yjD2Knx4qjo0yNF16Pubr4CUXyDk0KHA&usqp=CAU" alt="Charizard">
+                    </div>
+                </div>
+                </CarouselItem>
+                <CarouselItem>
+                <div class="pokemon-card">
+                    <div class="pokemon-image">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiot1ikCBbITM8MOhc578Hdkc4Ml6VLTcFfA&usqp=CAU" alt="Bulbasaur">
+                    </div>
+                </div>
+                </CarouselItem>
+                <CarouselItem>
+                <div class="pokemon-card">
+                    <div class="pokemon-image">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpDREtHhCfTkQu0DNTVFPOJw0m7-q7Z-034ThFKXBRze0PCyiBN4a_SSZkNL23RwtL-C8&usqp=CAU" alt="Squirtle">
+                    </div>
+                </div>
+                </CarouselItem>
+            </div>
+            </Carousel>
+        </div>
+
+        <h2>Pokémon Community</h2>
+        <p>
+            Connect with a vibrant community of fellow Trainers. Whether you're trading Pokémon, participating in tournaments, or joining forces to face powerful foes, the Pokémon community is a place of camaraderie and shared passion.
+        </p>
+
+        <h2>Explore Online Resources</h2>
+        <p>
+            Visit <a href="https://www.pokemon.com" target="_blank">Pokémon.com</a> to delve deeper into the Pokémon world. Access valuable resources, official news, and exciting updates about the ever-evolving Pokémon universe. Immerse yourself in the lore, discover new Pokémon species, and stay informed about upcoming events.
+        </p>
+
+        <h2>Ready to Begin Your Journey?</h2>
+        <p>
+            The Pokémon adventure awaits! From the bustling streets of Pallet Town to the majestic landscapes of Galar, your journey as a Pokémon Trainer is about to unfold. So, grab your Poké Balls, choose your starter Pokémon, and let the exploration and excitement begin!
+        </p>
+
+        <button onclick="openModal()">Start Your Journey</button>
+    </section>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Welcome Trainer!</h2>
+            <p>Your Pokémon journey is about to begin. Are you ready to catch 'em all?</p>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        function startGame() {
+            window.location.href = '/StartGame';
+        }
+
+        function initializeCarousel() {
+        // Your carousel initialization logic here
+        console.log("Carousel initialized");
+    }
+
+    window.addEventListener('load', function () {
+        initializeCarousel();
+    });
+    </script>
+</body>
+</html>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeCarousel");
+        }
+    }
+
+    public void Dispose()
+    {
+        JSRuntime.InvokeVoidAsync("disposeCarousel");
+    }
+    
+    private List<CarouselItem> items = new List<CarouselItem>();
+
+    private class CarouselItem
+    {
+        public string ImageUrl { get; set; }
+        public string Caption { get; set; }
+        public bool IsActive { get; set; }
+    }
+
+}
