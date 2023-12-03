@@ -4,6 +4,10 @@
 @inject IJSRuntime jsRuntime
 @attribute [Authorize]
 @inject NavigationManager navigation
+@using MudBlazor
+@using MudBlazor.Services
+@using MudBlazor.Components
+@inherits LayoutComponentBase
 
 @code{
     private List<PokemonList>? _pokemon;
@@ -31,6 +35,11 @@
     {
         _pokemon = await httpClient.GetFromJsonAsync<List<PokemonList>>($"api/Pokemon?page={currentPage}&pageSize={PageSize}");
         _totalPokemonCount = await httpClient.GetFromJsonAsync<int>("api/Pokemon/TotalCount");
+        
+        @if(_pokemon != null)
+        {
+            _pokemon = _pokemon.OrderBy(p => p.PokedexNumber).ToList();
+        }
     }
 
     private bool IsLastPage()
@@ -48,6 +57,19 @@
         navigation.NavigateTo("/Pokemon/Create");    
     }
 
+    private class FeatureCardModel
+    {
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+    }
+
+    private MudTheme currentTheme = new MudTheme();
+
+    private void NavigateBack()
+    {
+        // Implement navigation logic if needed
+    }
+
 }
 
 <style>
@@ -56,19 +78,67 @@
         background-repeat: no-repeat;
         background-size:  cover;
     }
-</style>
 
+    
+</style>
+<h1> Welcome to the Crashtastic PokéRealm Pokédex</h1>
 @if (_pokemon == null)
 {
     <p><em>Loading. . . </em></p>
 }
 else
 {
-    <table class = "table table-striped table-dark table-hover table-bordered border-danger">
+    <div Elevation="24"id="mainBody">
+    <MudContainer Class="mt-4">
+        <MudPaper Elevation="24" Class="p-5">
+            <MudTypography Typo="Typo.body1" Class="mb-4">
+                Greetings, aspiring trainers! Welcome to the vast and mysterious world of Crashtastic's PokeRealm, where incredible creatures known as Pokemon roam freely. To aid you on your journey, we present the Crashtastic Pokedex – your indispensable companion in the quest to become a Pokemon Master!
+            </MudTypography>
+
+            <MudTypography Typo="Typo.body1" Class="mb-4">
+                The Pokedex is a cutting-edge electronic device developed by the brilliant minds at the Crashtastic Research Institute. Its primary function is to catalog and provide vital information about the myriad Pokemon species inhabiting the diverse regions of the Crashtastic world.
+            </MudTypography>
+            <br>
+            <br>
+            <MudContainer Class="mb-4">
+                <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <FeatureCard Title="Comprehensive Pokemon Database">
+                            The Pokedex boasts an extensive database containing detailed entries for every known Pokemon species. From the fiery Charizard to the elusive Eevee, each entry includes information on a Pokemon's type, height, weight, and evolution chain.
+                        </FeatureCard>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <FeatureCard Title="Real-time Tracking">
+                            Equipped with state-of-the-art GPS technology, the Pokedex allows trainers to track the locations of Pokemon in real-time. Whether you're exploring dense forests, crossing vast oceans, or traversing towering mountains, the Pokedex will guide you to the habitats of Pokemon waiting to be discovered.
+                        </FeatureCard>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <FeatureCard Title="Personalized Trainer Profile">
+                            The Pokedex is not just a tool; it's a reflection of your journey. Customize your trainer profile, track your achievements, and showcase your Pokemon collection. As you embark on your adventure, the Pokedex evolves alongside you, becoming a testament to your growth as a Pokemon Trainer.
+                        </FeatureCard>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <FeatureCard Title="Team Builder">
+                            Strategize and plan your battles with the Team Builder feature. Create the ultimate Pokemon team by selecting companions that complement each other's strengths and weaknesses. The Pokedex provides valuable insights into moves, abilities, and optimal team compositions to help you conquer gyms and face formidable opponents.
+                        </FeatureCard>
+                    </MudItem>
+                </MudGrid>
+            </MudContainer>
+
+            <MudTypography Typo="Typo.body1">
+                Now that you've been introduced to the Crashtastic Pokedex, it's time to embark on an epic journey filled with excitement, challenges, and the thrill of discovering new Pokemon. Your destiny as a Pokemon Master awaits – venture forth, train hard, and may your Pokedex be your guiding light in the Crashtastic PokeRealm!
+            </MudTypography>
+        </MudPaper>
+    </MudContainer>
+    <br>
+
+    <table class = "table table-striped table-dark table-hover table-bordered" id="pokeTable">
         <thead>
             <tr>
-                <th>Identifier for Pokemon</th>
-                <th>Pokedex Number for Pokemon</th>
+                <th>Pokedex Number</th>
                 <th>Pokemon Name</th>
                 <th>Pokemon NickName</th>
                 <th>Pokemon Type One</th>
@@ -80,7 +150,6 @@ else
             @foreach(PokemonList pokemon in _pokemon)
             {
                 <tr>
-                    <td class ="text-center">@pokemon.Id</td>
                     <td class ="text-center">@pokemon.PokedexNumber</td>
                     <td class = "text-capitalize">@pokemon.Name</td>
                     <td>@pokemon.PokeNickName</td>
@@ -88,13 +157,13 @@ else
                     <td>@pokemon.PokeTypeNameTwo</td>
                     <td>
                         <div style="margin-bottom: 3px;">
-                            <a href=@($"Pokemon/{pokemon.Id}")>Get More Details</a>
+                            <a href=@($"Pokemon/{pokemon.Id}") class="additionalPokeOptions">Get More Details</a>
                         </div>
                         <div style="margin-bottom: 3px;">
-                            <a href=@($"Pokemon/Edit/{pokemon.Id}")>Edit</a>
+                            <a href=@($"Pokemon/Edit/{pokemon.Id}") class="additionalPokeOptions">Edit</a>
                         </div>
                         <div style="margin-bottom: 3px;">
-                            <a href=@($"Pokemon/Delete/{pokemon.Id}")>Delete</a>
+                            <a href=@($"Pokemon/Delete/{pokemon.Id}") class="additionalPokeOptions">Delete</a>
                         </div>
                     </td>
                 </tr>
@@ -110,4 +179,6 @@ else
     <div>
         <button class="btn btn-danger" @onclick="CreateNewPokemon">Create A New Pokemon </button>
     </div>
+</div>
 }
+

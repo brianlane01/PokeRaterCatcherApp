@@ -19,12 +19,18 @@
         background-size:  cover;
     }
 </style>
+<div class="row">
+    <div class="col">
+        <h1 class="text-center">Create a Pokemon</h1>
+    </div>
+</div>
+
 
 <div class = "row">
     <div class ="col mx-auto justify-content-between">
         <form class ="form-inline" @onsubmit ="GetPokemonAsync">
             <div class = "form-group mb-2">
-                <input type = "text" @bind-value="@searchText" class="form-control" placeholder="Search Pokemon">
+                <input type = "text" @bind-value="@searchText" class="form-control" placeholder="Search Pokemon" id="searchInput">
             </div>
             <button type="submit" class="btn btn-primary mb-2 ml-auto">Find</button>
         </form>
@@ -53,6 +59,7 @@ else
                         <h6>Height: @Pokemon.Height</h6>
                         <h6>Weight: @Pokemon.Weight</h6>
                         <h6>XP: @Pokemon.BaseExperience</h6>
+                        
                     </div>
                 </div>
                 <form class = "form-inline">
@@ -64,6 +71,10 @@ else
                     <div class="form-group">
                         <label for="PokeNickName">NickName for the Pokemon?</label>
                         <InputText id="PokeNickName" class="form-control" @bind-Value="@NewPokemon.PokeNickName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="PokeDescription">Pokedex Description for the Pokemon?</label>
+                        <InputTextArea id="pokeDescription" class="form-control" @bind-Value="@NewPokemon.Description" />
                     </div>
                     <div class="form-group">
                         <label for="Health">Pokemon Base Health</label>
@@ -157,15 +168,17 @@ else
                 </EditForm>
             </div>
         </div>
-
-        <br />  
-        <a href ="/Pokemon/Create">Create A Pokemon</a>
     }
 }
+<div id="pokemonDescription">
+    <h3>Pokemon Description</h3>
+    <p></p>
+</div>
 
 @code {
     public PokeApiPokemonDetail? Pokemon {get; set;}
     private PokemonCreate NewPokemon = new PokemonCreate();
+    private string pokemonDescriptionValue = "";
 
     public string? searchText;
     public bool IsLoading {get; set;}
@@ -246,3 +259,36 @@ else
         }
     }
 }
+
+<script>
+    function fetchPokemonDescriptionById() {
+        let searchText = document.getElementById("searchInput").value;
+        let pokemonDescription = document.getElementById("pokemonDescription");
+        pokemonDescription.innerHTML = ""; // Clear previous description
+
+        fetch(`https://pokeapi.co/api/v2/pokemon-species/${searchText}`)
+            .then(function (response) {
+                console.log(response);
+                return response.json();
+            })
+            .then(function (json) {
+                console.log(json);
+                let pokeDescription = json.flavor_text_entries[6].flavor_text;
+                let pItem = document.createElement('p');
+                pItem.innerText = pokeDescription;
+                pokemonDescription.appendChild(pItem);
+
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+    }
+
+    // Attach an event listener to the input field to trigger the fetch on input change
+    document.getElementById("searchInput").addEventListener("input", function () {
+        fetchPokemonDescriptionById();
+    });
+
+    // Fetch the Pokemon description initially based on the initial searchText
+    fetchPokemonDescriptionById();
+</script>

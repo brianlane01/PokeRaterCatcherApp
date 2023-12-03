@@ -38,6 +38,7 @@ public class PokemonService : IPokemonService
             MoveFourId = model.MoveFourId,
             AbilityId = model.AbilityId,
             PokeNickName = model.PokeNickName,
+            Description = model.Description,
         };
         _dbContext.Pokemon.Add(entity);
         var numberOfChanges = await _dbContext.SaveChangesAsync();
@@ -63,6 +64,7 @@ public class PokemonService : IPokemonService
         var pokemonQuery = _dbContext.Pokemon
             .Include(c => c.PokeTypeOne)
             .Include(c => c.PokeTypeTwo)
+            .OrderBy(c => c.PokedexNumber)
             .Select(n =>
                 new PokemonList
                 {
@@ -85,6 +87,7 @@ public class PokemonService : IPokemonService
         var pokemonQuery = _dbContext.Pokemon
             .Include(c => c.PokeTypeOne)
             .Include(c => c.PokeTypeTwo)
+            .OrderBy(c => c.PokedexNumber)
             .Select(n =>
                 new PokemonList
                 {

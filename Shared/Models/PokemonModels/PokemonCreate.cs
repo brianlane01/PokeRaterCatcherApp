@@ -21,6 +21,8 @@ public class PokemonCreate
     [Required]
     public int Weight { get; set; }
 
+    public string? Description { get; set; }
+
     [Required]
     public int Height { get; set; }
 

@@ -30,6 +30,8 @@ public class PokemonEntity
     [Required]
     public int BaseExperience { get; set; }
 
+    public string? Description { get; set; }
+
     [ForeignKey(nameof(PokeTypeOne))]
     public int PokeTypeIdOne { get; set; }
     public virtual PokemonTypeEntity PokeTypeOne { get; set; }

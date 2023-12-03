@@ -1,0 +1,22 @@
+.additionalPokeOptions{
+    color: red;
+}
+
+#pokeTable{
+    border: 10px solid rgb(231, 21, 21);
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+    text-align: center;
+}
+
+th{
+    text-align: center;
+    height: 100px;
+    padding-bottom: 40px;
+
+}
+
+#mainBody{
+    
+}

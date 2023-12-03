@@ -1,0 +1,45 @@
+@page "/GetPokeSpec"
+@inject HttpClient httpClient
+@inject IJSRuntime jsRuntime    
+@using System.Net.Http.Json
+@attribute [Authorize]
+
+
+<h3>Get Pokemon</h3>
+<div class = "row">
+    <div class = "col mx-auto justify-content-between">
+        <div class = "card">
+            
+            <div class = "card-body">
+                
+                
+                <div id="pokemonDescription">
+                    <h3>Pokemon's Immunity Ability</h3>
+                <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let pokemonDescription = document.getElementById("pokemonDescription");
+
+        fetch("https://pokeapi.co/api/v2/pokemon-species/17")
+          .then(function (response) {
+            console.log(response);
+            return response.json();
+          })
+          .then(function (json) {
+            console.log(json);
+            let pokeDescription = json.flavor_text_entries[6].flavor_text; 
+        
+            let pItem = document.createElement('p');
+            pItem.innerText = pokeDescription;
+            pokemonDescription.appendChild(pItem);
+          })
+          .catch(function (error) {
+            console.error('Error:', error);
+          });
+</script>
