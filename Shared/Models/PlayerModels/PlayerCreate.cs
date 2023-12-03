@@ -16,4 +16,5 @@ public class PlayerCreate
     public int? ItemInventoryId { get; set; }
 
     public List<int>? CaughtPokemon {get; set;}
+    public List<int>? ActivePokemon {get; set;}
 }

@@ -128,6 +128,7 @@ public class PokemonService : IPokemonService
                 Height = entity.Height,
                 Weight = entity.Weight,
                 BaseExperience = entity.BaseExperience,
+                Description = entity.Description,
                 Health = entity.Health,
                 PokeTypeIdOne = entity.PokeTypeIdOne,
                 PokeTypeNameOne = entity.PokeTypeOne.PokeType,
@@ -145,6 +146,7 @@ public class PokemonService : IPokemonService
                 MoveFourId = entity.MoveFourId,
                 MoveFourName = entity.MoveFour.MoveName,
                 MoveFourDescription = entity.MoveFour.MoveDescription,
+                AbilityId = entity.AbilityId,
                 AbilityName = entity.Ability.AbilityName,
                 AbilityDescription = entity.Ability.AbilityEffect
             };

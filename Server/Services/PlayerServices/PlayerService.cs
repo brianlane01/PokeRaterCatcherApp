@@ -44,6 +44,11 @@ public class PlayerService : IPlayerService
             AddPokemonToPlayer(model.CaughtPokemon, entity.Id);
         }
 
+        if (model.ActivePokemon != null)
+        {
+            AddActivePokemonToPlayer(model.ActivePokemon, entity.Id);
+        }
+
         return numberOfChanges == 1;
     }
 
@@ -121,6 +126,21 @@ public class PlayerService : IPlayerService
         _dbContext.SaveChanges();
     }
 
+    public void AddActivePokemonToPlayer(List<int> pokemonIds, int playerId)
+    {
+        var newPlayer = _dbContext.Players.Include(c => c.ActivePokemon).Single(c => c.Id == playerId);
+        foreach (var pokemonId in pokemonIds)
+        {
+            var newPokemon = _dbContext.PlayerPokemonEntity.Find(pokemonId);
+            if (newPokemon != null)
+            {
+                newPlayer.ActivePokemon.Add(newPokemon);
+            }
+        }
+
+        _dbContext.SaveChanges();
+    }
+
     public async Task<bool> UpdatePlayerAsync(PlayerEdit request)
     {
         var entity = await _dbContext.Players.FindAsync(request.Id);
@@ -130,7 +150,10 @@ public class PlayerService : IPlayerService
 
         entity.Id = request.Id;
         entity.Name = request.Name;
-        entity.UserId = _userId;
+        if (_userId != null)
+        {
+            entity.UserId = _userId;
+        }
         entity.ItemInventoryId = request.ItemInventoryId;
 
         var numberOfChanges = await _dbContext.SaveChangesAsync();

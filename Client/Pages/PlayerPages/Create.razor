@@ -255,6 +255,8 @@ else
     private PlayerInventoryCreate CreateInventory = new PlayerInventoryCreate();
     private PlayerCreate CreatePlayer = new PlayerCreate();
     private List<PokemonList>? Pokemon;
+    private PokemonDetail? PokemonDetail = new PokemonDetail();
+    private PlayerPokeCreate PlayerPokeCreate = new PlayerPokeCreate();
 
     private string? ErrorMessage;
 
@@ -399,6 +401,48 @@ else
                         .Where(kv => kv.Value)
                         .Select(kv => kv.Key)
                         .ToList();
+
+                    List<int> createdPokemonIds = new List<int>();
+
+                    foreach (var pokemonId in CreatePlayer.CaughtPokemon)
+                    {
+                        var pokemonResponse = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemonId}");
+                        if (pokemonResponse != null)
+                        {
+                            PokemonDetail = pokemonResponse;
+
+                            PlayerPokeCreate.PokedexNumber = pokemonResponse.PokedexNumber;
+                            PlayerPokeCreate.Name = pokemonResponse.Name;
+                            PlayerPokeCreate.PokeNickName = pokemonResponse.PokeNickName;
+                            PlayerPokeCreate.PokeTypeIdOne = pokemonResponse.PokeTypeIdOne;
+                            PlayerPokeCreate.PokeTypeIdTwo = pokemonResponse.PokeTypeIdTwo;
+                            PlayerPokeCreate.Weight = pokemonResponse.Weight;
+                            PlayerPokeCreate.Height = pokemonResponse.Height;
+                            PlayerPokeCreate.BaseExperience = pokemonResponse.BaseExperience;
+                            PlayerPokeCreate.Health = pokemonResponse.Health;
+                            PlayerPokeCreate.Description = pokemonResponse.Description;
+                            PlayerPokeCreate.MoveOneId = pokemonResponse.MoveOneId;
+                            PlayerPokeCreate.MoveTwoId = pokemonResponse.MoveTwoId;
+                            PlayerPokeCreate.MoveThreeId = pokemonResponse.MoveThreeId;
+                            PlayerPokeCreate.MoveFourId = pokemonResponse.MoveFourId;
+                            PlayerPokeCreate.AbilityId = pokemonResponse.AbilityId;
+
+                            var createPokeForPlayerResponse = await httpClient.PostAsJsonAsync("api/PlayerPokemon", PlayerPokeCreate);
+
+                            if(createPokeForPlayerResponse.IsSuccessStatusCode)
+                            {
+                                var createdPokemonForPlayer = await createPokeForPlayerResponse.Content.ReadFromJsonAsync<PlayerPokeDetail>();
+                                int pokemonForPlayerId = createdPokemonForPlayer.Id;
+                                createdPokemonIds.Add(pokemonForPlayerId);
+                            }
+                            else
+                            {
+                                await jsRuntime.InvokeVoidAsync("alert", "Player Pokémon Not Created");
+                            }
+                        }
+                    }
+
+                    CreatePlayer.ActivePokemon = createdPokemonIds;
 
                     // Create Player
                     var createPlayerResponse = await httpClient.PostAsJsonAsync("api/Player", CreatePlayer);

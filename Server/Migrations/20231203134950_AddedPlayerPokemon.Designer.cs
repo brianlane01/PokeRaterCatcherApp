@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PokemonCatcherGame.Server.Data;
 
@@ -11,10 +12,13 @@ using PokemonCatcherGame.Server.Data;
 namespace PokemonCatcherGame.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231203134950_AddedPlayerPokemon")]
+    partial class AddedPlayerPokemon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
+#pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
@@ -316,17 +320,23 @@ namespace PokemonCatcherGame.Server.Migrations
 
             modelBuilder.Entity("PlayerEntityPlayerPokemonEntity", b =>
                 {
-                    b.Property<int>("ActivePokemonId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 
-                    b.HasKey("ActivePokemonId", "PlayerId");
+                    b.Property<int>("ActivePokemonId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("PlayerId");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("PlayerEntityPlayerPokemonEntity");
+                    b.Property<int>("PokedexNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlayerId", "ActivePokemonId");
+
+                    b.HasIndex("ActivePokemonId");
+
+                    b.ToTable("PlayerEntityPlayerPokemonEntity", (string)null);
                 });
 
             modelBuilder.Entity("PlayerEntityPokemonEntity", b =>
@@ -7548,25 +7558,25 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.HasOne("Server.Entities.PokemonMoveEntity", "MoveFour")
                         .WithMany()
                         .HasForeignKey("MoveFourId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Server.Entities.PokemonMoveEntity", "MoveOne")
                         .WithMany()
                         .HasForeignKey("MoveOneId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Server.Entities.PokemonMoveEntity", "MoveThree")
                         .WithMany()
                         .HasForeignKey("MoveThreeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Server.Entities.PokemonMoveEntity", "MoveTwo")
                         .WithMany()
                         .HasForeignKey("MoveTwoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Server.Entities.PokemonTypeEntity", "PokeTypeOne")
@@ -7670,7 +7680,7 @@ namespace PokemonCatcherGame.Server.Migrations
 
                     b.Navigation("StatusCondition");
                 });
-
+#pragma warning restore 612, 618
         }
     }
 }

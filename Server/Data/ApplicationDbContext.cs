@@ -30,11 +30,11 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<TechnicalMachineMoveEntity> TMs { get; set; }
     public DbSet<TrainerOpponentEntity> Opponents { get; set; }
     public DbSet<InventoryHealthItemEntity> InventoryHealthItems { get; set; }
+    public DbSet<PlayerPokemonEntity> PlayerPokemonEntity { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
         modelBuilder.Entity<InventoryHealthItemEntity>()
             .HasKey(i => new { i.PlayerInventoryId, i.HealthItemId });
 

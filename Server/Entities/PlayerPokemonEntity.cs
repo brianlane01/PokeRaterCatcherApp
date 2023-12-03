@@ -1,10 +1,13 @@
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Server.Entities;
 
-public class PokemonEntity
+public class PlayerPokemonEntity
 {
     [Key]
     public int Id { get; set; }
@@ -60,15 +63,10 @@ public class PokemonEntity
     public int AbilityId { get; set; }
     public virtual PokemonAbilityEntity Ability { get; set; }
 
-    public virtual ICollection<PlayerEntity> Player { get; set; }
-    public virtual ICollection<TrainerOpponentEntity> Opponents { get; set; }
+    public  virtual ICollection<PlayerEntity> Player { get; set; }
 
-    public PokemonEntity()
+    public PlayerPokemonEntity()
     {
         Player = new HashSet<PlayerEntity>();
-        Opponents = new HashSet<TrainerOpponentEntity>();
-
-        
     }
-
 }

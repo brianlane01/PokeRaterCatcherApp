@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PokemonCatcherGame.Shared.Models.PokemonModels;
+namespace PokemonCatcherGame.Shared.Models.PlayerPokemonModels;
 
-public class PokemonDetail
+public class PlayerPokeDetail
 {
     //* This is the information that is stored in the Pokemon Table
     public int Id { get; set; }
@@ -16,7 +16,6 @@ public class PokemonDetail
     public int Height { get; set; }
     public int Health { get; set; }
     public int BaseExperience { get; set; }
-    public string? Description { get; set; }
 
     //? These are the names and descriptions of the Types that the pokemon has.
     //? They are not stored in the Pokemon Table, but are instead stored in the PokemonType table.
@@ -52,7 +51,6 @@ public class PokemonDetail
     //* These are the names and descriptions of the abilities and teachable moves
     //* that the pokemon has. They are not stored in the Pokemon Table, but are
     //* instead stored in the PokemonAbility and PokemonMove tables.
-    public int AbilityId { get; set; } //* This is the id of the ability that the pokemon has and the foriegn key to the PokemonAbility table.
     public string AbilityName { get; set; } = string.Empty; //* This is the name of the ability that the pokemon has.
     public string AbilityDescription { get; set; } = string.Empty; //* This is the description of the ability that the pokemon has.
 

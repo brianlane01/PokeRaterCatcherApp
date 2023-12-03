@@ -6,6 +6,7 @@
 @using PokemonCatcherGame.Shared.Models.PokeApiPokemonModels
 @using PokemonCatcherGame.Shared.Models.PokemonModels
 @using PokemonCatcherGame.Shared.Models.PokemonTypeModels
+@using PokemonCatcherGame.Shared.Models.PokemonSpeciesModels
 @using PokemonCatcherGame.Shared.Models.PokemonMoveModels
 @using PokemonCatcherGame.Shared.Models.PokemonAbilityModels
 @using System.Text.Json.Serialization
@@ -19,12 +20,67 @@
         background-size:  cover;
     }
 </style>
-<div class="row">
-    <div class="col">
-        <h1 class="text-center">Create a Pokemon</h1>
+<div Elevation="24"id="mainBody">
+    <h1 class="text-center">Welcome to Pokemon Creation!</h1>
+    <MudContainer Class="mt-4">
+        <MudPaper Elevation="24" Class="p-5">
+            <MudTypography Typo="Typo.body1" Class="mb-4">
+                <h4 class="text-center">Dive into the World of Pokemon</h4>
+                Greetings, Pokemon Trainer! Today marks a special day on your journey as you step into the fascinating realm of Pokemon creation. Get ready to unleash your creativity and bring a new Pokemon to life.
+            </MudTypography>
+
+            <MudTypography Typo="Typo.body1" Class="mb-4">
+                <h4 class="text-center">The Creative Journey Begins</h4>
+                Our "Create a Pokemon" feature empowers you to craft a unique and powerful Pokemon that will join your team in battles and adventures. Whether you envision a swift and nimble Pokemon or a mighty force of nature, the possibilities are endless.
+            </MudTypography>
+            <br>
+            <br>
+            <MudContainer Class="mb-4">
+                <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <FeatureCard Title="Explore and Search">
+                            To begin your creation, use the search bar to explore the vast Pokemon universe. Type in the name of your desired Pokemon, and witness a wealth of information unfold before you. From detailed descriptions to evolutions and moves, every piece of data contributes to shaping your Pokemon's identity.
+                        </FeatureCard>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <FeatureCard Title="Visualize Your Pokemon">
+                            As you discover your chosen Pokemon's attributes, take a moment to visualize its appearance. The dynamic card display showcases essential details such as ID, height, weight, and experience points. Marvel at your Pokemon's image, captured directly from the official PokeAPI.
+                        </FeatureCard>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <FeatureCard Title="Customize Your Pokemon">
+                            Now comes the exciting part – customization! With a user-friendly form, tailor your Pokemon's details to match your strategic preferences. Give it a catchy nickname, set its base health, and choose primary and secondary types, moves, and abilities. Your choices will shape its destiny in battles.
+                        </FeatureCard>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <FeatureCard Title="Preview and Navigate">
+                            Before finalizing, take a moment to preview your creation. Navigate through different Pokemon using the "Previous" and "Next" buttons, ensuring you've found the perfect match for your team.
+                        </FeatureCard>
+                    </MudItem>
+                </MudGrid>
+            </MudContainer>
+
+            <MudTypography Typo="Typo.body1">
+                Once satisfied, hit the "Submit" button to unleash your newly created Pokemon into the wild. A confirmation prompt ensures your commitment to this exciting addition. Once confirmed, watch as your Pokemon becomes an integral part of your adventure.
+            </MudTypography>
+        </MudPaper>
+    </MudContainer>
+</div>
+
+<div>
+    <h3>Pokemon Description</h3>
+    <div id="pokemonDescription">
+        <p></p>
     </div>
 </div>
 
+<h3>Pokemon Evolves from</h3>
+<div class="text-capitalize" id="pokemonEvolution">
+    <p></p>
+</div>
 
 <div class = "row">
     <div class ="col mx-auto justify-content-between">
@@ -59,7 +115,22 @@ else
                         <h6>Height: @Pokemon.Height</h6>
                         <h6>Weight: @Pokemon.Weight</h6>
                         <h6>XP: @Pokemon.BaseExperience</h6>
-                        
+                        @if(NewSpecies != null)
+                        {
+                            @foreach (var description in NewSpecies.FlavorTextEntries)
+                            {
+                                if (description.Language.Name == "en")
+                                {
+                                    EnglishEntryCount++;
+                                    if (EnglishEntryCount == 7)
+                                    {
+                                        EnglishFlavorText = description.FlavorText;
+                                        <h6>Description: @EnglishFlavorText</h6>
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     </div>
                 </div>
                 <form class = "form-inline">
@@ -71,10 +142,6 @@ else
                     <div class="form-group">
                         <label for="PokeNickName">NickName for the Pokemon?</label>
                         <InputText id="PokeNickName" class="form-control" @bind-Value="@NewPokemon.PokeNickName" />
-                    </div>
-                    <div class="form-group">
-                        <label for="PokeDescription">Pokedex Description for the Pokemon?</label>
-                        <InputTextArea id="pokeDescription" class="form-control" @bind-Value="@NewPokemon.Description" />
                     </div>
                     <div class="form-group">
                         <label for="Health">Pokemon Base Health</label>
@@ -170,26 +237,28 @@ else
         </div>
     }
 }
-<div id="pokemonDescription">
-    <h3>Pokemon Description</h3>
-    <p></p>
-</div>
 
 @code {
-    public PokeApiPokemonDetail? Pokemon {get; set;}
-    private PokemonCreate NewPokemon = new PokemonCreate();
-    private string pokemonDescriptionValue = "";
+    public PokeApiPokemonDetail? Pokemon {get; set;} // this is a model to place the pokemon information in that comes back from the PokeApi
+    public SpeciesCreate? NewSpecies {get; set;} // this is a model to place the pokemon description in that comes back from the PokeApi
 
+    private PokemonCreate NewPokemon = new PokemonCreate();
+
+    // Used to help get the base pokemon information from the PokeApi
     public string? searchText;
     public bool IsLoading {get; set;}
     private string? errorMessage;
+
+    public int EnglishEntryCount = 0;
+    public string EnglishFlavorText = string.Empty;
 
     // This is for the dropdown list to select the moves and type for the pokemon...
     private List<PokemonTypeList>? types; //* = new List<PokemonTypeList>();
     private List<PokemonMoveListItem>? moves; //* = new List<PokemonMoveListItem>();
     private List<PokemonAbilityList>? abilities; //* = new List<PokemonAbilityListItem>();
 
-        // This method is helpeing to call to the PokeApi and get the base pokemon information
+
+    // This method is helpeing to call to the PokeApi and get the base pokemon information
     protected async Task GetPokemonAsync()
     {
         if (string.IsNullOrEmpty(searchText))
@@ -200,6 +269,7 @@ else
         }
         IsLoading = true;
         Pokemon = await GetPokemon(searchText);
+        NewSpecies = await GetPokemonSpecies(searchText);
         IsLoading = false;
     }
 
@@ -211,7 +281,7 @@ else
         }
     }
 
-        // This method is helpeing to call to the PokeApi and get the base pokemon information
+     // This method is helpeing to call to the PokeApi and get the base pokemon information
     public async Task<PokeApiPokemonDetail?> GetPokemon(string name)
     {
         var result = JsonConvert.DeserializeObject<PokeApiPokemonDetail>(await httpClient.GetStringAsync($"https://pokeapi.co/api/v2/pokemon/{name}"));
@@ -219,6 +289,12 @@ else
         {
             return null;
         }
+
+        return result;
+    }
+    public async Task<SpeciesCreate?> GetPokemonSpecies(string name)
+    {
+        var result = JsonConvert.DeserializeObject<SpeciesCreate>(await httpClient.GetStringAsync($"https://pokeapi.co/api/v2/pokemon-species/{name}"));
 
         return result;
     }
@@ -239,6 +315,7 @@ else
             NewPokemon.Height = Pokemon.Height;
             NewPokemon.Weight = Pokemon.Weight;
             NewPokemon.BaseExperience = Pokemon.BaseExperience;
+            NewPokemon.Description = EnglishFlavorText;
         }
 
         bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", new object[] {"Are you sure you want to Create the Pokemon:"});
@@ -249,6 +326,7 @@ else
                 var result = await httpClient.PostAsJsonAsync<PokemonCreate>("/api/Pokemon", NewPokemon);
                 if (result.IsSuccessStatusCode)
                 {
+                    await jsRuntime.InvokeVoidAsync("alert", "Congratulations, Trainer! You've successfully added a new Pokemon to the game. Brace yourself for epic battles, discoveries, and friendships as you embark on new adventures with your custom-crafted Pokemon by your side.");
                     navigationManager.NavigateTo($"/Pokemon");
                 }
                 else
@@ -291,4 +369,37 @@ else
 
     // Fetch the Pokemon description initially based on the initial searchText
     fetchPokemonDescriptionById();
+</script>
+
+<script>
+    function fetchPokemonEvolutionById() {
+        let searchText = document.getElementById("searchInput").value;
+        let pokemonEvolution = document.getElementById("pokemonEvolution");
+        pokemonEvolution.innerHTML = ""; // Clear previous description
+
+        fetch(`https://pokeapi.co/api/v2/pokemon-species/${searchText}`)
+            .then(function (response) {
+                console.log(response);
+                return response.json();
+            })
+            .then(function (json) {
+                console.log(json);
+                let pokeEvolution = json.evolves_from_species.name;
+                let pItem = document.createElement('p');
+                pItem.innerText = pokeEvolution;
+                pokemonEvolution.appendChild(pItem);
+
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+    }
+
+    // Attach an event listener to the input field to trigger the fetch on input change
+    document.getElementById("searchInput").addEventListener("input", function () {
+        fetchPokemonEvolutionById();
+    });
+
+    // Fetch the Pokemon description initially based on the initial searchText
+    fetchPokemonEvolutionById();
 </script>

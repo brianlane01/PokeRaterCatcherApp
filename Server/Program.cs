@@ -16,6 +16,7 @@ using Server.Services.PlayerInventoryServices;
 using Server.Services.PlayerServices;
 using Server.Services.RejuvenationItemServices;
 using Server.Services.PokeBallServices;
+using Server.Services.PlayerPokemonServices;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,6 +39,7 @@ builder.Services.AddScoped<IPlayerInventoryService, PlayerInventoryService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IRejuvenationItemService, RejuvenationItemService>();
 builder.Services.AddScoped<IPokeBallService, PokeBallService>();
+builder.Services.AddScoped<IPlayerPokemonService, PlayerPokemonService>();
 
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
