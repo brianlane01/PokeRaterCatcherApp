@@ -39,7 +39,7 @@ public class PlayerPokemonService : IPlayerPokemonService
             AbilityId = model.AbilityId,
         };
 
-        _dbContext.PlayerPokemonEntity.Add(entity);
+        _dbContext.PlayerPokemon.Add(entity);
 
         var pokemonAdded = await _dbContext.SaveChangesAsync();
 
@@ -60,7 +60,7 @@ public class PlayerPokemonService : IPlayerPokemonService
 
     public async Task<PlayerPokeDetail?> GetPokemonForPlayerByIdAsync(int id)
     {
-        PlayerPokemonEntity? entity = await _dbContext.PlayerPokemonEntity
+        PlayerPokemonEntity? entity = await _dbContext.PlayerPokemon
             .Include(c => c.Ability)
             .Include(c => c.MoveOne)
             .Include(c => c.MoveTwo)

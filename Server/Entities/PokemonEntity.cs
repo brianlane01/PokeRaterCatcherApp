@@ -38,7 +38,7 @@ public class PokemonEntity
 
     [ForeignKey(nameof(PokeTypeTwo))]
     public int? PokeTypeIdTwo { get; set; }
-    public virtual PokemonTypeEntity PokeTypeTwo { get; set; }
+    public virtual PokemonTypeEntity? PokeTypeTwo { get; set; }
 
     [ForeignKey(nameof(MoveOne))]
     public int MoveOneId { get; set; }

@@ -131,7 +131,7 @@ public class PlayerService : IPlayerService
         var newPlayer = _dbContext.Players.Include(c => c.ActivePokemon).Single(c => c.Id == playerId);
         foreach (var pokemonId in pokemonIds)
         {
-            var newPokemon = _dbContext.PlayerPokemonEntity.Find(pokemonId);
+            var newPokemon = _dbContext.PlayerPokemon.Find(pokemonId);
             if (newPokemon != null)
             {
                 newPlayer.ActivePokemon.Add(newPokemon);

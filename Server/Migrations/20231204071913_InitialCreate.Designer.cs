@@ -12,8 +12,8 @@ using PokemonCatcherGame.Server.Data;
 namespace PokemonCatcherGame.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231124052014_AddedQuantityColumnsToInventory3")]
-    partial class AddedQuantityColumnsToInventory3
+    [Migration("20231204071913_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -318,6 +318,21 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PlayerEntityPlayerPokemonEntity", b =>
+                {
+                    b.Property<int>("ActivePokemonId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ActivePokemonId", "PlayerId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("PlayerEntityPlayerPokemonEntity");
+                });
+
             modelBuilder.Entity("PlayerEntityPokemonEntity", b =>
                 {
                     b.Property<int>("CaughtPokemonId")
@@ -599,6 +614,29 @@ namespace PokemonCatcherGame.Server.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Server.Entities.InventoryHealthItemEntity", b =>
+                {
+                    b.Property<int>("PlayerInventoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HealthItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerItemInventoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlayerInventoryId", "HealthItemId");
+
+                    b.HasIndex("HealthItemId");
+
+                    b.HasIndex("PlayerItemInventoryId");
+
+                    b.ToTable("InventoryHealthItems");
+                });
+
             modelBuilder.Entity("Server.Entities.PlayerEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -671,6 +709,9 @@ namespace PokemonCatcherGame.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("NumberOfFineRemendy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfFreshWater")
                         .HasColumnType("int");
 
                     b.Property<int>("NumberOfFullHeals")
@@ -778,6 +819,81 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PlayerItemInventories");
+                });
+
+            modelBuilder.Entity("Server.Entities.PlayerPokemonEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AbilityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BaseExperience")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Health")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MoveFourId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoveOneId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoveThreeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoveTwoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PokeNickName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PokeTypeIdOne")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PokeTypeIdTwo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PokedexNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AbilityId");
+
+                    b.HasIndex("MoveFourId");
+
+                    b.HasIndex("MoveOneId");
+
+                    b.HasIndex("MoveThreeId");
+
+                    b.HasIndex("MoveTwoId");
+
+                    b.HasIndex("PokeTypeIdOne");
+
+                    b.HasIndex("PokeTypeIdTwo");
+
+                    b.ToTable("PlayerPokemon");
                 });
 
             modelBuilder.Entity("Server.Entities.PokeBallEntity", b =>
@@ -1191,6 +1307,9 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.Property<int>("BaseExperience")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Health")
                         .HasColumnType("int");
 
@@ -1252,8 +1371,9 @@ namespace PokemonCatcherGame.Server.Migrations
                         new
                         {
                             Id = 1001,
-                            AbilityId = 1000,
+                            AbilityId = 1009,
                             BaseExperience = 236,
+                            Description = "Eevee has an unstable genetic makeup that suddenly mutates due to the environment in which it lives. Radiation from various stones causes this Pokémon to evolve.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 9,
@@ -1272,6 +1392,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1002,
                             AbilityId = 1001,
                             BaseExperience = 236,
+                            Description = "Whenever Pikachu comes across something new, it blasts it with a jolt of electricity. If you come across a blackened berry, it's evidence that this Pokémon mistook the intensity of its charge.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 4,
@@ -1290,6 +1411,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1003,
                             AbilityId = 1001,
                             BaseExperience = 236,
+                            Description = "It nests in small, horizontal holes in cave walls. It pounces to catch prey that stray too close.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 4,
@@ -1308,6 +1430,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1004,
                             AbilityId = 1001,
                             BaseExperience = 236,
+                            Description = "It has special pads on the backs of its feet, and one on its nose. Once it's raring to fight, these pads radiate tremendous heat.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 1,
@@ -1326,6 +1449,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1005,
                             AbilityId = 1003,
                             BaseExperience = 236,
+                            Description = "It is said to emerge from darkness to steal the lives of those who become lost in mountains.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 1,
@@ -1344,6 +1468,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1006,
                             AbilityId = 1003,
                             BaseExperience = 236,
+                            Description = "This Pokémon slept for aeons while in the form of a statue. It was asleep for so long, people forgot that it ever existed.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 1,
@@ -1362,6 +1487,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1007,
                             AbilityId = 1003,
                             BaseExperience = 236,
+                            Description = "The flame on its tail indicates Charmander's life force. If it is healthy, the flame burns brightly.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 1,
@@ -1380,6 +1506,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1008,
                             AbilityId = 1030,
                             BaseExperience = 236,
+                            Description = "When it retracts its long neck into its shell, it squirts out water with vigorous force.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 92,
@@ -1398,6 +1525,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1009,
                             AbilityId = 1024,
                             BaseExperience = 236,
+                            Description = "A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 1,
@@ -1416,6 +1544,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1010,
                             AbilityId = 1003,
                             BaseExperience = 236,
+                            Description = "It loves to bask in the sunlight. It uses the leaf on its head to seek out warm places.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 124,
@@ -1434,6 +1563,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1011,
                             AbilityId = 1016,
                             BaseExperience = 236,
+                            Description = "It has a timid nature. If it is startled, the flames on its back burn more vigorously.",
                             Health = 250,
                             Height = 25,
                             MoveFourId = 28,
@@ -1452,6 +1582,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1012,
                             AbilityId = 1003,
                             BaseExperience = 63,
+                            Description = "Its well-developed jaws are powerful and capable of crushing anything. Even its trainer must be careful.",
                             Health = 250,
                             Height = 6,
                             MoveFourId = 1,
@@ -1470,6 +1601,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1013,
                             AbilityId = 1003,
                             BaseExperience = 62,
+                            Description = "It makes its nest in a giant tree in the forest. It ferociously guards against anything nearing its territory.",
                             Health = 250,
                             Height = 5,
                             MoveFourId = 124,
@@ -1488,6 +1620,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1014,
                             AbilityId = 1016,
                             BaseExperience = 62,
+                            Description = "It has a flame sac inside its belly that perpetually burns. It feels warm if it is hugged.",
                             Health = 250,
                             Height = 4,
                             MoveFourId = 28,
@@ -1506,6 +1639,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1015,
                             AbilityId = 1018,
                             BaseExperience = 62,
+                            Description = "The fin on Mudkip's head acts as highly sensitive radar. Using this fin to sense movements of water and air, this Pokémon can determine what is taking place around it without using its eyes.",
                             Health = 250,
                             Height = 4,
                             MoveFourId = 1,
@@ -1524,6 +1658,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1016,
                             AbilityId = 1024,
                             BaseExperience = 64,
+                            Description = "It undertakes photosynthesis with its body, making oxygen. The leaf on its head wilts if it is thirsty.",
                             Health = 250,
                             Height = 4,
                             MoveFourId = 1,
@@ -1542,6 +1677,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1017,
                             AbilityId = 1016,
                             BaseExperience = 62,
+                            Description = "It agilely scales sheer cliffs to live atop craggy mountains. Its fire is put out when it sleeps.",
                             Health = 250,
                             Height = 5,
                             MoveFourId = 28,
@@ -1560,6 +1696,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1018,
                             AbilityId = 1002,
                             BaseExperience = 63,
+                            Description = "Because it is very proud, it hates accepting food from people. Its thick down guards it from cold.",
                             Health = 250,
                             Height = 5,
                             MoveFourId = 1,
@@ -1578,6 +1715,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1019,
                             AbilityId = 1004,
                             BaseExperience = 300,
+                            Description = "Latias is highly intelligent and capable of understanding human speech. It is covered with a glass-like down. The Pokémon enfolds its body with its down and refracts light to alter its appearance.",
                             Health = 300,
                             Height = 14,
                             MoveFourId = 32,
@@ -1596,6 +1734,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1020,
                             AbilityId = 1028,
                             BaseExperience = 62,
+                            Description = "They photosynthesize by bathing their tails in sunlight. When they are not feeling well, their tails droop.",
                             Health = 250,
                             Height = 7,
                             MoveFourId = 9,
@@ -1614,6 +1753,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1021,
                             AbilityId = 1015,
                             BaseExperience = 62,
+                            Description = "It can deftly dodge its foe's attacks while shooting fireballs from its nose. It roasts berries before it eats them.",
                             Health = 225,
                             Height = 5,
                             MoveFourId = 125,
@@ -1632,6 +1772,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1022,
                             AbilityId = 1009,
                             BaseExperience = 62,
+                            Description = "It fights using the scalchop on its stomach. In response to an attack, it retaliates immediately by slashing.",
                             Health = 225,
                             Height = 5,
                             MoveFourId = 89,
@@ -1650,6 +1791,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1023,
                             AbilityId = 1024,
                             BaseExperience = 63,
+                            Description = "The quills on its head are usually soft. When it flexes them, the points become so hard and sharp that they can pierce rock.",
                             Health = 225,
                             Height = 4,
                             MoveFourId = 122,
@@ -1668,6 +1810,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1024,
                             AbilityId = 1028,
                             BaseExperience = 63,
+                            Description = "Eating a twig fills it with energy, and its roomy ears give vent to air hotter than 390 degrees Fahrenheit.",
                             Health = 225,
                             Height = 4,
                             MoveFourId = 127,
@@ -1686,6 +1829,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1025,
                             AbilityId = 1010,
                             BaseExperience = 63,
+                            Description = "It secretes flexible bubbles from its chest and back. The bubbles reduce the damage it would otherwise take when attacked.",
                             Health = 225,
                             Height = 3,
                             MoveFourId = 90,
@@ -1704,6 +1848,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1026,
                             AbilityId = 1032,
                             BaseExperience = 63,
+                            Description = "It attacks with rapid beats of its stick. As it strikes with amazing speed, it gets more and more pumped.",
                             Health = 225,
                             Height = 3,
                             MoveFourId = 10,
@@ -1722,6 +1867,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1027,
                             AbilityId = 1004,
                             BaseExperience = 64,
+                            Description = "It sends its feathers, which are as sharp as blades, flying in attack. Its legs are strong, and its aim is excellent.",
                             Health = 225,
                             Height = 3,
                             MoveFourId = 82,
@@ -1740,6 +1886,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1028,
                             AbilityId = 1019,
                             BaseExperience = 63,
+                            Description = "While grooming itself, it builds up fur inside its stomach. It sets the fur alight and spews fiery attacks, which change based on how it coughs.",
                             Health = 225,
                             Height = 4,
                             MoveFourId = 93,
@@ -1758,6 +1905,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1029,
                             AbilityId = 1001,
                             BaseExperience = 63,
+                            Description = "It can throw bubble-covered pebbles with precise control, hitting empty cans up to a hundred feet away.",
                             Health = 225,
                             Height = 4,
                             MoveFourId = 89,
@@ -1776,6 +1924,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1030,
                             AbilityId = 1011,
                             BaseExperience = 63,
+                            Description = "When scared, this Pokémon cries. Its tears pack the chemical punch of 100 onions, and attackers won't be able to resist weeping.",
                             Health = 225,
                             Height = 4,
                             MoveFourId = 90,
@@ -1794,6 +1943,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1031,
                             AbilityId = 1026,
                             BaseExperience = 63,
+                            Description = "It has a habit of biting anything with its developed jaws. Even its Trainer needs to be careful.",
                             Health = 225,
                             Height = 4,
                             MoveFourId = 121,
@@ -1812,6 +1962,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1032,
                             AbilityId = 1019,
                             BaseExperience = 63,
+                            Description = "It stores flammable gas in its body and uses it to generate heat. The yellow sections on its belly get particularly hot.",
                             Health = 225,
                             Height = 4,
                             MoveFourId = 93,
@@ -1830,6 +1981,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1033,
                             AbilityId = 1019,
                             BaseExperience = 63,
+                            Description = "It dives underwater to hunt prey. When swimming rapidly, it rockets out of the water and startles prey.",
                             Health = 225,
                             Height = 5,
                             MoveFourId = 1,
@@ -1848,6 +2000,7 @@ namespace PokemonCatcherGame.Server.Migrations
                             Id = 1034,
                             AbilityId = 1034,
                             BaseExperience = 340,
+                            Description = "A Pokémon created by recombining Mew's genes. It's said to have the most savage heart among Pokémon.",
                             Health = 350,
                             Height = 20,
                             MoveFourId = 120,
@@ -1860,6 +2013,4699 @@ namespace PokemonCatcherGame.Server.Migrations
                             PokeTypeIdTwo = 1018,
                             PokedexNumber = 150,
                             Weight = 1220
+                        },
+                        new
+                        {
+                            Id = 1035,
+                            AbilityId = 1034,
+                            BaseExperience = 270,
+                            Description = "So rare that it is still said to be a mirage by many experts. Only a few people have seen it worldwide.",
+                            Health = 350,
+                            Height = 4,
+                            MoveFourId = 120,
+                            MoveOneId = 17,
+                            MoveThreeId = 7,
+                            MoveTwoId = 38,
+                            Name = "Mew",
+                            PokeNickName = "Mew",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 151,
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Id = 1036,
+                            AbilityId = 1034,
+                            BaseExperience = 261,
+                            Description = "A legendary bird Pokémon that is said to appear from clouds while dropping enormous lightning bolts.",
+                            Health = 350,
+                            Height = 16,
+                            MoveFourId = 112,
+                            MoveOneId = 6,
+                            MoveThreeId = 117,
+                            MoveTwoId = 78,
+                            Name = "Zapdos",
+                            PokeNickName = "Zapdos",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 145,
+                            Weight = 526
+                        },
+                        new
+                        {
+                            Id = 1037,
+                            AbilityId = 1034,
+                            BaseExperience = 261,
+                            Description = "Known as the legendary bird of fire. Every flap of its wings creates a dazzling flash of flames.",
+                            Health = 350,
+                            Height = 20,
+                            MoveFourId = 126,
+                            MoveOneId = 5,
+                            MoveThreeId = 47,
+                            MoveTwoId = 6,
+                            Name = "Moltres",
+                            PokeNickName = "Moltres",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 146,
+                            Weight = 600
+                        },
+                        new
+                        {
+                            Id = 1038,
+                            AbilityId = 1034,
+                            BaseExperience = 261,
+                            Description = "A legendary bird Pokémon. It can create blizzards by freezing moisture in the air.",
+                            Health = 350,
+                            Height = 17,
+                            MoveFourId = 79,
+                            MoveOneId = 78,
+                            MoveThreeId = 74,
+                            MoveTwoId = 80,
+                            Name = "Articuno",
+                            PokeNickName = "Articuno",
+                            PokeTypeIdOne = 1014,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 144,
+                            Weight = 554
+                        },
+                        new
+                        {
+                            Id = 1039,
+                            AbilityId = 1034,
+                            BaseExperience = 261,
+                            Description = "RAIKOU embodies the speed of lightning. The roars of this POKéMON send shock waves shuddering through the air and shake the ground as if lightning bolts had come crashing down.",
+                            Health = 350,
+                            Height = 19,
+                            MoveFourId = 112,
+                            MoveOneId = 6,
+                            MoveThreeId = 117,
+                            MoveTwoId = 78,
+                            Name = "Raikou",
+                            PokeNickName = "Raikou",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 243,
+                            Weight = 1780
+                        },
+                        new
+                        {
+                            Id = 1040,
+                            AbilityId = 1034,
+                            BaseExperience = 261,
+                            Description = "ENTEI embodies the passion of magma. This POKéMON is thought to have been born in the eruption of a volcano. It sends up massive bursts of fire that utterly consume all that they touch.",
+                            Health = 350,
+                            Height = 21,
+                            MoveFourId = 126,
+                            MoveOneId = 5,
+                            MoveThreeId = 47,
+                            MoveTwoId = 6,
+                            Name = "Entei",
+                            PokeNickName = "Entei",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 244,
+                            Weight = 1980
+                        },
+                        new
+                        {
+                            Id = 1041,
+                            AbilityId = 1034,
+                            BaseExperience = 261,
+                            Description = "SUICUNE embodies the compassion of a pure spring of water. It runs across the land with gracefulness. This POKéMON has the power to purify dirty water.",
+                            Health = 350,
+                            Height = 20,
+                            MoveFourId = 89,
+                            MoveOneId = 78,
+                            MoveThreeId = 90,
+                            MoveTwoId = 91,
+                            Name = "Suicune",
+                            PokeNickName = "Suicune",
+                            PokeTypeIdOne = 1014,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 245,
+                            Weight = 1870
+                        },
+                        new
+                        {
+                            Id = 1042,
+                            AbilityId = 1034,
+                            BaseExperience = 306,
+                            Description = "LUGIA's wings pack devastating power—a light fluttering of its wings can blow apart regular houses. As a result, this POKéMON chooses to live out of sight deep under the sea.",
+                            Health = 350,
+                            Height = 52,
+                            MoveFourId = 20,
+                            MoveOneId = 17,
+                            MoveThreeId = 19,
+                            MoveTwoId = 18,
+                            Name = "Lugia",
+                            PokeNickName = "Lugia",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 249,
+                            Weight = 2160
+                        },
+                        new
+                        {
+                            Id = 1043,
+                            AbilityId = 1034,
+                            BaseExperience = 306,
+                            Description = "HO-OH's feathers glow in seven colors depending on the angle at which they are struck by light. These feathers are said to bring happiness to the bearers. This POKéMON is said to live at the foot of a rainbow.",
+                            Health = 350,
+                            Height = 38,
+                            MoveFourId = 126,
+                            MoveOneId = 5,
+                            MoveThreeId = 47,
+                            MoveTwoId = 6,
+                            Name = "Ho-Oh",
+                            PokeNickName = "Ho-Oh",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 250,
+                            Weight = 1990
+                        },
+                        new
+                        {
+                            Id = 1044,
+                            AbilityId = 1034,
+                            BaseExperience = 270,
+                            Description = "This POKéMON came from the future by crossing over time. It is thought that so long as CELEBI appears, a bright and shining future awaits us.",
+                            Health = 350,
+                            Height = 6,
+                            MoveFourId = 120,
+                            MoveOneId = 17,
+                            MoveThreeId = 121,
+                            MoveTwoId = 124,
+                            Name = "Celebi",
+                            PokeNickName = "Celebi",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1013,
+                            PokedexNumber = 251,
+                            Weight = 50
+                        },
+                        new
+                        {
+                            Id = 1045,
+                            AbilityId = 1034,
+                            BaseExperience = 302,
+                            Description = "KYOGRE has the power to create massive rain clouds that cover the entire sky and bring about torrential downpours. This POKéMON saved people who were suffering from droughts.",
+                            Health = 350,
+                            Height = 45,
+                            MoveFourId = 88,
+                            MoveOneId = 74,
+                            MoveThreeId = 91,
+                            MoveTwoId = 96,
+                            Name = "Kyogre",
+                            PokeNickName = "Kyogre",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 382,
+                            Weight = 3520
+                        },
+                        new
+                        {
+                            Id = 1046,
+                            AbilityId = 1034,
+                            BaseExperience = 302,
+                            Description = "GROUDON has long been described in mythology as the POKéMON that raised lands and expanded continents. This POKéMON took to sleep after a cataclysmic battle with KYOGRE.",
+                            Health = 350,
+                            Height = 35,
+                            MoveFourId = 44,
+                            MoveOneId = 46,
+                            MoveThreeId = 41,
+                            MoveTwoId = 6,
+                            Name = "Groudon",
+                            PokeNickName = "Groudon",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 383,
+                            Weight = 9500
+                        },
+                        new
+                        {
+                            Id = 1047,
+                            AbilityId = 1034,
+                            BaseExperience = 306,
+                            Description = "RAYQUAZA lived for hundreds of millions of years in the earth's ozone layer, never descending to the ground. This POKéMON appears to feed on water and particles in the atmosphere.",
+                            Health = 350,
+                            Height = 70,
+                            MoveFourId = 33,
+                            MoveOneId = 6,
+                            MoveThreeId = 30,
+                            MoveTwoId = 31,
+                            Name = "Rayquaza",
+                            PokeNickName = "Rayquaza",
+                            PokeTypeIdOne = 1015,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 384,
+                            Weight = 2065
+                        },
+                        new
+                        {
+                            Id = 1048,
+                            AbilityId = 1034,
+                            BaseExperience = 270,
+                            Description = "The DNA of a space virus underwent a sudden mutation upon exposure to a laser beam and resulted in DEOXYS. The crystalline organ on this POKéMON's chest appears to be its brain.",
+                            Health = 350,
+                            Height = 17,
+                            MoveFourId = 20,
+                            MoveOneId = 17,
+                            MoveThreeId = 19,
+                            MoveTwoId = 18,
+                            Name = "Deoxys",
+                            PokeNickName = "Deoxys",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 386,
+                            Weight = 608
+                        },
+                        new
+                        {
+                            Id = 1049,
+                            AbilityId = 1034,
+                            BaseExperience = 270,
+                            Description = "JIRACHI will awaken from its sleep of a thousand years if you sing to it in a voice of purity. It is said to make true any wish that people desire.",
+                            Health = 350,
+                            Height = 3,
+                            MoveFourId = 20,
+                            MoveOneId = 17,
+                            MoveThreeId = 19,
+                            MoveTwoId = 18,
+                            Name = "Jirachi",
+                            PokeNickName = "Jirachi",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1013,
+                            PokedexNumber = 385,
+                            Weight = 11
+                        },
+                        new
+                        {
+                            Id = 1050,
+                            AbilityId = 1024,
+                            BaseExperience = 142,
+                            Description = "When the bulb on its back grows large, it appears to lose the ability to stand on its hind legs.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 1,
+                            MoveOneId = 9,
+                            MoveThreeId = 11,
+                            MoveTwoId = 10,
+                            Name = "Ivysaur",
+                            PokeNickName = "Ivysaur",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 2,
+                            Weight = 130
+                        },
+                        new
+                        {
+                            Id = 1051,
+                            AbilityId = 1016,
+                            BaseExperience = 142,
+                            Description = "It has a barbaric nature. In battle, it whips its fiery tail around and slashes away with sharp claws.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 16,
+                            MoveOneId = 15,
+                            MoveThreeId = 4,
+                            MoveTwoId = 5,
+                            Name = "Charmeleon",
+                            PokeNickName = "Charmeleon",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 5,
+                            Weight = 190
+                        },
+                        new
+                        {
+                            Id = 1052,
+                            AbilityId = 1024,
+                            BaseExperience = 236,
+                            Description = "Its plant blooms when it is absorbing solar energy. It stays on the move to seek sunlight.",
+                            Health = 250,
+                            Height = 20,
+                            MoveFourId = 1,
+                            MoveOneId = 9,
+                            MoveThreeId = 11,
+                            MoveTwoId = 10,
+                            Name = "Venusaur",
+                            PokeNickName = "Venusaur",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 3,
+                            Weight = 1000
+                        },
+                        new
+                        {
+                            Id = 1053,
+                            AbilityId = 1016,
+                            BaseExperience = 240,
+                            Description = "It spits fire that is hot enough to melt boulders. It may cause forest fires by blowing flames.",
+                            Health = 250,
+                            Height = 17,
+                            MoveFourId = 16,
+                            MoveOneId = 15,
+                            MoveThreeId = 14,
+                            MoveTwoId = 5,
+                            Name = "Charizard",
+                            PokeNickName = "Charizard",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 6,
+                            Weight = 905
+                        },
+                        new
+                        {
+                            Id = 1054,
+                            AbilityId = 1018,
+                            BaseExperience = 239,
+                            Description = "It crushes its foe under its heavy body to cause fainting. In a pinch, it will withdraw inside its shell.",
+                            Health = 250,
+                            Height = 16,
+                            MoveFourId = 1,
+                            MoveOneId = 89,
+                            MoveThreeId = 92,
+                            MoveTwoId = 90,
+                            Name = "Blastoise",
+                            PokeNickName = "Blastoise",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 9,
+                            Weight = 855
+                        },
+                        new
+                        {
+                            Id = 1055,
+                            AbilityId = 1018,
+                            BaseExperience = 142,
+                            Description = "It is recognized as a symbol of longevity. If its shell has algae on it, that WARTORTLE is very old.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 91,
+                            MoveOneId = 89,
+                            MoveThreeId = 92,
+                            MoveTwoId = 90,
+                            Name = "Wartortle",
+                            PokeNickName = "Wartortle",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 8,
+                            Weight = 225
+                        },
+                        new
+                        {
+                            Id = 1056,
+                            AbilityId = 1012,
+                            BaseExperience = 178,
+                            Description = "It loves the honey of flowers and can locate flower patches that have even tiny amounts of pollen.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 20,
+                            MoveOneId = 17,
+                            MoveThreeId = 19,
+                            MoveTwoId = 18,
+                            Name = "Catarpie",
+                            PokeNickName = "Catarpie",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 10,
+                            Weight = 320
+                        },
+                        new
+                        {
+                            Id = 1057,
+                            AbilityId = 1012,
+                            BaseExperience = 72,
+                            Description = "Its shell is filled with a thick liquid. All of the cells throughout its body are being rebuilt in preparation for evolution.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 20,
+                            MoveOneId = 17,
+                            MoveThreeId = 19,
+                            MoveTwoId = 18,
+                            Name = "Metapod",
+                            PokeNickName = "Metapod",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 11,
+                            Weight = 99
+                        },
+                        new
+                        {
+                            Id = 1058,
+                            AbilityId = 1012,
+                            BaseExperience = 178,
+                            Description = "It loves the honey of flowers and can locate flower patches that have even tiny amounts of pollen.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 20,
+                            MoveOneId = 17,
+                            MoveThreeId = 19,
+                            MoveTwoId = 18,
+                            Name = "Butterfree",
+                            PokeNickName = "Butterfree",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 12,
+                            Weight = 320
+                        },
+                        new
+                        {
+                            Id = 1059,
+                            AbilityId = 1012,
+                            BaseExperience = 39,
+                            Description = "Often found in forests, eating leaves. It has a sharp venomous stinger on its head.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 67,
+                            MoveOneId = 52,
+                            MoveThreeId = 55,
+                            MoveTwoId = 54,
+                            Name = "Weedle",
+                            PokeNickName = "Weedle",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 13,
+                            Weight = 32
+                        },
+                        new
+                        {
+                            Id = 1060,
+                            AbilityId = 1012,
+                            BaseExperience = 72,
+                            Description = "Almost incapable of moving, this POKéMON can only harden its shell to protect itself from predators.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 67,
+                            MoveOneId = 52,
+                            MoveThreeId = 55,
+                            MoveTwoId = 54,
+                            Name = "Kakuna",
+                            PokeNickName = "Kakuna",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 14,
+                            Weight = 100
+                        },
+                        new
+                        {
+                            Id = 1061,
+                            AbilityId = 1012,
+                            BaseExperience = 178,
+                            Description = "It has three poisonous stingers on its forelegs and its tail. They are used to jab its enemy repeatedly.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 67,
+                            MoveOneId = 52,
+                            MoveThreeId = 55,
+                            MoveTwoId = 54,
+                            Name = "Beedrill",
+                            PokeNickName = "Beedrill",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 15,
+                            Weight = 295
+                        },
+                        new
+                        {
+                            Id = 1062,
+                            AbilityId = 1020,
+                            BaseExperience = 50,
+                            Description = "Very docile. If attacked, it will often kick up sand to protect itself rather than fight back.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 86,
+                            MoveOneId = 81,
+                            MoveThreeId = 85,
+                            MoveTwoId = 82,
+                            Name = "Pidgey",
+                            PokeNickName = "Pidgey",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 16,
+                            Weight = 18
+                        },
+                        new
+                        {
+                            Id = 1063,
+                            AbilityId = 1020,
+                            BaseExperience = 122,
+                            Description = "The claws on its feet are well developed. It can carry prey such as an EXEGGCUTE to its nest over 60 miles away.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 86,
+                            MoveOneId = 81,
+                            MoveThreeId = 85,
+                            MoveTwoId = 82,
+                            Name = "Pidgeotto",
+                            PokeNickName = "Pidgeotto",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 17,
+                            Weight = 300
+                        },
+                        new
+                        {
+                            Id = 1064,
+                            AbilityId = 1020,
+                            BaseExperience = 216,
+                            Description = "When hunting, it skims the surface of water at high speed to pick off unwary prey such as MAGIKARP.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 86,
+                            MoveOneId = 81,
+                            MoveThreeId = 85,
+                            MoveTwoId = 82,
+                            Name = "Pidgeot",
+                            PokeNickName = "Pidgeot",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 18,
+                            Weight = 395
+                        },
+                        new
+                        {
+                            Id = 1065,
+                            AbilityId = 1011,
+                            BaseExperience = 51,
+                            Description = "Bites anything when it attacks. Small and very quick, it is a common sight in many places.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 93,
+                            MoveOneId = 1,
+                            MoveThreeId = 78,
+                            MoveTwoId = 45,
+                            Name = "Rattata",
+                            PokeNickName = "Rattata",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 19,
+                            Weight = 35
+                        },
+                        new
+                        {
+                            Id = 1066,
+                            AbilityId = 1011,
+                            BaseExperience = 145,
+                            Description = "It uses its whiskers to maintain its balance. It apparently slows down if they are cut off.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 93,
+                            MoveOneId = 1,
+                            MoveThreeId = 78,
+                            MoveTwoId = 45,
+                            Name = "Raticate",
+                            PokeNickName = "Raticate",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 20,
+                            Weight = 185
+                        },
+                        new
+                        {
+                            Id = 1067,
+                            AbilityId = 1020,
+                            BaseExperience = 52,
+                            Description = "Eats bugs in grassy areas. It has to flap its short wings at high speed to stay airborne.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 86,
+                            MoveOneId = 81,
+                            MoveThreeId = 85,
+                            MoveTwoId = 82,
+                            Name = "Spearow",
+                            PokeNickName = "Spearow",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 21,
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Id = 1068,
+                            AbilityId = 1020,
+                            BaseExperience = 155,
+                            Description = "With its huge and magnificent wings, it can keep aloft without ever having to land for rest.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 86,
+                            MoveOneId = 81,
+                            MoveThreeId = 85,
+                            MoveTwoId = 82,
+                            Name = "Fearow",
+                            PokeNickName = "Fearow",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 22,
+                            Weight = 380
+                        },
+                        new
+                        {
+                            Id = 1069,
+                            AbilityId = 1011,
+                            BaseExperience = 58,
+                            Description = "Moves silently and stealthily. Eats the eggs of birds, such as PIDGEY and SPEAROW, whole.",
+                            Health = 250,
+                            Height = 20,
+                            MoveFourId = 93,
+                            MoveOneId = 1,
+                            MoveThreeId = 78,
+                            MoveTwoId = 45,
+                            Name = "Ekans",
+                            PokeNickName = "Ekans",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 23,
+                            Weight = 69
+                        },
+                        new
+                        {
+                            Id = 1070,
+                            AbilityId = 1011,
+                            BaseExperience = 153,
+                            Description = "The pattern on its belly appears to be a frightening face. Weak foes will flee just at the sight of the pattern.",
+                            Health = 250,
+                            Height = 35,
+                            MoveFourId = 93,
+                            MoveOneId = 1,
+                            MoveThreeId = 78,
+                            MoveTwoId = 45,
+                            Name = "Arbok",
+                            PokeNickName = "Arbok",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 24,
+                            Weight = 650
+                        },
+                        new
+                        {
+                            Id = 1071,
+                            AbilityId = 1019,
+                            BaseExperience = 218,
+                            Description = "Its long tail serves as a ground to protect itself from its own high-voltage power.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 113,
+                            MoveOneId = 118,
+                            MoveThreeId = 116,
+                            MoveTwoId = 117,
+                            Name = "Raichu",
+                            PokeNickName = "Raichu",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 26,
+                            Weight = 300
+                        },
+                        new
+                        {
+                            Id = 1072,
+                            AbilityId = 1011,
+                            BaseExperience = 60,
+                            Description = "Burrows deep underground in arid locations far from water. It only emerges to hunt for food.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 44,
+                            MoveOneId = 41,
+                            MoveThreeId = 1,
+                            MoveTwoId = 42,
+                            Name = "Sandshrew",
+                            PokeNickName = "Sandshrew",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 27,
+                            Weight = 120
+                        },
+                        new
+                        {
+                            Id = 1073,
+                            AbilityId = 1011,
+                            BaseExperience = 158,
+                            Description = "Curls up into a spiny ball when threatened. It can roll while curled up to attack or escape.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 44,
+                            MoveOneId = 41,
+                            MoveThreeId = 43,
+                            MoveTwoId = 42,
+                            Name = "Sandslash",
+                            PokeNickName = "Sandslash",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 28,
+                            Weight = 295
+                        },
+                        new
+                        {
+                            Id = 1074,
+                            AbilityId = 1011,
+                            BaseExperience = 55,
+                            Description = "NIDORAN has barbs that secrete a powerful poison. They are thought to have developed as protection for this small-bodied POKéMON. When enraged, it releases a horrible toxin from its horn.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 57,
+                            MoveOneId = 1,
+                            MoveThreeId = 56,
+                            MoveTwoId = 45,
+                            Name = "Nidoran♀",
+                            PokeNickName = "Nidoran♀",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 29,
+                            Weight = 70
+                        },
+                        new
+                        {
+                            Id = 1075,
+                            AbilityId = 1011,
+                            BaseExperience = 128,
+                            Description = "When NIDORINA are with their friends or family, they keep their barbs tucked away to prevent hurting each other. This POKéMON appears to become nervous if separated from the others.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 57,
+                            MoveOneId = 1,
+                            MoveThreeId = 56,
+                            MoveTwoId = 45,
+                            Name = "Nidorina",
+                            PokeNickName = "Nidorina",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 30,
+                            Weight = 200
+                        },
+                        new
+                        {
+                            Id = 1076,
+                            AbilityId = 1011,
+                            BaseExperience = 227,
+                            Description = "NIDOQUEEN's body is encased in extremely hard scales. It is adept at sending foes flying with harsh tackles. This POKéMON is at its strongest when it is defending its young.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 57,
+                            MoveOneId = 1,
+                            MoveThreeId = 56,
+                            MoveTwoId = 45,
+                            Name = "Nidoqueen",
+                            PokeNickName = "Nidoqueen",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 31,
+                            Weight = 600
+                        },
+                        new
+                        {
+                            Id = 1077,
+                            AbilityId = 1011,
+                            BaseExperience = 55,
+                            Description = "NIDORAN has developed muscles for moving its ears. Thanks to them, the ears can be freely moved in any direction. Even the slightest sound does not escape this POKéMON's notice.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 57,
+                            MoveOneId = 1,
+                            MoveThreeId = 56,
+                            MoveTwoId = 45,
+                            Name = "Nidoran♂",
+                            PokeNickName = "Nidoran♂",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 32,
+                            Weight = 90
+                        },
+                        new
+                        {
+                            Id = 1078,
+                            AbilityId = 1011,
+                            BaseExperience = 128,
+                            Description = "NIDORINO has a horn that is harder than a diamond. If it senses a hostile presence, all the barbs on its back bristle up at once, and it challenges the foe with all its might.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 57,
+                            MoveOneId = 1,
+                            MoveThreeId = 56,
+                            MoveTwoId = 45,
+                            Name = "Nidorino",
+                            PokeNickName = "Nidorino",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 33,
+                            Weight = 195
+                        },
+                        new
+                        {
+                            Id = 1079,
+                            AbilityId = 1011,
+                            BaseExperience = 227,
+                            Description = "NIDOKING's thick tail packs enormously destructive power. With one swing, it can topple a metal transmission tower. Once this POKéMON goes on a rampage, there is no stopping it.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 57,
+                            MoveOneId = 1,
+                            MoveThreeId = 56,
+                            MoveTwoId = 45,
+                            Name = "Nidoking",
+                            PokeNickName = "Nidoking",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 34,
+                            Weight = 620
+                        },
+                        new
+                        {
+                            Id = 1080,
+                            AbilityId = 1011,
+                            BaseExperience = 113,
+                            Description = "Its magical and cute appeal has many admirers. It is rare and found only in certain areas.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 20,
+                            MoveOneId = 23,
+                            MoveThreeId = 19,
+                            MoveTwoId = 18,
+                            Name = "Clefairy",
+                            PokeNickName = "Clefairy",
+                            PokeTypeIdOne = 1017,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 35,
+                            Weight = 75
+                        },
+                        new
+                        {
+                            Id = 1081,
+                            AbilityId = 1011,
+                            BaseExperience = 217,
+                            Description = "A timid fairy POKéMON that is rarely seen. It will run and hide the moment it senses people.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 20,
+                            MoveOneId = 23,
+                            MoveThreeId = 19,
+                            MoveTwoId = 18,
+                            Name = "Clefable",
+                            PokeNickName = "Clefable",
+                            PokeTypeIdOne = 1017,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 36,
+                            Weight = 400
+                        },
+                        new
+                        {
+                            Id = 1082,
+                            AbilityId = 1011,
+                            BaseExperience = 60,
+                            Description = "At the time of birth, it has just one tail. The tail splits from its tip as it grows older.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 16,
+                            MoveOneId = 5,
+                            MoveThreeId = 14,
+                            MoveTwoId = 6,
+                            Name = "Vulpix",
+                            PokeNickName = "Vulpix",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 37,
+                            Weight = 99
+                        },
+                        new
+                        {
+                            Id = 1083,
+                            AbilityId = 1011,
+                            BaseExperience = 177,
+                            Description = "Very smart and very vengeful. Grabbing one of its many tails could result in a 1000-year curse.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 16,
+                            MoveOneId = 5,
+                            MoveThreeId = 14,
+                            MoveTwoId = 6,
+                            Name = "Ninetales",
+                            PokeNickName = "Ninetales",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 38,
+                            Weight = 199
+                        },
+                        new
+                        {
+                            Id = 1084,
+                            AbilityId = 1011,
+                            BaseExperience = 76,
+                            Description = "When its huge eyes light up, it sings a mysteriously soothing melody that lulls its enemies to sleep.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 109,
+                            MoveOneId = 105,
+                            MoveThreeId = 107,
+                            MoveTwoId = 106,
+                            Name = "Jigglypuff",
+                            PokeNickName = "Jigglypuff",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1017,
+                            PokedexNumber = 39,
+                            Weight = 55
+                        },
+                        new
+                        {
+                            Id = 1085,
+                            AbilityId = 1011,
+                            BaseExperience = 109,
+                            Description = "The body is soft and rubbery. When angered, it will suck in air and inflate itself to an enormous size.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 109,
+                            MoveOneId = 105,
+                            MoveThreeId = 107,
+                            MoveTwoId = 106,
+                            Name = "Wigglytuff",
+                            PokeNickName = "Wigglytuff",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1017,
+                            PokedexNumber = 40,
+                            Weight = 120
+                        },
+                        new
+                        {
+                            Id = 1086,
+                            AbilityId = 1011,
+                            BaseExperience = 49,
+                            Description = "Forms colonies in perpetually dark places. Uses ultrasonic waves to identify and approach targets.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 82,
+                            MoveOneId = 58,
+                            MoveThreeId = 55,
+                            MoveTwoId = 54,
+                            Name = "Zubat",
+                            PokeNickName = "Zubat",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 41,
+                            Weight = 75
+                        },
+                        new
+                        {
+                            Id = 1087,
+                            AbilityId = 1011,
+                            BaseExperience = 159,
+                            Description = "Once it strikes, it will not stop draining energy from the victim even if it gets too heavy to fly.",
+                            Health = 250,
+                            Height = 16,
+                            MoveFourId = 82,
+                            MoveOneId = 58,
+                            MoveThreeId = 55,
+                            MoveTwoId = 54,
+                            Name = "Golbat",
+                            PokeNickName = "Golbat",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 42,
+                            Weight = 550
+                        },
+                        new
+                        {
+                            Id = 1088,
+                            AbilityId = 1011,
+                            BaseExperience = 64,
+                            Description = "During the day, it keeps its face buried in the ground. At night, it wanders around sowing its seeds.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 97,
+                            MoveOneId = 11,
+                            MoveThreeId = 10,
+                            MoveTwoId = 12,
+                            Name = "Oddish",
+                            PokeNickName = "Oddish",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1011,
+                            PokedexNumber = 43,
+                            Weight = 54
+                        },
+                        new
+                        {
+                            Id = 1089,
+                            AbilityId = 1011,
+                            BaseExperience = 138,
+                            Description = "The fluid that oozes from its mouth isn't drool. It is a nectar that is used to attract prey.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 97,
+                            MoveOneId = 11,
+                            MoveThreeId = 10,
+                            MoveTwoId = 12,
+                            Name = "Gloom",
+                            PokeNickName = "Gloom",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1011,
+                            PokedexNumber = 44,
+                            Weight = 86
+                        },
+                        new
+                        {
+                            Id = 1090,
+                            AbilityId = 1011,
+                            BaseExperience = 221,
+                            Description = "The larger its petals, the more toxic pollen it contains. Its big head is heavy and hard to hold up.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 97,
+                            MoveOneId = 11,
+                            MoveThreeId = 10,
+                            MoveTwoId = 12,
+                            Name = "Vileplume",
+                            PokeNickName = "Vileplume",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1011,
+                            PokedexNumber = 45,
+                            Weight = 186
+                        },
+                        new
+                        {
+                            Id = 1091,
+                            AbilityId = 1011,
+                            BaseExperience = 57,
+                            Description = "Burrows to suck tree roots. The mushrooms on its back grow by drawing nutrients from the bug host.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 67,
+                            MoveOneId = 99,
+                            MoveThreeId = 66,
+                            MoveTwoId = 97,
+                            Name = "Paras",
+                            PokeNickName = "Paras",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1011,
+                            PokedexNumber = 46,
+                            Weight = 54
+                        },
+                        new
+                        {
+                            Id = 1092,
+                            AbilityId = 1011,
+                            BaseExperience = 142,
+                            Description = "A host-parasite pair in which the parasite mushroom has taken over the host bug. Prefers damp places.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 67,
+                            MoveOneId = 99,
+                            MoveThreeId = 66,
+                            MoveTwoId = 97,
+                            Name = "Parasect",
+                            PokeNickName = "Parasect",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1011,
+                            PokedexNumber = 47,
+                            Weight = 295
+                        },
+                        new
+                        {
+                            Id = 1093,
+                            AbilityId = 1011,
+                            BaseExperience = 61,
+                            Description = "Lives in the shadows of tall trees where it eats insects. It is attracted by light at night.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 67,
+                            MoveOneId = 52,
+                            MoveThreeId = 55,
+                            MoveTwoId = 54,
+                            Name = "Venonat",
+                            PokeNickName = "Venonat",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 48,
+                            Weight = 300
+                        },
+                        new
+                        {
+                            Id = 1094,
+                            AbilityId = 1011,
+                            BaseExperience = 158,
+                            Description = "The dust-like scales covering its wings are color coded to indicate the kinds of poison it has.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 67,
+                            MoveOneId = 52,
+                            MoveThreeId = 55,
+                            MoveTwoId = 54,
+                            Name = "Venomoth",
+                            PokeNickName = "Venomoth",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 49,
+                            Weight = 125
+                        },
+                        new
+                        {
+                            Id = 1095,
+                            AbilityId = 1011,
+                            BaseExperience = 53,
+                            Description = "Lives about one yard underground where it feeds on plant roots. It sometimes appears above ground.",
+                            Health = 250,
+                            Height = 2,
+                            MoveFourId = 44,
+                            MoveOneId = 41,
+                            MoveThreeId = 43,
+                            MoveTwoId = 42,
+                            Name = "Diglett",
+                            PokeNickName = "Diglett",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 50,
+                            Weight = 8
+                        },
+                        new
+                        {
+                            Id = 1096,
+                            AbilityId = 1011,
+                            BaseExperience = 142,
+                            Description = "A team of DIGLETT triplets. It triggers huge earthquakes by burrowing 60 miles underground.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 44,
+                            MoveOneId = 41,
+                            MoveThreeId = 43,
+                            MoveTwoId = 42,
+                            Name = "Dugtrio",
+                            PokeNickName = "Dugtrio",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 51,
+                            Weight = 333
+                        },
+                        new
+                        {
+                            Id = 1097,
+                            AbilityId = 1011,
+                            BaseExperience = 58,
+                            Description = "Adores circular objects. Wanders the streets on a nightly basis to look for dropped loose change.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 93,
+                            MoveOneId = 1,
+                            MoveThreeId = 78,
+                            MoveTwoId = 45,
+                            Name = "Meowth",
+                            PokeNickName = "Meowth",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 52,
+                            Weight = 42
+                        },
+                        new
+                        {
+                            Id = 1098,
+                            AbilityId = 1011,
+                            BaseExperience = 154,
+                            Description = "Although its fur has many admirers, it is tough to raise as a pet because of its fickle meanness.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 93,
+                            MoveOneId = 1,
+                            MoveThreeId = 78,
+                            MoveTwoId = 45,
+                            Name = "Persian",
+                            PokeNickName = "Persian",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 53,
+                            Weight = 320
+                        },
+                        new
+                        {
+                            Id = 1099,
+                            AbilityId = 1010,
+                            BaseExperience = 64,
+                            Description = "While lulling its enemies with its vacant look, this wily POKéMON will use psychokinetic powers.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 95,
+                            MoveOneId = 89,
+                            MoveThreeId = 92,
+                            MoveTwoId = 90,
+                            Name = "Psyduck",
+                            PokeNickName = "Psyduck",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 54,
+                            Weight = 196
+                        },
+                        new
+                        {
+                            Id = 1100,
+                            AbilityId = 1010,
+                            BaseExperience = 175,
+                            Description = "Often seen swimming elegantly by lake shores. It is often mistaken for the Japanese monster, Kappa.",
+                            Health = 250,
+                            Height = 17,
+                            MoveFourId = 95,
+                            MoveOneId = 89,
+                            MoveThreeId = 92,
+                            MoveTwoId = 90,
+                            Name = "Golduck",
+                            PokeNickName = "Golduck",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 55,
+                            Weight = 766
+                        },
+                        new
+                        {
+                            Id = 1101,
+                            AbilityId = 1030,
+                            BaseExperience = 61,
+                            Description = "Extremely quick to anger. It could be docile one moment then thrashing away the next instant.",
+                            Health = 350,
+                            Height = 5,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Mankey",
+                            PokeNickName = "Mankey",
+                            PokeTypeIdOne = 1001,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 56,
+                            Weight = 280
+                        },
+                        new
+                        {
+                            Id = 1102,
+                            AbilityId = 1030,
+                            BaseExperience = 159,
+                            Description = "Always furious and tenacious to boot. It will not abandon chasing its quarry until it is caught.",
+                            Health = 350,
+                            Height = 10,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Primeape",
+                            PokeNickName = "Primeape",
+                            PokeTypeIdOne = 1001,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 57,
+                            Weight = 320
+                        },
+                        new
+                        {
+                            Id = 1103,
+                            AbilityId = 1011,
+                            BaseExperience = 70,
+                            Description = "Very protective of its territory. It will bark and bite to repel intruders from its space.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 16,
+                            MoveOneId = 5,
+                            MoveThreeId = 14,
+                            MoveTwoId = 6,
+                            Name = "Growlithe",
+                            PokeNickName = "Growlithe",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 58,
+                            Weight = 190
+                        },
+                        new
+                        {
+                            Id = 1104,
+                            AbilityId = 1011,
+                            BaseExperience = 194,
+                            Description = "A POKéMON that has been admired since the past for its beauty. It runs agilely as if on wings.",
+                            Health = 250,
+                            Height = 19,
+                            MoveFourId = 16,
+                            MoveOneId = 5,
+                            MoveThreeId = 14,
+                            MoveTwoId = 6,
+                            Name = "Arcanine",
+                            PokeNickName = "Arcanine",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 59,
+                            Weight = 1550
+                        },
+                        new
+                        {
+                            Id = 1105,
+                            AbilityId = 1011,
+                            BaseExperience = 60,
+                            Description = "Its newly grown legs prevent it from running. It appears to prefer swimming than trying to stand.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Poliwag",
+                            PokeNickName = "Poliwag",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 60,
+                            Weight = 124
+                        },
+                        new
+                        {
+                            Id = 1106,
+                            AbilityId = 1011,
+                            BaseExperience = 135,
+                            Description = "Capable of living in or out of water. When out of water, it sweats to keep its body slimy.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Poliwhirl",
+                            PokeNickName = "Poliwhirl",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 61,
+                            Weight = 200
+                        },
+                        new
+                        {
+                            Id = 1107,
+                            AbilityId = 1011,
+                            BaseExperience = 230,
+                            Description = "An adept swimmer at both the front crawl and breast stroke. Easily overtakes the best human swimmers.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Poliwrath",
+                            PokeNickName = "Poliwrath",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1001,
+                            PokedexNumber = 62,
+                            Weight = 540
+                        },
+                        new
+                        {
+                            Id = 1108,
+                            AbilityId = 1011,
+                            BaseExperience = 62,
+                            Description = "Using its ability to read minds, it will identify impending danger and TELEPORT to safety.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 13,
+                            MoveOneId = 19,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Abra",
+                            PokeNickName = "Abra",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 63,
+                            Weight = 195
+                        },
+                        new
+                        {
+                            Id = 1109,
+                            AbilityId = 1011,
+                            BaseExperience = 140,
+                            Description = "It emits special alpha waves from its body that induce headaches just by being close by.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 13,
+                            MoveOneId = 19,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Kadabra",
+                            PokeNickName = "Kadabra",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 64,
+                            Weight = 565
+                        },
+                        new
+                        {
+                            Id = 1110,
+                            AbilityId = 1011,
+                            BaseExperience = 225,
+                            Description = "Its brain can outperform a supercomputer. Its intelligence quotient is said to be 5,000.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 13,
+                            MoveOneId = 19,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Alakazam",
+                            PokeNickName = "Alakazam",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 65,
+                            Weight = 480
+                        },
+                        new
+                        {
+                            Id = 1111,
+                            AbilityId = 1011,
+                            BaseExperience = 61,
+                            Description = "Loves to build its muscles. It trains in all styles of martial arts to become even stronger.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Machop",
+                            PokeNickName = "Machop",
+                            PokeTypeIdOne = 1001,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 66,
+                            Weight = 195
+                        },
+                        new
+                        {
+                            Id = 1112,
+                            AbilityId = 1011,
+                            BaseExperience = 142,
+                            Description = "Its muscular body is so powerful, it must wear a power save belt to be able to regulate its motions.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Machoke",
+                            PokeNickName = "Machoke",
+                            PokeTypeIdOne = 1001,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 67,
+                            Weight = 705
+                        },
+                        new
+                        {
+                            Id = 1113,
+                            AbilityId = 1011,
+                            BaseExperience = 227,
+                            Description = "Using its heavy muscles, it throws powerful punches that can send the victim clear over the horizon.",
+                            Health = 250,
+                            Height = 16,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Machamp",
+                            PokeNickName = "Machamp",
+                            PokeTypeIdOne = 1001,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 68,
+                            Weight = 1300
+                        },
+                        new
+                        {
+                            Id = 1114,
+                            AbilityId = 1011,
+                            BaseExperience = 60,
+                            Description = "A carnivorous POKéMON that traps and eats bugs. It uses its root feet to soak up needed moisture.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 97,
+                            MoveOneId = 11,
+                            MoveThreeId = 10,
+                            MoveTwoId = 12,
+                            Name = "Bellsprout",
+                            PokeNickName = "Bellsprout",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 69,
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Id = 1115,
+                            AbilityId = 1011,
+                            BaseExperience = 137,
+                            Description = "It spits out POISONPOWDER to immobilize the enemy and then finishes it with a spray of ACID.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 97,
+                            MoveOneId = 11,
+                            MoveThreeId = 10,
+                            MoveTwoId = 12,
+                            Name = "Weepinbell",
+                            PokeNickName = "Weepinbell",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 70,
+                            Weight = 64
+                        },
+                        new
+                        {
+                            Id = 1116,
+                            AbilityId = 1011,
+                            BaseExperience = 216,
+                            Description = "Said to live in huge colonies deep in jungles, although no one has ever returned from there.",
+                            Health = 250,
+                            Height = 17,
+                            MoveFourId = 97,
+                            MoveOneId = 11,
+                            MoveThreeId = 10,
+                            MoveTwoId = 12,
+                            Name = "Victreebel",
+                            PokeNickName = "Victreebel",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 71,
+                            Weight = 155
+                        },
+                        new
+                        {
+                            Id = 1117,
+                            AbilityId = 1011,
+                            BaseExperience = 67,
+                            Description = "Drifts in shallow seas. Anglers who hook them by accident are often punished by its stinging acid.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 92,
+                            MoveOneId = 56,
+                            MoveThreeId = 87,
+                            MoveTwoId = 54,
+                            Name = "Tentacool",
+                            PokeNickName = "Tentacool",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 72,
+                            Weight = 455
+                        },
+                        new
+                        {
+                            Id = 1118,
+                            AbilityId = 1011,
+                            BaseExperience = 180,
+                            Description = "The tentacles are normally kept short. On hunts, they are extended to ensnare and immobilize prey.",
+                            Health = 250,
+                            Height = 16,
+                            MoveFourId = 92,
+                            MoveOneId = 56,
+                            MoveThreeId = 87,
+                            MoveTwoId = 54,
+                            Name = "Tentacruel",
+                            PokeNickName = "Tentacruel",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 73,
+                            Weight = 550
+                        },
+                        new
+                        {
+                            Id = 1119,
+                            AbilityId = 1028,
+                            BaseExperience = 60,
+                            Description = "Found in fields and mountains. Mistaking them for boulders, people often step or trip on them.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 41,
+                            MoveOneId = 63,
+                            MoveThreeId = 61,
+                            MoveTwoId = 62,
+                            Name = "Geodude",
+                            PokeNickName = "Geodude",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 74,
+                            Weight = 200
+                        },
+                        new
+                        {
+                            Id = 1120,
+                            AbilityId = 1028,
+                            BaseExperience = 137,
+                            Description = "Rolls down slopes to move. It rolls over any obstacle without slowing or changing its direction.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 41,
+                            MoveOneId = 63,
+                            MoveThreeId = 61,
+                            MoveTwoId = 62,
+                            Name = "Graveler",
+                            PokeNickName = "Graveler",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 75,
+                            Weight = 1050
+                        },
+                        new
+                        {
+                            Id = 1121,
+                            AbilityId = 1028,
+                            BaseExperience = 223,
+                            Description = "Its boulder-like body is extremely hard. It can easily withstand dynamite blasts without damage.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 41,
+                            MoveOneId = 63,
+                            MoveThreeId = 61,
+                            MoveTwoId = 62,
+                            Name = "Golem",
+                            PokeNickName = "Golem",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 76,
+                            Weight = 3000
+                        },
+                        new
+                        {
+                            Id = 1122,
+                            AbilityId = 1011,
+                            BaseExperience = 82,
+                            Description = "Its hooves are 10 times harder than diamonds. It can trample anything completely flat in little time.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 16,
+                            MoveOneId = 5,
+                            MoveThreeId = 14,
+                            MoveTwoId = 6,
+                            Name = "Ponyta",
+                            PokeNickName = "Ponyta",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 77,
+                            Weight = 300
+                        },
+                        new
+                        {
+                            Id = 1123,
+                            AbilityId = 1011,
+                            BaseExperience = 175,
+                            Description = "Very competitive, this POKéMON will chase anything that moves fast in the hopes of racing it.",
+                            Health = 250,
+                            Height = 17,
+                            MoveFourId = 16,
+                            MoveOneId = 5,
+                            MoveThreeId = 14,
+                            MoveTwoId = 6,
+                            Name = "Rapidash",
+                            PokeNickName = "Rapidash",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 78,
+                            Weight = 950
+                        },
+                        new
+                        {
+                            Id = 1124,
+                            AbilityId = 1011,
+                            BaseExperience = 63,
+                            Description = "Incredibly slow and dopey. It takes 5 seconds for it to feel pain when under attack.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 95,
+                            MoveOneId = 89,
+                            MoveThreeId = 92,
+                            MoveTwoId = 90,
+                            Name = "Slowpoke",
+                            PokeNickName = "Slowpoke",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1013,
+                            PokedexNumber = 79,
+                            Weight = 360
+                        },
+                        new
+                        {
+                            Id = 1125,
+                            AbilityId = 1011,
+                            BaseExperience = 172,
+                            Description = "The SHELLDER that is latched onto SLOWPOKE's tail is said to feed on the host's left over scraps.",
+                            Health = 250,
+                            Height = 16,
+                            MoveFourId = 95,
+                            MoveOneId = 89,
+                            MoveThreeId = 92,
+                            MoveTwoId = 90,
+                            Name = "Slowbro",
+                            PokeNickName = "Slowbro",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1013,
+                            PokedexNumber = 80,
+                            Weight = 785
+                        },
+                        new
+                        {
+                            Id = 1126,
+                            AbilityId = 1011,
+                            BaseExperience = 65,
+                            Description = "Uses anti-gravity to stay suspended. Appears without warning and uses THUNDER WAVE and similar moves.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 113,
+                            MoveOneId = 51,
+                            MoveThreeId = 7,
+                            MoveTwoId = 6,
+                            Name = "Magnemite",
+                            PokeNickName = "Magnemite",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1008,
+                            PokedexNumber = 81,
+                            Weight = 60
+                        },
+                        new
+                        {
+                            Id = 1127,
+                            AbilityId = 1011,
+                            BaseExperience = 163,
+                            Description = "Formed by several MAGNEMITEs linked together. They frequently appear when sunspots flare up.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 113,
+                            MoveOneId = 51,
+                            MoveThreeId = 7,
+                            MoveTwoId = 6,
+                            Name = "Magneton",
+                            PokeNickName = "Magneton",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1008,
+                            PokedexNumber = 82,
+                            Weight = 600
+                        },
+                        new
+                        {
+                            Id = 1128,
+                            AbilityId = 1001,
+                            BaseExperience = 132,
+                            Description = "The sprig of green onions it holds is its weapon. It is used much like a metal sword.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 81,
+                            MoveOneId = 1,
+                            MoveThreeId = 95,
+                            MoveTwoId = 93,
+                            Name = "Farfetch'd",
+                            PokeNickName = "Farfetch'd",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 83,
+                            Weight = 150
+                        },
+                        new
+                        {
+                            Id = 1129,
+                            AbilityId = 1011,
+                            BaseExperience = 62,
+                            Description = "A bird that makes up for its poor flying with its fast foot speed. Leaves giant footprints.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 81,
+                            MoveOneId = 1,
+                            MoveThreeId = 95,
+                            MoveTwoId = 93,
+                            Name = "Doduo",
+                            PokeNickName = "Doduo",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 84,
+                            Weight = 392
+                        },
+                        new
+                        {
+                            Id = 1130,
+                            AbilityId = 1011,
+                            BaseExperience = 161,
+                            Description = "Uses its three brains to execute complex plans. While two heads sleep, one head stays awake.",
+                            Health = 250,
+                            Height = 18,
+                            MoveFourId = 81,
+                            MoveOneId = 1,
+                            MoveThreeId = 95,
+                            MoveTwoId = 93,
+                            Name = "Dodrio",
+                            PokeNickName = "Dodrio",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 85,
+                            Weight = 852
+                        },
+                        new
+                        {
+                            Id = 1131,
+                            AbilityId = 1011,
+                            BaseExperience = 65,
+                            Description = "The protruding horn on its head is very hard. It is used for bashing through thick ice.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Seel",
+                            PokeNickName = "Seel",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 86,
+                            Weight = 900
+                        },
+                        new
+                        {
+                            Id = 1132,
+                            AbilityId = 1011,
+                            BaseExperience = 166,
+                            Description = "Stores thermal energy in its body. Swims at a steady 8 knots even in intensely cold waters.",
+                            Health = 250,
+                            Height = 17,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Dewgong",
+                            PokeNickName = "Dewgong",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1014,
+                            PokedexNumber = 87,
+                            Weight = 1200
+                        },
+                        new
+                        {
+                            Id = 1133,
+                            AbilityId = 1011,
+                            BaseExperience = 65,
+                            Description = "Appears in filthy areas. Thrives by sucking up polluted sludge that is pumped out of factories.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 57,
+                            MoveOneId = 54,
+                            MoveThreeId = 58,
+                            MoveTwoId = 55,
+                            Name = "Grimer",
+                            PokeNickName = "Grimer",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 88,
+                            Weight = 300
+                        },
+                        new
+                        {
+                            Id = 1134,
+                            AbilityId = 1011,
+                            BaseExperience = 175,
+                            Description = "Thickly covered with a filthy, vile sludge. It is so toxic, even its footprints contain poison.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 57,
+                            MoveOneId = 54,
+                            MoveThreeId = 58,
+                            MoveTwoId = 55,
+                            Name = "Muk",
+                            PokeNickName = "Muk",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 89,
+                            Weight = 300
+                        },
+                        new
+                        {
+                            Id = 1135,
+                            AbilityId = 1011,
+                            BaseExperience = 61,
+                            Description = "Its hard shell repels any kind of attack. It is vulnerable only when its shell is open.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Shellder",
+                            PokeNickName = "Shellder",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 90,
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Id = 1136,
+                            AbilityId = 1011,
+                            BaseExperience = 184,
+                            Description = "When attacked, it launches its horns in quick volleys. Its innards have never been seen.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Cloyster",
+                            PokeNickName = "Cloyster",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1014,
+                            PokedexNumber = 91,
+                            Weight = 1325
+                        },
+                        new
+                        {
+                            Id = 1137,
+                            AbilityId = 1011,
+                            BaseExperience = 62,
+                            Description = "Almost invisible, this gaseous POKéMON cloaks the target and puts it to sleep without notice.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 40,
+                            MoveOneId = 56,
+                            MoveThreeId = 38,
+                            MoveTwoId = 36,
+                            Name = "Gastly",
+                            PokeNickName = "Gastly",
+                            PokeTypeIdOne = 1007,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 92,
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Id = 1138,
+                            AbilityId = 1011,
+                            BaseExperience = 142,
+                            Description = "Because of its ability to slip through block walls, it is said to be from another dimension.",
+                            Health = 250,
+                            Height = 16,
+                            MoveFourId = 40,
+                            MoveOneId = 56,
+                            MoveThreeId = 38,
+                            MoveTwoId = 36,
+                            Name = "Haunter",
+                            PokeNickName = "Haunter",
+                            PokeTypeIdOne = 1007,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 93,
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Id = 1139,
+                            AbilityId = 1011,
+                            BaseExperience = 225,
+                            Description = "Under a full moon, this POKéMON likes to mimic the shadows of people and laugh at their fright.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 40,
+                            MoveOneId = 56,
+                            MoveThreeId = 38,
+                            MoveTwoId = 36,
+                            Name = "Gengar",
+                            PokeNickName = "Gengar",
+                            PokeTypeIdOne = 1007,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 94,
+                            Weight = 405
+                        },
+                        new
+                        {
+                            Id = 1140,
+                            AbilityId = 1028,
+                            BaseExperience = 77,
+                            Description = "As it grows, the stone portions of its body harden to become similar to a diamond, but colored black.",
+                            Health = 250,
+                            Height = 88,
+                            MoveFourId = 41,
+                            MoveOneId = 63,
+                            MoveThreeId = 61,
+                            MoveTwoId = 62,
+                            Name = "Onix",
+                            PokeNickName = "Onix",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 95,
+                            Weight = 2100
+                        },
+                        new
+                        {
+                            Id = 1141,
+                            AbilityId = 1011,
+                            BaseExperience = 66,
+                            Description = "Puts enemies to sleep then eats their dreams. Occasionally gets sick from eating bad dreams.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 13,
+                            MoveOneId = 19,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Drowzee",
+                            PokeNickName = "Drowzee",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 96,
+                            Weight = 324
+                        },
+                        new
+                        {
+                            Id = 1142,
+                            AbilityId = 1011,
+                            BaseExperience = 169,
+                            Description = "When it locks eyes with an enemy, it will use a mix of PSI moves such as HYPNOSIS and CONFUSION.",
+                            Health = 250,
+                            Height = 16,
+                            MoveFourId = 13,
+                            MoveOneId = 19,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Hypno",
+                            PokeNickName = "Hypno",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 97,
+                            Weight = 756
+                        },
+                        new
+                        {
+                            Id = 1143,
+                            AbilityId = 1011,
+                            BaseExperience = 65,
+                            Description = "Its pincers are not only powerful weapons, they are used for balance when walking sideways.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 97,
+                            MoveOneId = 91,
+                            MoveThreeId = 90,
+                            MoveTwoId = 93,
+                            Name = "Krabby",
+                            PokeNickName = "Krabby",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 98,
+                            Weight = 65
+                        },
+                        new
+                        {
+                            Id = 1144,
+                            AbilityId = 1011,
+                            BaseExperience = 166,
+                            Description = "The large pincer has 10000 hp of crushing power. However, its huge size makes it unwieldy to use.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 97,
+                            MoveOneId = 91,
+                            MoveThreeId = 90,
+                            MoveTwoId = 93,
+                            Name = "Kingler",
+                            PokeNickName = "Kingler",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 99,
+                            Weight = 600
+                        },
+                        new
+                        {
+                            Id = 1145,
+                            AbilityId = 1011,
+                            BaseExperience = 66,
+                            Description = "Usually found in power plants. Easily mistaken for a POKé BALL, they have zapped many people.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 113,
+                            MoveOneId = 51,
+                            MoveThreeId = 7,
+                            MoveTwoId = 6,
+                            Name = "Voltorb",
+                            PokeNickName = "Voltorb",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 100,
+                            Weight = 104
+                        },
+                        new
+                        {
+                            Id = 1146,
+                            AbilityId = 1011,
+                            BaseExperience = 172,
+                            Description = "It stores electric energy under very high pressure. It often explodes with little or no provocation.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 113,
+                            MoveOneId = 51,
+                            MoveThreeId = 7,
+                            MoveTwoId = 6,
+                            Name = "Electrode",
+                            PokeNickName = "Electrode",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 101,
+                            Weight = 666
+                        },
+                        new
+                        {
+                            Id = 1147,
+                            AbilityId = 1011,
+                            BaseExperience = 65,
+                            Description = "Often mistaken for eggs. When disturbed, they quickly gather and attack in swarms.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Exeggcute",
+                            PokeNickName = "Exeggcute",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1013,
+                            PokedexNumber = 102,
+                            Weight = 25
+                        },
+                        new
+                        {
+                            Id = 1148,
+                            AbilityId = 1011,
+                            BaseExperience = 182,
+                            Description = "Legend has it that on rare occasions, one of its heads will drop off and continue on as an EXEGGCUTE.",
+                            Health = 250,
+                            Height = 20,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Exeggutor",
+                            PokeNickName = "Exeggutor",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1013,
+                            PokedexNumber = 103,
+                            Weight = 1200
+                        },
+                        new
+                        {
+                            Id = 1149,
+                            AbilityId = 1001,
+                            BaseExperience = 64,
+                            Description = "Because it never removes its skull helmet, no one has ever seen this POKéMON's real face.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 41,
+                            MoveOneId = 63,
+                            MoveThreeId = 61,
+                            MoveTwoId = 62,
+                            Name = "Cubone",
+                            PokeNickName = "Cubone",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 104,
+                            Weight = 65
+                        },
+                        new
+                        {
+                            Id = 1150,
+                            AbilityId = 1001,
+                            BaseExperience = 149,
+                            Description = "The bone it holds is its key weapon. It throws the bone skillfully like a boomerang to KO targets.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 41,
+                            MoveOneId = 63,
+                            MoveThreeId = 61,
+                            MoveTwoId = 62,
+                            Name = "Marowak",
+                            PokeNickName = "Marowak",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 105,
+                            Weight = 450
+                        },
+                        new
+                        {
+                            Id = 1151,
+                            AbilityId = 1011,
+                            BaseExperience = 159,
+                            Description = "When in a hurry, its legs lengthen progressively. It runs smoothly with extra long, loping strides.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Hitmonlee",
+                            PokeNickName = "Hitmonlee",
+                            PokeTypeIdOne = 1001,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 106,
+                            Weight = 498
+                        },
+                        new
+                        {
+                            Id = 1152,
+                            AbilityId = 1011,
+                            BaseExperience = 159,
+                            Description = "While apparently doing nothing, it fires punches in lightning fast volleys that are impossible to see.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 68,
+                            MoveOneId = 70,
+                            MoveThreeId = 72,
+                            MoveTwoId = 71,
+                            Name = "Hitmonchan",
+                            PokeNickName = "Hitmonchan",
+                            PokeTypeIdOne = 1001,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 107,
+                            Weight = 502
+                        },
+                        new
+                        {
+                            Id = 1153,
+                            AbilityId = 1011,
+                            BaseExperience = 77,
+                            Description = "Its tongue can be extended like a chameleon's. It leaves a tingling sensation when it licks enemies.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 13,
+                            MoveOneId = 19,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Lickitung",
+                            PokeNickName = "Lickitung",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 108,
+                            Weight = 655
+                        },
+                        new
+                        {
+                            Id = 1154,
+                            AbilityId = 1011,
+                            BaseExperience = 68,
+                            Description = "Because it stores several kinds of toxic gases in its body, it is prone to exploding without warning.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 57,
+                            MoveOneId = 54,
+                            MoveThreeId = 58,
+                            MoveTwoId = 55,
+                            Name = "Koffing",
+                            PokeNickName = "Koffing",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 109,
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Id = 1155,
+                            AbilityId = 1011,
+                            BaseExperience = 172,
+                            Description = "Where two kinds of poison gases meet, 2 KOFFINGs can fuse into a WEEZING over many years.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 57,
+                            MoveOneId = 54,
+                            MoveThreeId = 58,
+                            MoveTwoId = 55,
+                            Name = "Weezing",
+                            PokeNickName = "Weezing",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 110,
+                            Weight = 95
+                        },
+                        new
+                        {
+                            Id = 1156,
+                            AbilityId = 1001,
+                            BaseExperience = 69,
+                            Description = "Its massive bones are 1000 times harder than human bones. It can easily knock a trailer flying.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 41,
+                            MoveOneId = 42,
+                            MoveThreeId = 61,
+                            MoveTwoId = 62,
+                            Name = "Rhyhorn",
+                            PokeNickName = "Rhyhorn",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1005,
+                            PokedexNumber = 111,
+                            Weight = 1150
+                        },
+                        new
+                        {
+                            Id = 1157,
+                            AbilityId = 1001,
+                            BaseExperience = 170,
+                            Description = "Protected by an armor-like hide, it is capable of living in molten lava of 3,600 degrees.",
+                            Health = 250,
+                            Height = 19,
+                            MoveFourId = 41,
+                            MoveOneId = 42,
+                            MoveThreeId = 61,
+                            MoveTwoId = 62,
+                            Name = "Rhydon",
+                            PokeNickName = "Rhydon",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1005,
+                            PokedexNumber = 112,
+                            Weight = 1200
+                        },
+                        new
+                        {
+                            Id = 1158,
+                            AbilityId = 1002,
+                            BaseExperience = 395,
+                            Description = "A rare and elusive POKéMON that is said to bring happiness to those who manage to get it.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 13,
+                            MoveOneId = 19,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Chansey",
+                            PokeNickName = "Chansey",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 113,
+                            Weight = 346
+                        },
+                        new
+                        {
+                            Id = 1159,
+                            AbilityId = 1027,
+                            BaseExperience = 87,
+                            Description = "The whole body is swathed with wide vines that are similar to seaweed. Its vines shake as it walks.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Tangela",
+                            PokeNickName = "Tangela",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 114,
+                            Weight = 350
+                        },
+                        new
+                        {
+                            Id = 1160,
+                            AbilityId = 1001,
+                            BaseExperience = 172,
+                            Description = "The infant rarely ventures out of its mother's protective pouch until it is 3 years old.",
+                            Health = 250,
+                            Height = 22,
+                            MoveFourId = 93,
+                            MoveOneId = 95,
+                            MoveThreeId = 96,
+                            MoveTwoId = 98,
+                            Name = "Kangaskhan",
+                            PokeNickName = "Kangaskhan",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 115,
+                            Weight = 800
+                        },
+                        new
+                        {
+                            Id = 1161,
+                            AbilityId = 1011,
+                            BaseExperience = 59,
+                            Description = "Known to shoot down flying bugs with precision blasts of ink from the surface of the water.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Horsea",
+                            PokeNickName = "Horsea",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 116,
+                            Weight = 80
+                        },
+                        new
+                        {
+                            Id = 1162,
+                            AbilityId = 1024,
+                            BaseExperience = 154,
+                            Description = "Capable of swimming backwards by rapidly flapping its wing-like pectoral fins and stout tail.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Seadra",
+                            PokeNickName = "Seadra",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 117,
+                            Weight = 250
+                        },
+                        new
+                        {
+                            Id = 1163,
+                            AbilityId = 1011,
+                            BaseExperience = 64,
+                            Description = "Its tail fin billows like an elegant ballroom dress, giving it the nickname of the Water Queen.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Goldeen",
+                            PokeNickName = "Goldeen",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 118,
+                            Weight = 150
+                        },
+                        new
+                        {
+                            Id = 1164,
+                            AbilityId = 1011,
+                            BaseExperience = 158,
+                            Description = "In the autumn spawning season, they can be seen swimming powerfully up rivers and creeks.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Seaking",
+                            PokeNickName = "Seaking",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 119,
+                            Weight = 390
+                        },
+                        new
+                        {
+                            Id = 1165,
+                            AbilityId = 1011,
+                            BaseExperience = 68,
+                            Description = "An enigmatic POKéMON that can effortlessly regenerate any appendage it loses in battle.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 89,
+                            MoveOneId = 90,
+                            MoveThreeId = 91,
+                            MoveTwoId = 92,
+                            Name = "Staryu",
+                            PokeNickName = "Staryu",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 120,
+                            Weight = 345
+                        },
+                        new
+                        {
+                            Id = 1166,
+                            AbilityId = 1011,
+                            BaseExperience = 182,
+                            Description = "Its central core glows with the seven colors of the rainbow. Some people value the core as a gem.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 89,
+                            MoveOneId = 90,
+                            MoveThreeId = 91,
+                            MoveTwoId = 92,
+                            Name = "Starmie",
+                            PokeNickName = "Starmie",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1014,
+                            PokedexNumber = 121,
+                            Weight = 800
+                        },
+                        new
+                        {
+                            Id = 1167,
+                            AbilityId = 1011,
+                            BaseExperience = 161,
+                            Description = "If interrupted while it is miming, it will slap around the offender with its broad hands.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 17,
+                            MoveOneId = 107,
+                            MoveThreeId = 120,
+                            MoveTwoId = 108,
+                            Name = "Mr. Mime",
+                            PokeNickName = "Mr. Mime",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1017,
+                            PokedexNumber = 122,
+                            Weight = 545
+                        },
+                        new
+                        {
+                            Id = 1168,
+                            AbilityId = 1003,
+                            BaseExperience = 100,
+                            Description = "With ninja-like agility and speed, it can create the illusion that there is more than one.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 67,
+                            MoveOneId = 51,
+                            MoveThreeId = 82,
+                            MoveTwoId = 65,
+                            Name = "Scyther",
+                            PokeNickName = "Scyther",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 123,
+                            Weight = 560
+                        },
+                        new
+                        {
+                            Id = 1169,
+                            AbilityId = 1032,
+                            BaseExperience = 159,
+                            Description = "It seductively wiggles its hips as it walks. It can cause people to dance in unison with it.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 79,
+                            MoveOneId = 120,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Jynx",
+                            PokeNickName = "Jynx",
+                            PokeTypeIdOne = 1014,
+                            PokeTypeIdTwo = 1013,
+                            PokedexNumber = 124,
+                            Weight = 406
+                        },
+                        new
+                        {
+                            Id = 1170,
+                            AbilityId = 1015,
+                            BaseExperience = 172,
+                            Description = "Normally found near power plants, they can wander away and cause major blackouts in cities.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 112,
+                            MoveOneId = 7,
+                            MoveThreeId = 117,
+                            MoveTwoId = 118,
+                            Name = "Electabuzz",
+                            PokeNickName = "Electabuzz",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 125,
+                            Weight = 300
+                        },
+                        new
+                        {
+                            Id = 1171,
+                            AbilityId = 1016,
+                            BaseExperience = 173,
+                            Description = "Its body always burns with an orange glow that enables it to hide perfectly among flames.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 127,
+                            MoveOneId = 7,
+                            MoveThreeId = 125,
+                            MoveTwoId = 115,
+                            Name = "Magmar",
+                            PokeNickName = "Magmar",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 126,
+                            Weight = 445
+                        },
+                        new
+                        {
+                            Id = 1172,
+                            AbilityId = 1026,
+                            BaseExperience = 175,
+                            Description = "If it fails to crush the victim in its pincers, it will swing it around and toss it hard.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 28,
+                            MoveOneId = 64,
+                            MoveThreeId = 65,
+                            MoveTwoId = 67,
+                            Name = "Pinsir",
+                            PokeNickName = "Pinsir",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 127,
+                            Weight = 550
+                        },
+                        new
+                        {
+                            Id = 1173,
+                            AbilityId = 1004,
+                            BaseExperience = 172,
+                            Description = "When it targets an enemy, it charges furiously while whipping its body with its long tails.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 93,
+                            MoveOneId = 95,
+                            MoveThreeId = 96,
+                            MoveTwoId = 98,
+                            Name = "Tauros",
+                            PokeNickName = "Tauros",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 128,
+                            Weight = 884
+                        },
+                        new
+                        {
+                            Id = 1174,
+                            AbilityId = 1002,
+                            BaseExperience = 40,
+                            Description = "In the distant past, it was somewhat stronger than the horribly weak descendants that exist today.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 1,
+                            MoveOneId = 92,
+                            MoveThreeId = 87,
+                            MoveTwoId = 91,
+                            Name = "Magikarp",
+                            PokeNickName = "Magikarp",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 129,
+                            Weight = 100
+                        },
+                        new
+                        {
+                            Id = 1175,
+                            AbilityId = 1032,
+                            BaseExperience = 189,
+                            Description = "Rarely seen in the wild. Huge and vicious, it is capable of destroying entire cities in a rage.",
+                            Health = 250,
+                            Height = 65,
+                            MoveFourId = 88,
+                            MoveOneId = 33,
+                            MoveThreeId = 30,
+                            MoveTwoId = 34,
+                            Name = "Gyarados",
+                            PokeNickName = "Gyarados",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 130,
+                            Weight = 2350
+                        },
+                        new
+                        {
+                            Id = 1176,
+                            AbilityId = 1011,
+                            BaseExperience = 187,
+                            Description = "People have driven LAPRAS almost to the point of extinction. In the evenings, it is said to sing plaintively as it seeks what few others of its kind still remain.",
+                            Health = 250,
+                            Height = 25,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 76,
+                            MoveTwoId = 92,
+                            Name = "Lapras",
+                            PokeNickName = "Lapras",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1014,
+                            PokedexNumber = 131,
+                            Weight = 2200
+                        },
+                        new
+                        {
+                            Id = 1177,
+                            AbilityId = 1023,
+                            BaseExperience = 101,
+                            Description = "Capable of copying an enemy's genetic code to instantly transform itself into a duplicate of the enemy.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 13,
+                            MoveOneId = 96,
+                            MoveThreeId = 129,
+                            MoveTwoId = 95,
+                            Name = "Ditto",
+                            PokeNickName = "Ditto",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 132,
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Id = 1178,
+                            AbilityId = 1030,
+                            BaseExperience = 184,
+                            Description = "Lives close to water. Its long tail is ridged with a fin which is often mistaken for a mermaid's.",
+                            Health = 400,
+                            Height = 10,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 87,
+                            MoveTwoId = 92,
+                            Name = "Vaporeon",
+                            PokeNickName = "Vaporeon",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 134,
+                            Weight = 290
+                        },
+                        new
+                        {
+                            Id = 1179,
+                            AbilityId = 1008,
+                            BaseExperience = 184,
+                            Description = "It accumulates negative ions in the atmosphere to blast out 10000-volt lightning bolts.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 113,
+                            MoveOneId = 117,
+                            MoveThreeId = 7,
+                            MoveTwoId = 118,
+                            Name = "Jolteon",
+                            PokeNickName = "Jolteon",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 135,
+                            Weight = 245
+                        },
+                        new
+                        {
+                            Id = 1180,
+                            AbilityId = 1007,
+                            BaseExperience = 184,
+                            Description = "When storing thermal energy in its body, its temperature could soar to over 1600 degrees.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 16,
+                            MoveOneId = 115,
+                            MoveThreeId = 7,
+                            MoveTwoId = 125,
+                            Name = "Flareon",
+                            PokeNickName = "Flareon",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 136,
+                            Weight = 250
+                        },
+                        new
+                        {
+                            Id = 1181,
+                            AbilityId = 1012,
+                            BaseExperience = 79,
+                            Description = "A POKéMON that consists entirely of programming code. Capable of moving freely in cyberspace.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 113,
+                            MoveOneId = 51,
+                            MoveThreeId = 7,
+                            MoveTwoId = 6,
+                            Name = "Porygon",
+                            PokeNickName = "Porygon",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 137,
+                            Weight = 365
+                        },
+                        new
+                        {
+                            Id = 1182,
+                            AbilityId = 1017,
+                            BaseExperience = 71,
+                            Description = "Although long extinct, in rare cases, it can be genetically resurrected from fossils.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 91,
+                            MoveOneId = 59,
+                            MoveThreeId = 89,
+                            MoveTwoId = 63,
+                            Name = "Omanyte",
+                            PokeNickName = "Omanyte",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1010,
+                            PokedexNumber = 138,
+                            Weight = 75
+                        },
+                        new
+                        {
+                            Id = 1183,
+                            AbilityId = 1017,
+                            BaseExperience = 173,
+                            Description = "A prehistoric POKéMON that died out when its heavy shell made it impossible to catch prey.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 91,
+                            MoveOneId = 59,
+                            MoveThreeId = 89,
+                            MoveTwoId = 63,
+                            Name = "Omastar",
+                            PokeNickName = "Omastar",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1010,
+                            PokedexNumber = 139,
+                            Weight = 350
+                        },
+                        new
+                        {
+                            Id = 1184,
+                            AbilityId = 1017,
+                            BaseExperience = 71,
+                            Description = "A POKéMON that was resurrected from a fossil found in what was once the ocean floor eons ago.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 91,
+                            MoveOneId = 59,
+                            MoveThreeId = 89,
+                            MoveTwoId = 63,
+                            Name = "Kabuto",
+                            PokeNickName = "Kabuto",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1010,
+                            PokedexNumber = 140,
+                            Weight = 115
+                        },
+                        new
+                        {
+                            Id = 1185,
+                            AbilityId = 1017,
+                            BaseExperience = 173,
+                            Description = "Its sleek shape is perfect for swimming. It slashes prey with its claws and drains the body fluids.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 91,
+                            MoveOneId = 59,
+                            MoveThreeId = 89,
+                            MoveTwoId = 63,
+                            Name = "Kabutops",
+                            PokeNickName = "Kabutops",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 141,
+                            Weight = 405
+                        },
+                        new
+                        {
+                            Id = 1186,
+                            AbilityId = 1004,
+                            BaseExperience = 180,
+                            Description = "A ferocious, prehistoric POKéMON that goes for the enemy's throat with its serrated saw-like fangs.",
+                            Health = 250,
+                            Height = 18,
+                            MoveFourId = 82,
+                            MoveOneId = 59,
+                            MoveThreeId = 81,
+                            MoveTwoId = 63,
+                            Name = "Aerodactyl",
+                            PokeNickName = "Aerodactyl",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 142,
+                            Weight = 590
+                        },
+                        new
+                        {
+                            Id = 1187,
+                            AbilityId = 1001,
+                            BaseExperience = 189,
+                            Description = "Very lazy. Just eats and sleeps. As its rotund bulk builds, it becomes steadily more slothful.",
+                            Health = 250,
+                            Height = 21,
+                            MoveFourId = 93,
+                            MoveOneId = 95,
+                            MoveThreeId = 96,
+                            MoveTwoId = 98,
+                            Name = "Snorlax",
+                            PokeNickName = "Snorlax",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 143,
+                            Weight = 4600
+                        },
+                        new
+                        {
+                            Id = 1188,
+                            AbilityId = 1004,
+                            BaseExperience = 60,
+                            Description = "Long considered a mythical POKéMON until recently when a small colony was found living underwater.",
+                            Health = 250,
+                            Height = 18,
+                            MoveFourId = 88,
+                            MoveOneId = 33,
+                            MoveThreeId = 30,
+                            MoveTwoId = 34,
+                            Name = "Dratini",
+                            PokeNickName = "Dratini",
+                            PokeTypeIdOne = 1015,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 147,
+                            Weight = 33
+                        },
+                        new
+                        {
+                            Id = 1189,
+                            AbilityId = 1004,
+                            BaseExperience = 147,
+                            Description = "A mystical POKéMON that exudes a gentle aura. Has the ability to change climate conditions.",
+                            Health = 250,
+                            Height = 40,
+                            MoveFourId = 88,
+                            MoveOneId = 33,
+                            MoveThreeId = 30,
+                            MoveTwoId = 34,
+                            Name = "Dragonair",
+                            PokeNickName = "Dragonair",
+                            PokeTypeIdOne = 1015,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 148,
+                            Weight = 165
+                        },
+                        new
+                        {
+                            Id = 1190,
+                            AbilityId = 1004,
+                            BaseExperience = 270,
+                            Description = "Dragonite is capable of circling the globe in just 16 hours. It is a kindhearted Pokémon that leads lost and foundering ships in a storm to the safety of land.",
+                            Health = 250,
+                            Height = 22,
+                            MoveFourId = 88,
+                            MoveOneId = 33,
+                            MoveThreeId = 30,
+                            MoveTwoId = 34,
+                            Name = "Dragonite",
+                            PokeNickName = "Dragonite",
+                            PokeTypeIdOne = 1015,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 149,
+                            Weight = 2100
+                        },
+                        new
+                        {
+                            Id = 1191,
+                            AbilityId = 1024,
+                            BaseExperience = 142,
+                            Description = "A spicy aroma emanates from around its neck. The aroma acts as a stimulant to restore health.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Bayleef",
+                            PokeNickName = "Bayleef",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 153,
+                            Weight = 158
+                        },
+                        new
+                        {
+                            Id = 1192,
+                            AbilityId = 1024,
+                            BaseExperience = 236,
+                            Description = "The aroma that rises from its petals contains a substance that calms aggressive feelings.",
+                            Health = 250,
+                            Height = 18,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Meganium",
+                            PokeNickName = "Meganium",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 154,
+                            Weight = 1005
+                        },
+                        new
+                        {
+                            Id = 1193,
+                            AbilityId = 1005,
+                            BaseExperience = 62,
+                            Description = "Be careful if it turns its back during battle. It means that it will attack with the fire on its back.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 16,
+                            MoveOneId = 115,
+                            MoveThreeId = 7,
+                            MoveTwoId = 125,
+                            Name = "Quilava",
+                            PokeNickName = "Quilava",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 156,
+                            Weight = 79
+                        },
+                        new
+                        {
+                            Id = 1194,
+                            AbilityId = 1005,
+                            BaseExperience = 240,
+                            Description = "If its rage peaks, it becomes so hot that anything that touches it will instantly go up in flames.",
+                            Health = 250,
+                            Height = 17,
+                            MoveFourId = 16,
+                            MoveOneId = 115,
+                            MoveThreeId = 7,
+                            MoveTwoId = 125,
+                            Name = "Typhlosion",
+                            PokeNickName = "Typhlosion",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 157,
+                            Weight = 795
+                        },
+                        new
+                        {
+                            Id = 1195,
+                            AbilityId = 1006,
+                            BaseExperience = 66,
+                            Description = "Once it bites down, it won't let go until it loses its fangs. New fangs quickly grow into place.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Croconaw",
+                            PokeNickName = "Croconaw",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 159,
+                            Weight = 250
+                        },
+                        new
+                        {
+                            Id = 1196,
+                            AbilityId = 1006,
+                            BaseExperience = 239,
+                            Description = "It opens its huge mouth to intimidate enemies. In battle, it runs using its thick and powerful hind legs to charge the foe with incredible speed.",
+                            Health = 250,
+                            Height = 23,
+                            MoveFourId = 74,
+                            MoveOneId = 90,
+                            MoveThreeId = 75,
+                            MoveTwoId = 92,
+                            Name = "Feraligator",
+                            PokeNickName = "Feraligatr",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 160,
+                            Weight = 888
+                        },
+                        new
+                        {
+                            Id = 1197,
+                            AbilityId = 1002,
+                            BaseExperience = 43,
+                            Description = "It stands on its tail so it can see a long way. If it spots an enemy, it cries loudly to warn its kind.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 13,
+                            MoveOneId = 19,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Sentret",
+                            PokeNickName = "Sentret",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 161,
+                            Weight = 60
+                        },
+                        new
+                        {
+                            Id = 1198,
+                            AbilityId = 1002,
+                            BaseExperience = 145,
+                            Description = "The mother puts its offspring to sleep by curling up around them. It corners foes with speed.",
+                            Health = 250,
+                            Height = 18,
+                            MoveFourId = 13,
+                            MoveOneId = 19,
+                            MoveThreeId = 20,
+                            MoveTwoId = 18,
+                            Name = "Furret",
+                            PokeNickName = "Furret",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 162,
+                            Weight = 325
+                        },
+                        new
+                        {
+                            Id = 1199,
+                            AbilityId = 1002,
+                            BaseExperience = 52,
+                            Description = "It has an internal organ that senses the earth's rotation. Using this special organ, a HOOTHOOT begins hooting at precisely the same time every day.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 86,
+                            MoveOneId = 1,
+                            MoveThreeId = 83,
+                            MoveTwoId = 80,
+                            Name = "Hoothoot",
+                            PokeNickName = "Hoothoot",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 163,
+                            Weight = 212
+                        },
+                        new
+                        {
+                            Id = 1200,
+                            AbilityId = 1002,
+                            BaseExperience = 155,
+                            Description = "Its eyes are specially developed to enable it to see clearly even in murky darkness and minimal light.",
+                            Health = 250,
+                            Height = 16,
+                            MoveFourId = 86,
+                            MoveOneId = 1,
+                            MoveThreeId = 83,
+                            MoveTwoId = 80,
+                            Name = "Noctowl",
+                            PokeNickName = "Noctowl",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 164,
+                            Weight = 408
+                        },
+                        new
+                        {
+                            Id = 1201,
+                            AbilityId = 1002,
+                            BaseExperience = 53,
+                            Description = "It is very timid. It will be afraid to move if it is alone. But it will be active if it is in a group.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 67,
+                            MoveOneId = 51,
+                            MoveThreeId = 82,
+                            MoveTwoId = 65,
+                            Name = "Ledyba",
+                            PokeNickName = "Ledyba",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 165,
+                            Weight = 108
+                        },
+                        new
+                        {
+                            Id = 1202,
+                            AbilityId = 1002,
+                            BaseExperience = 137,
+                            Description = "When the stars flicker in the night sky, it flutters about, scattering a glowing powder.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 67,
+                            MoveOneId = 51,
+                            MoveThreeId = 82,
+                            MoveTwoId = 65,
+                            Name = "Ledian",
+                            PokeNickName = "Ledian",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 166,
+                            Weight = 356
+                        },
+                        new
+                        {
+                            Id = 1203,
+                            AbilityId = 1002,
+                            BaseExperience = 50,
+                            Description = "It spins a web using fine--but durable--thread. It then waits patiently for prey to be trapped.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 67,
+                            MoveOneId = 51,
+                            MoveThreeId = 82,
+                            MoveTwoId = 65,
+                            Name = "Spinarak",
+                            PokeNickName = "Spinarak",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 167,
+                            Weight = 85
+                        },
+                        new
+                        {
+                            Id = 1204,
+                            AbilityId = 1002,
+                            BaseExperience = 137,
+                            Description = "It spins string not only from its rear but also from its mouth. It's hard to tell which end is which.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 67,
+                            MoveOneId = 51,
+                            MoveThreeId = 82,
+                            MoveTwoId = 65,
+                            Name = "Ariados",
+                            PokeNickName = "Ariados",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 168,
+                            Weight = 335
+                        },
+                        new
+                        {
+                            Id = 1205,
+                            AbilityId = 1001,
+                            BaseExperience = 66,
+                            Description = "It shoots positive and negative electricity between the tips of its two antennae and zaps its enemies.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 82,
+                            MoveOneId = 86,
+                            MoveThreeId = 57,
+                            MoveTwoId = 54,
+                            Name = "Crobat",
+                            PokeNickName = "Crobat",
+                            PokeTypeIdOne = 1003,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 169,
+                            Weight = 120
+                        },
+                        new
+                        {
+                            Id = 1206,
+                            AbilityId = 1002,
+                            BaseExperience = 66,
+                            Description = "It shoots positive and negative electricity between the tips of its two antennae and zaps its enemies.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 112,
+                            MoveOneId = 7,
+                            MoveThreeId = 117,
+                            MoveTwoId = 118,
+                            Name = "Chinchou",
+                            PokeNickName = "Chinchou",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1010,
+                            PokedexNumber = 170,
+                            Weight = 120
+                        },
+                        new
+                        {
+                            Id = 1207,
+                            AbilityId = 1002,
+                            BaseExperience = 161,
+                            Description = "The light it emits is so bright that it can illuminate the sea's surface from a depth of over three miles.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 112,
+                            MoveOneId = 7,
+                            MoveThreeId = 117,
+                            MoveTwoId = 118,
+                            Name = "Lanturn",
+                            PokeNickName = "Lanturn",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1010,
+                            PokedexNumber = 171,
+                            Weight = 225
+                        },
+                        new
+                        {
+                            Id = 1208,
+                            AbilityId = 1002,
+                            BaseExperience = 41,
+                            Description = "It is not yet skilled at storing electricity. It may send out a jolt if amused or startled.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 112,
+                            MoveOneId = 7,
+                            MoveThreeId = 117,
+                            MoveTwoId = 118,
+                            Name = "Pichu",
+                            PokeNickName = "Pichu",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 172,
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Id = 1209,
+                            AbilityId = 1002,
+                            BaseExperience = 44,
+                            Description = "Because of its unusual, star-like silhouette, people believe that it came here on a meteor.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 1,
+                            MoveOneId = 22,
+                            MoveThreeId = 107,
+                            MoveTwoId = 23,
+                            Name = "Cleffa",
+                            PokeNickName = "Cleffa",
+                            PokeTypeIdOne = 1017,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 173,
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Id = 1210,
+                            AbilityId = 1002,
+                            BaseExperience = 42,
+                            Description = "Its extremely flexible and elastic body makes it bounce continuously--anytime, anywhere.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 1,
+                            MoveOneId = 22,
+                            MoveThreeId = 107,
+                            MoveTwoId = 23,
+                            Name = "Igglybuff",
+                            PokeNickName = "Igglybuff",
+                            PokeTypeIdOne = 1017,
+                            PokeTypeIdTwo = 1000,
+                            PokedexNumber = 174,
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Id = 1211,
+                            AbilityId = 1002,
+                            BaseExperience = 49,
+                            Description = "It is considered to be a symbol of good luck. Its shell is said to be filled with happiness.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 1,
+                            MoveOneId = 22,
+                            MoveThreeId = 107,
+                            MoveTwoId = 23,
+                            Name = "Togepi",
+                            PokeNickName = "Togepi",
+                            PokeTypeIdOne = 1017,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 175,
+                            Weight = 15
+                        },
+                        new
+                        {
+                            Id = 1212,
+                            AbilityId = 1002,
+                            BaseExperience = 142,
+                            Description = "It grows dispirited if it is not with kind people. It can float in midair without moving its wings.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 1,
+                            MoveOneId = 22,
+                            MoveThreeId = 107,
+                            MoveTwoId = 23,
+                            Name = "Togetic",
+                            PokeNickName = "Togetic",
+                            PokeTypeIdOne = 1017,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 176,
+                            Weight = 32
+                        },
+                        new
+                        {
+                            Id = 1213,
+                            AbilityId = 1025,
+                            BaseExperience = 64,
+                            Description = "It usually forages for food on the ground but may, on rare occasions, hop onto branches to peck at shoots.",
+                            Health = 250,
+                            Height = 2,
+                            MoveFourId = 101,
+                            MoveOneId = 17,
+                            MoveThreeId = 119,
+                            MoveTwoId = 18,
+                            Name = "Natu",
+                            PokeNickName = "Natu",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 177,
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Id = 1214,
+                            AbilityId = 1025,
+                            BaseExperience = 165,
+                            Description = "They say that it stays still and quiet because it is seeing both the past and future at the same time.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 101,
+                            MoveOneId = 17,
+                            MoveThreeId = 119,
+                            MoveTwoId = 18,
+                            Name = "Xatu",
+                            PokeNickName = "Xatu",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 178,
+                            Weight = 150
+                        },
+                        new
+                        {
+                            Id = 1215,
+                            AbilityId = 1002,
+                            BaseExperience = 56,
+                            Description = "Its fluffy wool rubs together and builds a static charge. The more energy is charged, the more brightly the lightbulb at the tip of its tail glows.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 112,
+                            MoveOneId = 7,
+                            MoveThreeId = 117,
+                            MoveTwoId = 118,
+                            Name = "Mareep",
+                            PokeNickName = "Mareep",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 179,
+                            Weight = 78
+                        },
+                        new
+                        {
+                            Id = 1216,
+                            AbilityId = 1002,
+                            BaseExperience = 128,
+                            Description = "Its fluffy wool rubs together and builds a static charge. The more energy is charged, the more brightly the lightbulb at the tip of its tail glows.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 112,
+                            MoveOneId = 7,
+                            MoveThreeId = 117,
+                            MoveTwoId = 118,
+                            Name = "Flaaffy",
+                            PokeNickName = "Flaaffy",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 180,
+                            Weight = 133
+                        },
+                        new
+                        {
+                            Id = 1217,
+                            AbilityId = 1002,
+                            BaseExperience = 230,
+                            Description = "The tail's tip shines brightly and can be seen from far away. It acts as a beacon for lost people.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 112,
+                            MoveOneId = 7,
+                            MoveThreeId = 117,
+                            MoveTwoId = 118,
+                            Name = "Ampharos",
+                            PokeNickName = "Ampharos",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 181,
+                            Weight = 1000
+                        },
+                        new
+                        {
+                            Id = 1218,
+                            AbilityId = 1024,
+                            BaseExperience = 221,
+                            Description = "BELLOSSOM gather at times and seem to dance. They say that the dance is a ritual to summon the sun.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Bellossom",
+                            PokeNickName = "Bellossom",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 182,
+                            Weight = 58
+                        },
+                        new
+                        {
+                            Id = 1219,
+                            AbilityId = 1002,
+                            BaseExperience = 88,
+                            Description = "The tip of its tail, which contains oil that is lighter than water, lets it swim without drowning.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 106,
+                            MoveOneId = 90,
+                            MoveThreeId = 111,
+                            MoveTwoId = 92,
+                            Name = "Marill",
+                            PokeNickName = "Marill",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1017,
+                            PokedexNumber = 183,
+                            Weight = 85
+                        },
+                        new
+                        {
+                            Id = 1220,
+                            AbilityId = 1002,
+                            BaseExperience = 189,
+                            Description = "By keeping still and listening intently, it can even tell how close it is to evolving.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 106,
+                            MoveOneId = 90,
+                            MoveThreeId = 111,
+                            MoveTwoId = 92,
+                            Name = "Azumarill",
+                            PokeNickName = "Azumarill",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1017,
+                            PokedexNumber = 184,
+                            Weight = 285
+                        },
+                        new
+                        {
+                            Id = 1221,
+                            AbilityId = 1002,
+                            BaseExperience = 144,
+                            Description = "It disguises itself as a tree to avoid attack. It hates water, so it will disappear if it starts raining.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 47,
+                            MoveOneId = 59,
+                            MoveThreeId = 95,
+                            MoveTwoId = 60,
+                            Name = "Sudowoodo",
+                            PokeNickName = "Sudowoodo",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 185,
+                            Weight = 380
+                        },
+                        new
+                        {
+                            Id = 1222,
+                            AbilityId = 1002,
+                            BaseExperience = 225,
+                            Description = "Whenever three or more of these get together, they sing in a loud voice that sounds like bellowing.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 106,
+                            MoveOneId = 90,
+                            MoveThreeId = 111,
+                            MoveTwoId = 92,
+                            Name = "Politoed",
+                            PokeNickName = "Politoed",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 186,
+                            Weight = 339
+                        },
+                        new
+                        {
+                            Id = 1223,
+                            AbilityId = 1002,
+                            BaseExperience = 50,
+                            Description = "It drifts on winds. It is said that when Hoppip gather in fields and mountains, spring is on the way.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Hoppip",
+                            PokeNickName = "Hoppip",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 187,
+                            Weight = 5
+                        },
+                        new
+                        {
+                            Id = 1224,
+                            AbilityId = 1002,
+                            BaseExperience = 119,
+                            Description = "It blooms when the weather warms. It floats in the sky to soak up as much sunlight as possible.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Skiploom",
+                            PokeNickName = "Skiploom",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 188,
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Id = 1225,
+                            AbilityId = 1002,
+                            BaseExperience = 203,
+                            Description = "Once it catches the wind, it deftly controls its cotton-puff spores to float, even around the world.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Jumpluff",
+                            PokeNickName = "Jumpluff",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 189,
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Id = 1226,
+                            AbilityId = 1014,
+                            BaseExperience = 72,
+                            Description = "It lives atop tall trees. When leaping from branch to branch, it deftly uses its tail for balance.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 98,
+                            MoveOneId = 69,
+                            MoveThreeId = 63,
+                            MoveTwoId = 72,
+                            Name = "Aipom",
+                            PokeNickName = "Aipom",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 190,
+                            Weight = 115
+                        },
+                        new
+                        {
+                            Id = 1227,
+                            AbilityId = 1002,
+                            BaseExperience = 36,
+                            Description = "It lives by drinking only dewdrops from under the leaves of plants. It is said that it eats nothing else.",
+                            Health = 250,
+                            Height = 3,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Sunkern",
+                            PokeNickName = "Sunkern",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 191,
+                            Weight = 18
+                        },
+                        new
+                        {
+                            Id = 1228,
+                            AbilityId = 1002,
+                            BaseExperience = 149,
+                            Description = "It converts sun light into energy. In the darkness after sunset, it closes its petals and becomes still.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 110,
+                            MoveOneId = 121,
+                            MoveThreeId = 124,
+                            MoveTwoId = 120,
+                            Name = "Sunflora",
+                            PokeNickName = "Sunflora",
+                            PokeTypeIdOne = 1011,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 192,
+                            Weight = 85
+                        },
+                        new
+                        {
+                            Id = 1229,
+                            AbilityId = 1028,
+                            BaseExperience = 78,
+                            Description = "Its large eyes can scan 360 degrees. It looks in all directions to seek out insects as its prey.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 65,
+                            MoveOneId = 66,
+                            MoveThreeId = 21,
+                            MoveTwoId = 67,
+                            Name = "Yanma",
+                            PokeNickName = "Yanma",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 193,
+                            Weight = 380
+                        },
+                        new
+                        {
+                            Id = 1230,
+                            AbilityId = 1002,
+                            BaseExperience = 42,
+                            Description = "When walking on land, it covers its body with a poisonous film that keeps its skin from dehydrating.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 44,
+                            MoveOneId = 42,
+                            MoveThreeId = 89,
+                            MoveTwoId = 88,
+                            Name = "Wooper",
+                            PokeNickName = "Wooper",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 194,
+                            Weight = 85
+                        },
+                        new
+                        {
+                            Id = 1231,
+                            AbilityId = 1012,
+                            BaseExperience = 151,
+                            Description = "It has a sluggish nature. It lies at the river's bottom, waiting for prey to stray into its mouth.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 44,
+                            MoveOneId = 42,
+                            MoveThreeId = 89,
+                            MoveTwoId = 88,
+                            Name = "Quagsire",
+                            PokeNickName = "Quagsire",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 195,
+                            Weight = 750
+                        },
+                        new
+                        {
+                            Id = 1232,
+                            AbilityId = 1019,
+                            BaseExperience = 184,
+                            Description = "It uses the fine hair that covers its body to sense air currents and predict its enemy's actions.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 120,
+                            MoveOneId = 17,
+                            MoveThreeId = 101,
+                            MoveTwoId = 18,
+                            Name = "Espeon",
+                            PokeNickName = "Espeon",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 196,
+                            Weight = 265
+                        },
+                        new
+                        {
+                            Id = 1233,
+                            AbilityId = 1019,
+                            BaseExperience = 184,
+                            Description = "When darkness falls, the rings on the body begin to glow, striking fear in the hearts of anyone nearby.",
+                            Health = 250,
+                            Height = 10,
+                            MoveFourId = 8,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Umbreon",
+                            PokeNickName = "Umbreon",
+                            PokeTypeIdOne = 1016,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 197,
+                            Weight = 270
+                        },
+                        new
+                        {
+                            Id = 1234,
+                            AbilityId = 1019,
+                            BaseExperience = 81,
+                            Description = "It is said that when chased, it lures its attacker onto dark mountain trails where the foe will get lost.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Murkrow",
+                            PokeNickName = "Murkrow",
+                            PokeTypeIdOne = 1016,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 198,
+                            Weight = 21
+                        },
+                        new
+                        {
+                            Id = 1235,
+                            AbilityId = 1034,
+                            BaseExperience = 172,
+                            Description = "Every time it yawns, Shellder injects more poison into it. The poison makes it more intelligent.",
+                            Health = 250,
+                            Height = 20,
+                            MoveFourId = 74,
+                            MoveOneId = 20,
+                            MoveThreeId = 75,
+                            MoveTwoId = 21,
+                            Name = "Slowking",
+                            PokeNickName = "Slowking",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1013,
+                            PokedexNumber = 199,
+                            Weight = 795
+                        },
+                        new
+                        {
+                            Id = 1236,
+                            AbilityId = 1026,
+                            BaseExperience = 87,
+                            Description = "It likes playing mischievous tricks such as screaming and wailing to startle people at night.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 40,
+                            MoveOneId = 35,
+                            MoveThreeId = 36,
+                            MoveTwoId = 37,
+                            Name = "Misdreavus",
+                            PokeNickName = "Misdreavus",
+                            PokeTypeIdOne = 1007,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 200,
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Id = 1237,
+                            AbilityId = 1002,
+                            BaseExperience = 118,
+                            Description = "Their shapes look like hieroglyphs on ancient tablets. It is said the two are somehow related.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 1,
+                            MoveOneId = 17,
+                            MoveThreeId = 107,
+                            MoveTwoId = 18,
+                            Name = "Unown",
+                            PokeNickName = "Unown",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 201,
+                            Weight = 50
+                        },
+                        new
+                        {
+                            Id = 1238,
+                            AbilityId = 1002,
+                            BaseExperience = 142,
+                            Description = "It hates light and shock. If attacked, it inflates its body to pump up its counterstrike.",
+                            Health = 250,
+                            Height = 13,
+                            MoveFourId = 40,
+                            MoveOneId = 35,
+                            MoveThreeId = 36,
+                            MoveTwoId = 37,
+                            Name = "Wobbuffet",
+                            PokeNickName = "Wobbuffet",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 202,
+                            Weight = 285
+                        },
+                        new
+                        {
+                            Id = 1239,
+                            AbilityId = 1019,
+                            BaseExperience = 159,
+                            Description = "Its tail has a small brain of its own. Beware! If you get close, it may react to your scent and bite.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 120,
+                            MoveOneId = 17,
+                            MoveThreeId = 119,
+                            MoveTwoId = 18,
+                            Name = "Girafarig",
+                            PokeNickName = "Girafarig",
+                            PokeTypeIdOne = 1013,
+                            PokeTypeIdTwo = 1000,
+                            PokedexNumber = 203,
+                            Weight = 415
+                        },
+                        new
+                        {
+                            Id = 1240,
+                            AbilityId = 1002,
+                            BaseExperience = 58,
+                            Description = "It likes to make its shell thicker by adding layers of tree bark. The additional weight doesn't bother it.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 103,
+                            MoveOneId = 66,
+                            MoveThreeId = 1,
+                            MoveTwoId = 67,
+                            Name = "Pineco",
+                            PokeNickName = "Pineco",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 204,
+                            Weight = 72
+                        },
+                        new
+                        {
+                            Id = 1241,
+                            AbilityId = 1002,
+                            BaseExperience = 163,
+                            Description = "It keeps itself inside its steel shell. The shell is opened when it is catching prey, but it is so quick that the shell's inside cannot be seen.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 103,
+                            MoveOneId = 66,
+                            MoveThreeId = 1,
+                            MoveTwoId = 67,
+                            Name = "Forretress",
+                            PokeNickName = "Forretress",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1008,
+                            PokedexNumber = 205,
+                            Weight = 1258
+                        },
+                        new
+                        {
+                            Id = 1242,
+                            AbilityId = 1002,
+                            BaseExperience = 145,
+                            Description = "It has a drill for a tail. It uses this tail to burrow into the ground backwards. This Pokémon is known to make its nest in complex shapes deep under the ground.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 86,
+                            MoveOneId = 1,
+                            MoveThreeId = 83,
+                            MoveTwoId = 80,
+                            Name = "Dunsparce",
+                            PokeNickName = "Dunsparce",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 206,
+                            Weight = 140
+                        },
+                        new
+                        {
+                            Id = 1243,
+                            AbilityId = 1027,
+                            BaseExperience = 86,
+                            Description = "It glides without making a single sound. It grasps the face of its foe using its hind and large front claws, then stabs with its poison barb.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 85,
+                            MoveOneId = 46,
+                            MoveThreeId = 81,
+                            MoveTwoId = 41,
+                            Name = "Gligar",
+                            PokeNickName = "Gligar",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 207,
+                            Weight = 648
+                        },
+                        new
+                        {
+                            Id = 1244,
+                            AbilityId = 1002,
+                            BaseExperience = 179,
+                            Description = "It is said that if an Onix lives for over 100 years, its composition changes to become diamond-like.",
+                            Health = 250,
+                            Height = 92,
+                            MoveFourId = 47,
+                            MoveOneId = 59,
+                            MoveThreeId = 95,
+                            MoveTwoId = 60,
+                            Name = "Steelix",
+                            PokeNickName = "Steelix",
+                            PokeTypeIdOne = 1008,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 208,
+                            Weight = 4000
+                        },
+                        new
+                        {
+                            Id = 1245,
+                            AbilityId = 1018,
+                            BaseExperience = 60,
+                            Description = "By baring its fangs and making a scary face, Snubbull sends smaller Pokémon scurrying away in terror. However, this Pokémon seems a little sad at making its foes flee.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Snubbull",
+                            PokeNickName = "Snubbull",
+                            PokeTypeIdOne = 1016,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 209,
+                            Weight = 78
+                        },
+                        new
+                        {
+                            Id = 1246,
+                            AbilityId = 1018,
+                            BaseExperience = 158,
+                            Description = "It is actually timid and easily spooked. If attacked, it flails about to fend off its attacker.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Granbull",
+                            PokeNickName = "Granbull",
+                            PokeTypeIdOne = 1016,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 210,
+                            Weight = 487
+                        },
+                        new
+                        {
+                            Id = 1247,
+                            AbilityId = 1027,
+                            BaseExperience = 88,
+                            Description = "It shoots the poison spines on its body in all directions. Its round form makes it a poor swimmer.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 56,
+                            MoveOneId = 53,
+                            MoveThreeId = 89,
+                            MoveTwoId = 88,
+                            Name = "Qwilfish",
+                            PokeNickName = "Qwilfish",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1003,
+                            PokedexNumber = 211,
+                            Weight = 39
+                        },
+                        new
+                        {
+                            Id = 1248,
+                            AbilityId = 1003,
+                            BaseExperience = 175,
+                            Description = "It swings its eye-patterned pincers up to scare its foes. This makes it look like it has three heads.",
+                            Health = 250,
+                            Height = 18,
+                            MoveFourId = 53,
+                            MoveOneId = 65,
+                            MoveThreeId = 51,
+                            MoveTwoId = 26,
+                            Name = "Scizor",
+                            PokeNickName = "Scizor",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1008,
+                            PokedexNumber = 212,
+                            Weight = 1180
+                        },
+                        new
+                        {
+                            Id = 1249,
+                            AbilityId = 1006,
+                            BaseExperience = 177,
+                            Description = "The berries it stores in its vase-like shell decompose and become a gooey liquid.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 47,
+                            MoveOneId = 59,
+                            MoveThreeId = 95,
+                            MoveTwoId = 60,
+                            Name = "Shuckle",
+                            PokeNickName = "Shuckle",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1005,
+                            PokedexNumber = 213,
+                            Weight = 205
+                        },
+                        new
+                        {
+                            Id = 1250,
+                            AbilityId = 1002,
+                            BaseExperience = 175,
+                            Description = "This powerful Pokémon thrusts its prized horn under its enemies' bellies then lifts and throws them.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 64,
+                            MoveOneId = 71,
+                            MoveThreeId = 65,
+                            MoveTwoId = 69,
+                            Name = "Heracross",
+                            PokeNickName = "Heracross",
+                            PokeTypeIdOne = 1006,
+                            PokeTypeIdTwo = 1001,
+                            PokedexNumber = 214,
+                            Weight = 540
+                        },
+                        new
+                        {
+                            Id = 1251,
+                            AbilityId = 1019,
+                            BaseExperience = 86,
+                            Description = "It feeds on eggs stolen from nests. Its sharply hooked claws rip vulnerable spots on prey.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 74,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Sneasel",
+                            PokeNickName = "Sneasel",
+                            PokeTypeIdOne = 1016,
+                            PokeTypeIdTwo = 1014,
+                            PokedexNumber = 215,
+                            Weight = 280
+                        },
+                        new
+                        {
+                            Id = 1252,
+                            AbilityId = 1018,
+                            BaseExperience = 66,
+                            Description = "It always licks honey. Its palm tastes sweet because of all the honey it has absorbed.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Teddiursa",
+                            PokeNickName = "Teddiursa",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 216,
+                            Weight = 88
+                        },
+                        new
+                        {
+                            Id = 1253,
+                            AbilityId = 1018,
+                            BaseExperience = 175,
+                            Description = "Although it is a good climber, it prefers to snap trees with its forelegs and eat fallen Berries.",
+                            Health = 250,
+                            Height = 18,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Ursaring",
+                            PokeNickName = "Ursaring",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 217,
+                            Weight = 1258
+                        },
+                        new
+                        {
+                            Id = 1254,
+                            AbilityId = 1016,
+                            BaseExperience = 50,
+                            Description = "It is a species of Pokémon that lives in volcanic areas. If its body cools, its skin hardens and immobilizes it.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 127,
+                            MoveOneId = 7,
+                            MoveThreeId = 126,
+                            MoveTwoId = 16,
+                            Name = "Slugma",
+                            PokeNickName = "Slugma",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 218,
+                            Weight = 350
+                        },
+                        new
+                        {
+                            Id = 1255,
+                            AbilityId = 1016,
+                            BaseExperience = 151,
+                            Description = "Its brittle shell occasionally spouts intense flames that circulate throughout its body.",
+                            Health = 250,
+                            Height = 8,
+                            MoveFourId = 127,
+                            MoveOneId = 7,
+                            MoveThreeId = 126,
+                            MoveTwoId = 16,
+                            Name = "Magcargo",
+                            PokeNickName = "Magcargo",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1005,
+                            PokedexNumber = 219,
+                            Weight = 550
+                        },
+                        new
+                        {
+                            Id = 1256,
+                            AbilityId = 1018,
+                            BaseExperience = 50,
+                            Description = "It rubs its snout on the ground to find and dig up food. It sometimes discovers hot springs.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 78,
+                            MoveOneId = 46,
+                            MoveThreeId = 76,
+                            MoveTwoId = 41,
+                            Name = "Swinub",
+                            PokeNickName = "Swinub",
+                            PokeTypeIdOne = 1014,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 220,
+                            Weight = 65
+                        },
+                        new
+                        {
+                            Id = 1257,
+                            AbilityId = 1018,
+                            BaseExperience = 158,
+                            Description = "It has a very sensitive nose. It can locate mushrooms, berries, and even hot springs buried under ice.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 78,
+                            MoveOneId = 46,
+                            MoveThreeId = 76,
+                            MoveTwoId = 41,
+                            Name = "Piloswine",
+                            PokeNickName = "Piloswine",
+                            PokeTypeIdOne = 1014,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 221,
+                            Weight = 558
+                        },
+                        new
+                        {
+                            Id = 1258,
+                            AbilityId = 1018,
+                            BaseExperience = 133,
+                            Description = "It continuously sheds and grows. The tip of its head is prized as a treasure for its beauty.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 56,
+                            MoveOneId = 53,
+                            MoveThreeId = 89,
+                            MoveTwoId = 88,
+                            Name = "Corsola",
+                            PokeNickName = "Corsola",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1005,
+                            PokedexNumber = 222,
+                            Weight = 50
+                        },
+                        new
+                        {
+                            Id = 1259,
+                            AbilityId = 1018,
+                            BaseExperience = 60,
+                            Description = "It has superb accuracy. The water it shoots out can strike even moving prey from more than 300 feet.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 92,
+                            MoveOneId = 87,
+                            MoveThreeId = 89,
+                            MoveTwoId = 88,
+                            Name = "Remoraid",
+                            PokeNickName = "Remoraid",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 223,
+                            Weight = 120
+                        },
+                        new
+                        {
+                            Id = 1260,
+                            AbilityId = 1018,
+                            BaseExperience = 168,
+                            Description = "It traps enemies with its suction-cupped tentacles then smashes them with its rock-hard head.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 92,
+                            MoveOneId = 87,
+                            MoveThreeId = 89,
+                            MoveTwoId = 88,
+                            Name = "Octillery",
+                            PokeNickName = "Octillery",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 224,
+                            Weight = 285
+                        },
+                        new
+                        {
+                            Id = 1261,
+                            AbilityId = 1018,
+                            BaseExperience = 116,
+                            Description = "It carries food bundled up in its tail. There was a famous explorer who managed to scale Mt. Everest thanks to a Delibird sharing its food.",
+                            Health = 250,
+                            Height = 9,
+                            MoveFourId = 82,
+                            MoveOneId = 24,
+                            MoveThreeId = 84,
+                            MoveTwoId = 74,
+                            Name = "Delibird",
+                            PokeNickName = "Delibird",
+                            PokeTypeIdOne = 1014,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 225,
+                            Weight = 160
+                        },
+                        new
+                        {
+                            Id = 1262,
+                            AbilityId = 1018,
+                            BaseExperience = 170,
+                            Description = "It swims along with a school of Remoraid. It leaps out of the water and catches prey Pokémon with its mouth.",
+                            Health = 250,
+                            Height = 21,
+                            MoveFourId = 92,
+                            MoveOneId = 87,
+                            MoveThreeId = 89,
+                            MoveTwoId = 88,
+                            Name = "Mantine",
+                            PokeNickName = "Mantine",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 226,
+                            Weight = 2200
+                        },
+                        new
+                        {
+                            Id = 1263,
+                            AbilityId = 1001,
+                            BaseExperience = 163,
+                            Description = "Its sturdy wings look heavy, but they are actually hollow and light, allowing it to fly freely in the sky.",
+                            Health = 250,
+                            Height = 17,
+                            MoveFourId = 47,
+                            MoveOneId = 59,
+                            MoveThreeId = 95,
+                            MoveTwoId = 60,
+                            Name = "Skarmory",
+                            PokeNickName = "Skarmory",
+                            PokeTypeIdOne = 1008,
+                            PokeTypeIdTwo = 1002,
+                            PokedexNumber = 227,
+                            Weight = 505
+                        },
+                        new
+                        {
+                            Id = 1264,
+                            AbilityId = 1018,
+                            BaseExperience = 66,
+                            Description = "It uses different kinds of cries for communicating with others of its kind and for pursuing its prey.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Houndour",
+                            PokeNickName = "Houndour",
+                            PokeTypeIdOne = 1016,
+                            PokeTypeIdTwo = 1009,
+                            PokedexNumber = 228,
+                            Weight = 108
+                        },
+                        new
+                        {
+                            Id = 1265,
+                            AbilityId = 1018,
+                            BaseExperience = 175,
+                            Description = "Upon hearing its eerie howls, other Pokémon get the shivers and head straight back to their nests.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Houndoom",
+                            PokeNickName = "Houndoom",
+                            PokeTypeIdOne = 1016,
+                            PokeTypeIdTwo = 1009,
+                            PokedexNumber = 229,
+                            Weight = 350
+                        },
+                        new
+                        {
+                            Id = 1266,
+                            AbilityId = 1009,
+                            BaseExperience = 243,
+                            Description = "It sleeps quietly, deep on the seafloor. When it comes up to the surface, it creates a huge whirlpool that can swallow even ships.",
+                            Health = 250,
+                            Height = 18,
+                            MoveFourId = 34,
+                            MoveOneId = 87,
+                            MoveThreeId = 89,
+                            MoveTwoId = 88,
+                            Name = "Kingdra",
+                            PokeNickName = "Kingdra",
+                            PokeTypeIdOne = 1010,
+                            PokeTypeIdTwo = 1015,
+                            PokedexNumber = 230,
+                            Weight = 1520
+                        },
+                        new
+                        {
+                            Id = 1267,
+                            AbilityId = 1032,
+                            BaseExperience = 66,
+                            Description = "It swings its long snout around playfully, but because it is so strong, that can be dangerous.",
+                            Health = 250,
+                            Height = 5,
+                            MoveFourId = 44,
+                            MoveOneId = 42,
+                            MoveThreeId = 43,
+                            MoveTwoId = 41,
+                            Name = "Phanpy",
+                            PokeNickName = "Phanpy",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 231,
+                            Weight = 335
+                        },
+                        new
+                        {
+                            Id = 1268,
+                            AbilityId = 1032,
+                            BaseExperience = 175,
+                            Description = "It has sharp, hard tusks and a rugged hide. Its Tackle is strong enough to knock down a house.",
+                            Health = 250,
+                            Height = 11,
+                            MoveFourId = 44,
+                            MoveOneId = 42,
+                            MoveThreeId = 43,
+                            MoveTwoId = 41,
+                            Name = "Donphan",
+                            PokeNickName = "Donphan",
+                            PokeTypeIdOne = 1004,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 232,
+                            Weight = 1200
+                        },
+                        new
+                        {
+                            Id = 1269,
+                            AbilityId = 1002,
+                            BaseExperience = 180,
+                            Description = "Further research enhanced its abilities. Sometimes, it may exhibit motions that were not programmed.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 1,
+                            MoveOneId = 17,
+                            MoveThreeId = 107,
+                            MoveTwoId = 18,
+                            Name = "Porygon2",
+                            PokeNickName = "Porygon2",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 233,
+                            Weight = 325
+                        },
+                        new
+                        {
+                            Id = 1270,
+                            AbilityId = 1018,
+                            BaseExperience = 163,
+                            Description = "The curved antlers subtly change the flow of air to create a strange space where reality is distorted.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Stantler",
+                            PokeNickName = "Stantler",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 234,
+                            Weight = 712
+                        },
+                        new
+                        {
+                            Id = 1271,
+                            AbilityId = 1018,
+                            BaseExperience = 88,
+                            Description = "A special fluid oozes from the tip of its tail. It paints the fluid everywhere to mark its territory.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Smeargle",
+                            PokeNickName = "Smeargle",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 235,
+                            Weight = 580
+                        },
+                        new
+                        {
+                            Id = 1272,
+                            AbilityId = 1003,
+                            BaseExperience = 42,
+                            Description = "It is always bursting with energy. To make itself stronger, it keeps on fighting even if it loses.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 72,
+                            MoveOneId = 68,
+                            MoveThreeId = 73,
+                            MoveTwoId = 69,
+                            Name = "Tyrogue",
+                            PokeNickName = "Tyrogue",
+                            PokeTypeIdOne = 1001,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 236,
+                            Weight = 210
+                        },
+                        new
+                        {
+                            Id = 1273,
+                            AbilityId = 1003,
+                            BaseExperience = 159,
+                            Description = "If you become enchanted by its smooth, elegant, dance-like kicks, you may get drilled hard.",
+                            Health = 250,
+                            Height = 14,
+                            MoveFourId = 72,
+                            MoveOneId = 68,
+                            MoveThreeId = 73,
+                            MoveTwoId = 69,
+                            Name = "Hitmontop",
+                            PokeNickName = "Hitmontop",
+                            PokeTypeIdOne = 1001,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 237,
+                            Weight = 480
+                        },
+                        new
+                        {
+                            Id = 1274,
+                            AbilityId = 1028,
+                            BaseExperience = 61,
+                            Description = "Its lips are the most sensitive parts on its body. It always uses its lips first to examine things.",
+                            Health = 250,
+                            Height = 4,
+                            MoveFourId = 1,
+                            MoveOneId = 17,
+                            MoveThreeId = 107,
+                            MoveTwoId = 18,
+                            Name = "Smoochum",
+                            PokeNickName = "Smoochum",
+                            PokeTypeIdOne = 1014,
+                            PokeTypeIdTwo = 1013,
+                            PokedexNumber = 238,
+                            Weight = 60
+                        },
+                        new
+                        {
+                            Id = 1275,
+                            AbilityId = 1028,
+                            BaseExperience = 72,
+                            Description = "It generates electricity by whirling its arms. However, it can't store the energy it makes.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 114,
+                            MoveOneId = 117,
+                            MoveThreeId = 116,
+                            MoveTwoId = 85,
+                            Name = "Elekid",
+                            PokeNickName = "Elekid",
+                            PokeTypeIdOne = 1012,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 239,
+                            Weight = 235
+                        },
+                        new
+                        {
+                            Id = 1276,
+                            AbilityId = 1028,
+                            BaseExperience = 73,
+                            Description = "It is found in volcanic craters. Its body temp. is over 1100 degrees, so don't underestimate it.",
+                            Health = 250,
+                            Height = 7,
+                            MoveFourId = 127,
+                            MoveOneId = 7,
+                            MoveThreeId = 126,
+                            MoveTwoId = 16,
+                            Name = "Magby",
+                            PokeNickName = "Magby",
+                            PokeTypeIdOne = 1009,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 240,
+                            Weight = 214
+                        },
+                        new
+                        {
+                            Id = 1277,
+                            AbilityId = 1018,
+                            BaseExperience = 172,
+                            Description = "It gives over five gallons of milk daily. Its sweet milk is enjoyed by children and grown-ups alike. People who can't drink milk turn it into yogurt and eat it instead.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Miltank",
+                            PokeNickName = "Miltank",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 241,
+                            Weight = 755
+                        },
+                        new
+                        {
+                            Id = 1278,
+                            AbilityId = 1018,
+                            BaseExperience = 608,
+                            Description = "It has a very compassionate nature. If it sees a sick Pokémon, it will nurse the sufferer back to health.",
+                            Health = 250,
+                            Height = 15,
+                            MoveFourId = 102,
+                            MoveOneId = 26,
+                            MoveThreeId = 21,
+                            MoveTwoId = 29,
+                            Name = "Blissey",
+                            PokeNickName = "Blissey",
+                            PokeTypeIdOne = 1000,
+                            PokeTypeIdTwo = 1018,
+                            PokedexNumber = 242,
+                            Weight = 468
+                        },
+                        new
+                        {
+                            Id = 1279,
+                            AbilityId = 1023,
+                            BaseExperience = 60,
+                            Description = "It feeds on soil. After it has eaten a large mountain, it will fall asleep so it can grow.",
+                            Health = 250,
+                            Height = 6,
+                            MoveFourId = 29,
+                            MoveOneId = 59,
+                            MoveThreeId = 28,
+                            MoveTwoId = 60,
+                            Name = "Larvitar",
+                            PokeNickName = "Larvitar",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 246,
+                            Weight = 720
+                        },
+                        new
+                        {
+                            Id = 1280,
+                            AbilityId = 1023,
+                            BaseExperience = 144,
+                            Description = "Its shell is as hard as sheet rock, and it is also very strong. Its THRASHING can topple a mountain.",
+                            Health = 250,
+                            Height = 12,
+                            MoveFourId = 29,
+                            MoveOneId = 59,
+                            MoveThreeId = 28,
+                            MoveTwoId = 60,
+                            Name = "Pupitar",
+                            PokeNickName = "Pupitar",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 247,
+                            Weight = 1520
+                        },
+                        new
+                        {
+                            Id = 1281,
+                            AbilityId = 1023,
+                            BaseExperience = 270,
+                            Description = "Its body can't be harmed by any sort of attack, so it is very eager to make challenges against enemies.",
+                            Health = 250,
+                            Height = 20,
+                            MoveFourId = 29,
+                            MoveOneId = 59,
+                            MoveThreeId = 28,
+                            MoveTwoId = 60,
+                            Name = "Tyranitar",
+                            PokeNickName = "Tyranitar",
+                            PokeTypeIdOne = 1005,
+                            PokeTypeIdTwo = 1004,
+                            PokedexNumber = 248,
+                            Weight = 2020
                         });
                 });
 
@@ -3820,6 +8666,141 @@ namespace PokemonCatcherGame.Server.Migrations
                             MoveType = "Fire",
                             PokeApiMoveId = 436,
                             StatusConditionId = 1002
+                        },
+                        new
+                        {
+                            Id = 128,
+                            Accuracy = 85,
+                            HealthRestorationAmount = 0,
+                            MoveAppliesAStatusCondition = true,
+                            MoveBasePP = 5,
+                            MoveDescription = "The target is attacked with an intense blast of all-consuming fire. This may also leave the target with a burn.",
+                            MoveName = "Fire Blast",
+                            MovePower = 110,
+                            MoveRestoresHealth = false,
+                            MoveType = "Fire",
+                            PokeApiMoveId = 126,
+                            StatusConditionId = 1002
+                        },
+                        new
+                        {
+                            Id = 129,
+                            Accuracy = 100,
+                            HealthRestorationAmount = 0,
+                            MoveAppliesAStatusCondition = true,
+                            MoveBasePP = 15,
+                            MoveDescription = "The user transforms into a copy of the target right down to having the same move set.",
+                            MoveName = "Transform",
+                            MovePower = 0,
+                            MoveRestoresHealth = false,
+                            MoveType = "Normal",
+                            PokeApiMoveId = 53,
+                            StatusConditionId = 1002
+                        },
+                        new
+                        {
+                            Id = 130,
+                            Accuracy = 100,
+                            HealthRestorationAmount = 20,
+                            MoveAppliesAStatusCondition = false,
+                            MoveBasePP = 15,
+                            MoveDescription = "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.",
+                            MoveName = "Mega Drain",
+                            MovePower = 40,
+                            MoveRestoresHealth = true,
+                            MoveType = "Grass",
+                            PokeApiMoveId = 72,
+                            StatusConditionId = 1007
+                        },
+                        new
+                        {
+                            Id = 131,
+                            Accuracy = 100,
+                            HealthRestorationAmount = 0,
+                            MoveAppliesAStatusCondition = true,
+                            MoveBasePP = 10,
+                            MoveDescription = "Unsanitary sludge is hurled at the target. This may also poison the target.",
+                            MoveName = "Sludge Bomb",
+                            MovePower = 90,
+                            MoveRestoresHealth = false,
+                            MoveType = "Poison",
+                            PokeApiMoveId = 188,
+                            StatusConditionId = 1004
+                        },
+                        new
+                        {
+                            Id = 132,
+                            Accuracy = 100,
+                            HealthRestorationAmount = 0,
+                            MoveAppliesAStatusCondition = true,
+                            MoveBasePP = 10,
+                            MoveDescription = "The user strikes everything around it by swamping the area with a giant sludge wave. This may also poison those hit.",
+                            MoveName = "Sludge Wave",
+                            MovePower = 95,
+                            MoveRestoresHealth = false,
+                            MoveType = "Poison",
+                            PokeApiMoveId = 482,
+                            StatusConditionId = 1004
+                        },
+                        new
+                        {
+                            Id = 133,
+                            Accuracy = 100,
+                            HealthRestorationAmount = 0,
+                            MoveAppliesAStatusCondition = true,
+                            MoveBasePP = 20,
+                            MoveDescription = "The target is stabbed with a tentacle or arm steeped in poison. This may also poison the target.",
+                            MoveName = "Poison Jab",
+                            MovePower = 80,
+                            MoveRestoresHealth = false,
+                            MoveType = "Poison",
+                            PokeApiMoveId = 398,
+                            StatusConditionId = 1004
+                        },
+                        new
+                        {
+                            Id = 134,
+                            Accuracy = 100,
+                            HealthRestorationAmount = 0,
+                            MoveAppliesAStatusCondition = true,
+                            MoveBasePP = 20,
+                            MoveDescription = "The user spits fluid that works to melt the target. This harshly lowers the target's Sp. Def stat.",
+                            MoveName = "Acid Spray",
+                            MovePower = 40,
+                            MoveRestoresHealth = false,
+                            MoveType = "Poison",
+                            PokeApiMoveId = 491,
+                            StatusConditionId = 1004
+                        },
+                        new
+                        {
+                            Id = 135,
+                            Accuracy = 100,
+                            HealthRestorationAmount = 0,
+                            MoveAppliesAStatusCondition = true,
+                            MoveBasePP = 30,
+                            MoveDescription = "A move that leaves the target badly poisoned. Its poison damage worsens every turn.",
+                            MoveName = "Toxic",
+                            MovePower = 40,
+                            MoveRestoresHealth = false,
+                            MoveType = "Poison",
+                            PokeApiMoveId = 51,
+                            StatusConditionId = 1004
+                        },
+                        new
+                        {
+                            Id = 136,
+                            Accuracy = 100,
+                            HealthRestorationAmount = 0,
+                            MoveAppliesAStatusCondition = false,
+                            MoveBasePP = 30,
+                            MoveDescription = " A spray of countless bubbles is jetted at the opposing Pokémon. This may also lower their Speed stats.",
+                            MoveName = "Bubble",
+                            MovePower = 40,
+                            MoveRestoresHealth = false,
+                            MoveType = "Water",
+                            PokeApiMoveId = 474,
+                            StatusConditionId = 1004
                         });
                 });
 
@@ -7281,6 +12262,21 @@ namespace PokemonCatcherGame.Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PlayerEntityPlayerPokemonEntity", b =>
+                {
+                    b.HasOne("Server.Entities.PlayerPokemonEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ActivePokemonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Entities.PlayerEntity", null)
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PlayerEntityPokemonEntity", b =>
                 {
                     b.HasOne("Server.Entities.PokemonEntity", null)
@@ -7371,10 +12367,29 @@ namespace PokemonCatcherGame.Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Server.Entities.InventoryHealthItemEntity", b =>
+                {
+                    b.HasOne("Server.Entities.HealthItemEntity", "HealthItem")
+                        .WithMany()
+                        .HasForeignKey("HealthItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Entities.PlayerItemInventoryEntity", "PlayerItemInventory")
+                        .WithMany()
+                        .HasForeignKey("PlayerItemInventoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HealthItem");
+
+                    b.Navigation("PlayerItemInventory");
+                });
+
             modelBuilder.Entity("Server.Entities.PlayerEntity", b =>
                 {
                     b.HasOne("Server.Entities.PlayerItemInventoryEntity", "ItemInventory")
-                        .WithMany("Players")
+                        .WithMany()
                         .HasForeignKey("ItemInventoryId");
 
                     b.HasOne("PokemonCatcherGame.Server.Entities.ApplicationUser", "User")
@@ -7386,6 +12401,63 @@ namespace PokemonCatcherGame.Server.Migrations
                     b.Navigation("ItemInventory");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Server.Entities.PlayerPokemonEntity", b =>
+                {
+                    b.HasOne("Server.Entities.PokemonAbilityEntity", "Ability")
+                        .WithMany()
+                        .HasForeignKey("AbilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Entities.PokemonMoveEntity", "MoveFour")
+                        .WithMany()
+                        .HasForeignKey("MoveFourId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Entities.PokemonMoveEntity", "MoveOne")
+                        .WithMany()
+                        .HasForeignKey("MoveOneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Entities.PokemonMoveEntity", "MoveThree")
+                        .WithMany()
+                        .HasForeignKey("MoveThreeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Entities.PokemonMoveEntity", "MoveTwo")
+                        .WithMany()
+                        .HasForeignKey("MoveTwoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Entities.PokemonTypeEntity", "PokeTypeOne")
+                        .WithMany()
+                        .HasForeignKey("PokeTypeIdOne")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Entities.PokemonTypeEntity", "PokeTypeTwo")
+                        .WithMany()
+                        .HasForeignKey("PokeTypeIdTwo");
+
+                    b.Navigation("Ability");
+
+                    b.Navigation("MoveFour");
+
+                    b.Navigation("MoveOne");
+
+                    b.Navigation("MoveThree");
+
+                    b.Navigation("MoveTwo");
+
+                    b.Navigation("PokeTypeOne");
+
+                    b.Navigation("PokeTypeTwo");
                 });
 
             modelBuilder.Entity("Server.Entities.PokemonEntity", b =>
@@ -7463,11 +12535,6 @@ namespace PokemonCatcherGame.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("StatusCondition");
-                });
-
-            modelBuilder.Entity("Server.Entities.PlayerItemInventoryEntity", b =>
-                {
-                    b.Navigation("Players");
                 });
 #pragma warning restore 612, 618
         }

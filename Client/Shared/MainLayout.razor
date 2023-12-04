@@ -6,8 +6,12 @@
 
 <MudLayout>
     <MudAppBar Style="@($"color:{Theme.Palette.SuccessLighten}; background:{Theme.Palette.Dark};")">
+        
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         My Application
+        <div class="auth" id="login">
+            <LoginDisplay />
+        </div>
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen" Class="pa-4" Style="@($"color:{Colors.Purple.Darken4}; background:{Theme.Palette.Dark}; background:{Theme.Palette.Dark};")">
         <NavMenu/>

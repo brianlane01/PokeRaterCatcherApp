@@ -72,7 +72,7 @@ namespace PokemonCatcherGame.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HealthRestoratinItems",
+                name: "HealthRestorationItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -83,7 +83,7 @@ namespace PokemonCatcherGame.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HealthRestoratinItems", x => x.Id);
+                    table.PrimaryKey("PK_HealthRestorationItems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,7 +143,53 @@ namespace PokemonCatcherGame.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NameOfPlayer = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    NameOfPlayer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumberOfPotions = table.Column<int>(type: "int", nullable: false),
+                    NumberOfSuperPotions = table.Column<int>(type: "int", nullable: false),
+                    NumberOfHyperPotions = table.Column<int>(type: "int", nullable: false),
+                    NumberOfMaxPotions = table.Column<int>(type: "int", nullable: false),
+                    NumberOfRevives = table.Column<int>(type: "int", nullable: false),
+                    NumberOfMaxRevives = table.Column<int>(type: "int", nullable: false),
+                    NumberOfPokeBalls = table.Column<int>(type: "int", nullable: false),
+                    NumberOfGreatBalls = table.Column<int>(type: "int", nullable: false),
+                    NumberOfUltraBalls = table.Column<int>(type: "int", nullable: false),
+                    NumberOfMasterBalls = table.Column<int>(type: "int", nullable: false),
+                    NumberOfAntidotes = table.Column<int>(type: "int", nullable: false),
+                    NumberOfParalyzeHeals = table.Column<int>(type: "int", nullable: false),
+                    NumberOfAwakening = table.Column<int>(type: "int", nullable: false),
+                    NumberOfBurnHeals = table.Column<int>(type: "int", nullable: false),
+                    NumberOfIceHeals = table.Column<int>(type: "int", nullable: false),
+                    NumberOfFullHeals = table.Column<int>(type: "int", nullable: false),
+                    NumberOfEnergyPowder = table.Column<int>(type: "int", nullable: false),
+                    NumberOfEnergyRoot = table.Column<int>(type: "int", nullable: false),
+                    NumberOfHealPowder = table.Column<int>(type: "int", nullable: false),
+                    NumberOfRevivalHerb = table.Column<int>(type: "int", nullable: false),
+                    NumberOfSodaPop = table.Column<int>(type: "int", nullable: false),
+                    NumberOfLemonade = table.Column<int>(type: "int", nullable: false),
+                    NumberOfMoomooMilk = table.Column<int>(type: "int", nullable: false),
+                    NumberOfBerryJuice = table.Column<int>(type: "int", nullable: false),
+                    NumberOfSacredAsh = table.Column<int>(type: "int", nullable: false),
+                    NumberOfRageCandyBar = table.Column<int>(type: "int", nullable: false),
+                    NumberOfLavaCookie = table.Column<int>(type: "int", nullable: false),
+                    NumberOfCasteliacone = table.Column<int>(type: "int", nullable: false),
+                    NumberOfOldGateau = table.Column<int>(type: "int", nullable: false),
+                    NumberOfShalourSable = table.Column<int>(type: "int", nullable: false),
+                    NumberOfLumioseGalette = table.Column<int>(type: "int", nullable: false),
+                    NumberOfFineRemendy = table.Column<int>(type: "int", nullable: false),
+                    NumberOfSafariBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfPremierBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfRepeatBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfTimerBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfNestBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfNetBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfDiveBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfLuxuryBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfHealBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfQuickBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfDuskBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfCherishBall = table.Column<int>(type: "int", nullable: false),
+                    NumberOfFullRestore = table.Column<int>(type: "int", nullable: false),
+                    NumberOfFreshWater = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -369,14 +415,40 @@ namespace PokemonCatcherGame.Server.Migrations
                 {
                     table.PrimaryKey("PK_HealthItemEntityPlayerItemInventoryEntity", x => new { x.HealthItemsId, x.PlayerInventoryId });
                     table.ForeignKey(
-                        name: "FK_HealthItemEntityPlayerItemInventoryEntity_HealthRestoratinItems_HealthItemsId",
+                        name: "FK_HealthItemEntityPlayerItemInventoryEntity_HealthRestorationItems_HealthItemsId",
                         column: x => x.HealthItemsId,
-                        principalTable: "HealthRestoratinItems",
+                        principalTable: "HealthRestorationItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_HealthItemEntityPlayerItemInventoryEntity_PlayerItemInventories_PlayerInventoryId",
                         column: x => x.PlayerInventoryId,
+                        principalTable: "PlayerItemInventories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryHealthItems",
+                columns: table => new
+                {
+                    PlayerInventoryId = table.Column<int>(type: "int", nullable: false),
+                    HealthItemId = table.Column<int>(type: "int", nullable: false),
+                    PlayerItemInventoryId = table.Column<int>(type: "int", nullable: false),
+                    ItemQuantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryHealthItems", x => new { x.PlayerInventoryId, x.HealthItemId });
+                    table.ForeignKey(
+                        name: "FK_InventoryHealthItems_HealthRestorationItems_HealthItemId",
+                        column: x => x.HealthItemId,
+                        principalTable: "HealthRestorationItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InventoryHealthItems_PlayerItemInventories_PlayerItemInventoryId",
+                        column: x => x.PlayerItemInventoryId,
                         principalTable: "PlayerItemInventories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -390,7 +462,7 @@ namespace PokemonCatcherGame.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ItemIventoryId = table.Column<int>(type: "int", nullable: false)
+                    ItemInventoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -402,11 +474,10 @@ namespace PokemonCatcherGame.Server.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Players_PlayerItemInventories_ItemIventoryId",
-                        column: x => x.ItemIventoryId,
+                        name: "FK_Players_PlayerItemInventories_ItemInventoryId",
+                        column: x => x.ItemInventoryId,
                         principalTable: "PlayerItemInventories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -557,6 +628,74 @@ namespace PokemonCatcherGame.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PlayerPokemon",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PokedexNumber = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PokeNickName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Weight = table.Column<int>(type: "int", nullable: false),
+                    Height = table.Column<int>(type: "int", nullable: false),
+                    Health = table.Column<int>(type: "int", nullable: false),
+                    BaseExperience = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PokeTypeIdOne = table.Column<int>(type: "int", nullable: false),
+                    PokeTypeIdTwo = table.Column<int>(type: "int", nullable: true),
+                    MoveOneId = table.Column<int>(type: "int", nullable: false),
+                    MoveTwoId = table.Column<int>(type: "int", nullable: false),
+                    MoveThreeId = table.Column<int>(type: "int", nullable: false),
+                    MoveFourId = table.Column<int>(type: "int", nullable: false),
+                    AbilityId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerPokemon", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlayerPokemon_PokemonAbilities_AbilityId",
+                        column: x => x.AbilityId,
+                        principalTable: "PokemonAbilities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerPokemon_PokemonMoves_MoveFourId",
+                        column: x => x.MoveFourId,
+                        principalTable: "PokemonMoves",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_PlayerPokemon_PokemonMoves_MoveOneId",
+                        column: x => x.MoveOneId,
+                        principalTable: "PokemonMoves",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_PlayerPokemon_PokemonMoves_MoveThreeId",
+                        column: x => x.MoveThreeId,
+                        principalTable: "PokemonMoves",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_PlayerPokemon_PokemonMoves_MoveTwoId",
+                        column: x => x.MoveTwoId,
+                        principalTable: "PokemonMoves",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_PlayerPokemon_PokemonTypes_PokeTypeIdOne",
+                        column: x => x.PokeTypeIdOne,
+                        principalTable: "PokemonTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerPokemon_PokemonTypes_PokeTypeIdTwo",
+                        column: x => x.PokeTypeIdTwo,
+                        principalTable: "PokemonTypes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pokemon",
                 columns: table => new
                 {
@@ -569,6 +708,7 @@ namespace PokemonCatcherGame.Server.Migrations
                     Height = table.Column<int>(type: "int", nullable: false),
                     Health = table.Column<int>(type: "int", nullable: false),
                     BaseExperience = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PokeTypeIdOne = table.Column<int>(type: "int", nullable: false),
                     PokeTypeIdTwo = table.Column<int>(type: "int", nullable: true),
                     MoveOneId = table.Column<int>(type: "int", nullable: false),
@@ -648,6 +788,30 @@ namespace PokemonCatcherGame.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PlayerEntityPlayerPokemonEntity",
+                columns: table => new
+                {
+                    ActivePokemonId = table.Column<int>(type: "int", nullable: false),
+                    PlayerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerEntityPlayerPokemonEntity", x => new { x.ActivePokemonId, x.PlayerId });
+                    table.ForeignKey(
+                        name: "FK_PlayerEntityPlayerPokemonEntity_PlayerPokemon_ActivePokemonId",
+                        column: x => x.ActivePokemonId,
+                        principalTable: "PlayerPokemon",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerEntityPlayerPokemonEntity_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PlayerEntityPokemonEntity",
                 columns: table => new
                 {
@@ -696,7 +860,7 @@ namespace PokemonCatcherGame.Server.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "HealthRestoratinItems",
+                table: "HealthRestorationItems",
                 columns: new[] { "Id", "AmountOfHealthRestored", "HealthItemDescription", "HealthItemName" },
                 values: new object[,]
                 {
@@ -988,7 +1152,16 @@ namespace PokemonCatcherGame.Server.Migrations
                     { 124, 100, 0, false, 15, "The user stirs up a violent petal blizzard and attacks everything around it.", "Petal Blizzard", 90, false, "Grass", 572, 1007 },
                     { 125, 90, 0, false, 5, "The user attacks the target at full power. The attack's recoil harshly lowers the user's Sp. Atk stat.", "Overheat", 130, false, "Fire", 315, 1007 },
                     { 126, 100, 0, true, 10, "The user attacks by breathing a special, hot fire. This also lowers the target's Sp. Atk stat.", "Mystical Fire", 75, false, "Fire", 595, 1002 },
-                    { 127, 100, 0, true, 15, "The user torches everything around it in an inferno of scarlet flames. This may also leave those it hits with a burn.", "Lava Plume", 80, false, "Fire", 436, 1002 }
+                    { 127, 100, 0, true, 15, "The user torches everything around it in an inferno of scarlet flames. This may also leave those it hits with a burn.", "Lava Plume", 80, false, "Fire", 436, 1002 },
+                    { 128, 85, 0, true, 5, "The target is attacked with an intense blast of all-consuming fire. This may also leave the target with a burn.", "Fire Blast", 110, false, "Fire", 126, 1002 },
+                    { 129, 100, 0, true, 15, "The user transforms into a copy of the target right down to having the same move set.", "Transform", 0, false, "Normal", 53, 1002 },
+                    { 130, 100, 20, false, 15, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", "Mega Drain", 40, true, "Grass", 72, 1007 },
+                    { 131, 100, 0, true, 10, "Unsanitary sludge is hurled at the target. This may also poison the target.", "Sludge Bomb", 90, false, "Poison", 188, 1004 },
+                    { 132, 100, 0, true, 10, "The user strikes everything around it by swamping the area with a giant sludge wave. This may also poison those hit.", "Sludge Wave", 95, false, "Poison", 482, 1004 },
+                    { 133, 100, 0, true, 20, "The target is stabbed with a tentacle or arm steeped in poison. This may also poison the target.", "Poison Jab", 80, false, "Poison", 398, 1004 },
+                    { 134, 100, 0, true, 20, "The user spits fluid that works to melt the target. This harshly lowers the target's Sp. Def stat.", "Acid Spray", 40, false, "Poison", 491, 1004 },
+                    { 135, 100, 0, true, 30, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.", "Toxic", 40, false, "Poison", 51, 1004 },
+                    { 136, 100, 0, false, 30, " A spray of countless bubbles is jetted at the opposing Pokémon. This may also lower their Speed stats.", "Bubble", 40, false, "Water", 474, 1004 }
                 });
 
             migrationBuilder.InsertData(
@@ -1082,43 +1255,290 @@ namespace PokemonCatcherGame.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "Pokemon",
-                columns: new[] { "Id", "AbilityId", "BaseExperience", "Health", "Height", "MoveFourId", "MoveOneId", "MoveThreeId", "MoveTwoId", "Name", "PokeNickName", "PokeTypeIdOne", "PokeTypeIdTwo", "PokedexNumber", "Weight" },
+                columns: new[] { "Id", "AbilityId", "BaseExperience", "Description", "Health", "Height", "MoveFourId", "MoveOneId", "MoveThreeId", "MoveTwoId", "Name", "PokeNickName", "PokeTypeIdOne", "PokeTypeIdTwo", "PokedexNumber", "Weight" },
                 values: new object[,]
                 {
-                    { 1001, 1000, 236, 250, 25, 9, 5, 15, 7, "Eevee", "Eevee", 1000, 1018, 133, 1000 },
-                    { 1002, 1001, 236, 250, 25, 4, 5, 13, 1, "Pikachu", "Pikachu", 1012, 1018, 25, 1000 },
-                    { 1003, 1001, 236, 250, 25, 4, 5, 13, 1, "Gible", "Gible", 1004, 1018, 443, 1000 },
-                    { 1004, 1001, 236, 250, 25, 1, 6, 5, 7, "Scorbunny", "Scorbunny", 1009, 1018, 813, 1000 },
-                    { 1005, 1003, 236, 250, 25, 1, 6, 5, 7, "Gengar", "Gengar", 1007, 1003, 94, 1000 },
-                    { 1006, 1003, 236, 250, 25, 1, 6, 5, 7, "Zamazenta", "Zamazenta", 1001, 1017, 889, 1000 },
-                    { 1007, 1003, 236, 250, 25, 1, 4, 14, 5, "Charmander", "Charmander", 1009, 1018, 4, 100 },
-                    { 1008, 1030, 236, 250, 25, 92, 1, 89, 87, "Squirtle", "Squirtle", 1010, 1018, 7, 100 },
-                    { 1009, 1024, 236, 250, 25, 1, 9, 11, 10, "Bulbasaur", "Bulbasaur", 1011, 1003, 1, 100 },
-                    { 1010, 1003, 236, 250, 25, 124, 10, 122, 121, "Chikorita", "Chikorita", 1011, 1018, 152, 100 },
-                    { 1011, 1016, 236, 250, 25, 28, 15, 4, 5, "Cyndaquil", "Cyndaquil", 1009, 1018, 155, 1000 },
-                    { 1012, 1003, 63, 250, 6, 1, 89, 92, 90, "Totodile", "Totodile", 1010, 1018, 158, 95 },
-                    { 1013, 1003, 62, 250, 5, 124, 10, 122, 121, "Treecko", "Treecko", 1011, 1018, 252, 50 },
-                    { 1014, 1016, 62, 250, 4, 28, 15, 4, 5, "Torchic", "Torchic", 1009, 1018, 255, 25 },
-                    { 1015, 1018, 62, 250, 4, 1, 89, 92, 90, "Mudkip", "Mudkip", 1010, 1018, 258, 75 },
-                    { 1016, 1024, 64, 250, 4, 1, 110, 95, 122, "Turtwig", "Turtwig", 1010, 1018, 387, 100 },
-                    { 1017, 1016, 62, 250, 5, 28, 15, 4, 5, "Chimchar", "Torchic", 1009, 1018, 390, 62 },
-                    { 1018, 1002, 63, 250, 5, 1, 87, 92, 89, "Piplup", "Piplup", 1010, 1018, 393, 52 },
-                    { 1019, 1004, 300, 300, 14, 32, 17, 31, 7, "Latias", "Latias", 1015, 1013, 380, 400 },
-                    { 1020, 1028, 62, 250, 7, 9, 103, 10, 122, "Snivy", "Snivy", 1011, 1018, 495, 81 },
-                    { 1021, 1015, 62, 225, 5, 125, 5, 16, 4, "Tepig", "Tepig", 1009, 1018, 498, 99 },
-                    { 1022, 1009, 62, 225, 5, 89, 87, 90, 88, "Oshawott", "Oshawott", 1010, 1018, 501, 59 },
-                    { 1023, 1024, 63, 225, 4, 122, 104, 121, 110, "Chespin", "Chespin", 1011, 1018, 650, 90 },
-                    { 1024, 1028, 63, 225, 4, 127, 125, 4, 5, "Fennekin", "Fennekin", 1009, 1018, 653, 90 },
-                    { 1025, 1010, 63, 225, 3, 90, 87, 21, 55, "Froakie", "Froakie", 1010, 1018, 656, 70 },
-                    { 1026, 1032, 63, 225, 3, 10, 121, 9, 122, "Grookey", "Grookey", 1011, 1018, 810, 50 },
-                    { 1027, 1004, 64, 225, 3, 82, 1, 13, 11, "Rowlet", "Rowlet", 1011, 1002, 722, 15 },
-                    { 1028, 1019, 63, 225, 4, 93, 4, 1, 5, "Litten", "Litten", 1009, 1018, 725, 43 },
-                    { 1029, 1001, 63, 225, 4, 89, 87, 24, 1, "Popplio", "Popplio", 1010, 1018, 728, 75 },
-                    { 1030, 1011, 63, 225, 4, 90, 87, 97, 95, "Sobble", "Sobble", 1010, 1018, 816, 40 },
-                    { 1031, 1026, 63, 225, 4, 121, 9, 12, 10, "Sprigatito", "Sprigatito", 1011, 1018, 906, 43 },
-                    { 1032, 1019, 63, 225, 4, 93, 4, 1, 5, "Fuecoco", "Fuecoco", 1009, 1018, 909, 98 },
-                    { 1033, 1019, 63, 225, 5, 1, 87, 89, 88, "Quaxly", "Quaxly", 1010, 1018, 912, 61 },
-                    { 1034, 1034, 340, 350, 20, 120, 17, 7, 38, "Mewtwo", "Mewtwo", 1013, 1018, 150, 1220 }
+                    { 1001, 1009, 236, "Eevee has an unstable genetic makeup that suddenly mutates due to the environment in which it lives. Radiation from various stones causes this Pokémon to evolve.", 250, 25, 9, 5, 15, 7, "Eevee", "Eevee", 1000, 1018, 133, 1000 },
+                    { 1002, 1001, 236, "Whenever Pikachu comes across something new, it blasts it with a jolt of electricity. If you come across a blackened berry, it's evidence that this Pokémon mistook the intensity of its charge.", 250, 25, 4, 5, 13, 1, "Pikachu", "Pikachu", 1012, 1018, 25, 1000 },
+                    { 1003, 1001, 236, "It nests in small, horizontal holes in cave walls. It pounces to catch prey that stray too close.", 250, 25, 4, 5, 13, 1, "Gible", "Gible", 1004, 1018, 443, 1000 },
+                    { 1004, 1001, 236, "It has special pads on the backs of its feet, and one on its nose. Once it's raring to fight, these pads radiate tremendous heat.", 250, 25, 1, 6, 5, 7, "Scorbunny", "Scorbunny", 1009, 1018, 813, 1000 },
+                    { 1005, 1003, 236, "It is said to emerge from darkness to steal the lives of those who become lost in mountains.", 250, 25, 1, 6, 5, 7, "Gengar", "Gengar", 1007, 1003, 94, 1000 },
+                    { 1006, 1003, 236, "This Pokémon slept for aeons while in the form of a statue. It was asleep for so long, people forgot that it ever existed.", 250, 25, 1, 6, 5, 7, "Zamazenta", "Zamazenta", 1001, 1017, 889, 1000 },
+                    { 1007, 1003, 236, "The flame on its tail indicates Charmander's life force. If it is healthy, the flame burns brightly.", 250, 25, 1, 4, 14, 5, "Charmander", "Charmander", 1009, 1018, 4, 100 },
+                    { 1008, 1030, 236, "When it retracts its long neck into its shell, it squirts out water with vigorous force.", 250, 25, 92, 1, 89, 87, "Squirtle", "Squirtle", 1010, 1018, 7, 100 },
+                    { 1009, 1024, 236, "A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.", 250, 25, 1, 9, 11, 10, "Bulbasaur", "Bulbasaur", 1011, 1003, 1, 100 },
+                    { 1010, 1003, 236, "It loves to bask in the sunlight. It uses the leaf on its head to seek out warm places.", 250, 25, 124, 10, 122, 121, "Chikorita", "Chikorita", 1011, 1018, 152, 100 },
+                    { 1011, 1016, 236, "It has a timid nature. If it is startled, the flames on its back burn more vigorously.", 250, 25, 28, 15, 4, 5, "Cyndaquil", "Cyndaquil", 1009, 1018, 155, 1000 },
+                    { 1012, 1003, 63, "Its well-developed jaws are powerful and capable of crushing anything. Even its trainer must be careful.", 250, 6, 1, 89, 92, 90, "Totodile", "Totodile", 1010, 1018, 158, 95 },
+                    { 1013, 1003, 62, "It makes its nest in a giant tree in the forest. It ferociously guards against anything nearing its territory.", 250, 5, 124, 10, 122, 121, "Treecko", "Treecko", 1011, 1018, 252, 50 },
+                    { 1014, 1016, 62, "It has a flame sac inside its belly that perpetually burns. It feels warm if it is hugged.", 250, 4, 28, 15, 4, 5, "Torchic", "Torchic", 1009, 1018, 255, 25 },
+                    { 1015, 1018, 62, "The fin on Mudkip's head acts as highly sensitive radar. Using this fin to sense movements of water and air, this Pokémon can determine what is taking place around it without using its eyes.", 250, 4, 1, 89, 92, 90, "Mudkip", "Mudkip", 1010, 1018, 258, 75 },
+                    { 1016, 1024, 64, "It undertakes photosynthesis with its body, making oxygen. The leaf on its head wilts if it is thirsty.", 250, 4, 1, 110, 95, 122, "Turtwig", "Turtwig", 1010, 1018, 387, 100 },
+                    { 1017, 1016, 62, "It agilely scales sheer cliffs to live atop craggy mountains. Its fire is put out when it sleeps.", 250, 5, 28, 15, 4, 5, "Chimchar", "Torchic", 1009, 1018, 390, 62 },
+                    { 1018, 1002, 63, "Because it is very proud, it hates accepting food from people. Its thick down guards it from cold.", 250, 5, 1, 87, 92, 89, "Piplup", "Piplup", 1010, 1018, 393, 52 },
+                    { 1019, 1004, 300, "Latias is highly intelligent and capable of understanding human speech. It is covered with a glass-like down. The Pokémon enfolds its body with its down and refracts light to alter its appearance.", 300, 14, 32, 17, 31, 7, "Latias", "Latias", 1015, 1013, 380, 400 },
+                    { 1020, 1028, 62, "They photosynthesize by bathing their tails in sunlight. When they are not feeling well, their tails droop.", 250, 7, 9, 103, 10, 122, "Snivy", "Snivy", 1011, 1018, 495, 81 },
+                    { 1021, 1015, 62, "It can deftly dodge its foe's attacks while shooting fireballs from its nose. It roasts berries before it eats them.", 225, 5, 125, 5, 16, 4, "Tepig", "Tepig", 1009, 1018, 498, 99 },
+                    { 1022, 1009, 62, "It fights using the scalchop on its stomach. In response to an attack, it retaliates immediately by slashing.", 225, 5, 89, 87, 90, 88, "Oshawott", "Oshawott", 1010, 1018, 501, 59 },
+                    { 1023, 1024, 63, "The quills on its head are usually soft. When it flexes them, the points become so hard and sharp that they can pierce rock.", 225, 4, 122, 104, 121, 110, "Chespin", "Chespin", 1011, 1018, 650, 90 },
+                    { 1024, 1028, 63, "Eating a twig fills it with energy, and its roomy ears give vent to air hotter than 390 degrees Fahrenheit.", 225, 4, 127, 125, 4, 5, "Fennekin", "Fennekin", 1009, 1018, 653, 90 },
+                    { 1025, 1010, 63, "It secretes flexible bubbles from its chest and back. The bubbles reduce the damage it would otherwise take when attacked.", 225, 3, 90, 87, 21, 55, "Froakie", "Froakie", 1010, 1018, 656, 70 },
+                    { 1026, 1032, 63, "It attacks with rapid beats of its stick. As it strikes with amazing speed, it gets more and more pumped.", 225, 3, 10, 121, 9, 122, "Grookey", "Grookey", 1011, 1018, 810, 50 },
+                    { 1027, 1004, 64, "It sends its feathers, which are as sharp as blades, flying in attack. Its legs are strong, and its aim is excellent.", 225, 3, 82, 1, 13, 11, "Rowlet", "Rowlet", 1011, 1002, 722, 15 },
+                    { 1028, 1019, 63, "While grooming itself, it builds up fur inside its stomach. It sets the fur alight and spews fiery attacks, which change based on how it coughs.", 225, 4, 93, 4, 1, 5, "Litten", "Litten", 1009, 1018, 725, 43 },
+                    { 1029, 1001, 63, "It can throw bubble-covered pebbles with precise control, hitting empty cans up to a hundred feet away.", 225, 4, 89, 87, 24, 1, "Popplio", "Popplio", 1010, 1018, 728, 75 },
+                    { 1030, 1011, 63, "When scared, this Pokémon cries. Its tears pack the chemical punch of 100 onions, and attackers won't be able to resist weeping.", 225, 4, 90, 87, 97, 95, "Sobble", "Sobble", 1010, 1018, 816, 40 },
+                    { 1031, 1026, 63, "It has a habit of biting anything with its developed jaws. Even its Trainer needs to be careful.", 225, 4, 121, 9, 12, 10, "Sprigatito", "Sprigatito", 1011, 1018, 906, 43 },
+                    { 1032, 1019, 63, "It stores flammable gas in its body and uses it to generate heat. The yellow sections on its belly get particularly hot.", 225, 4, 93, 4, 1, 5, "Fuecoco", "Fuecoco", 1009, 1018, 909, 98 },
+                    { 1033, 1019, 63, "It dives underwater to hunt prey. When swimming rapidly, it rockets out of the water and startles prey.", 225, 5, 1, 87, 89, 88, "Quaxly", "Quaxly", 1010, 1018, 912, 61 },
+                    { 1034, 1034, 340, "A Pokémon created by recombining Mew's genes. It's said to have the most savage heart among Pokémon.", 350, 20, 120, 17, 7, 38, "Mewtwo", "Mewtwo", 1013, 1018, 150, 1220 },
+                    { 1035, 1034, 270, "So rare that it is still said to be a mirage by many experts. Only a few people have seen it worldwide.", 350, 4, 120, 17, 7, 38, "Mew", "Mew", 1013, 1018, 151, 40 },
+                    { 1036, 1034, 261, "A legendary bird Pokémon that is said to appear from clouds while dropping enormous lightning bolts.", 350, 16, 112, 6, 117, 78, "Zapdos", "Zapdos", 1012, 1002, 145, 526 },
+                    { 1037, 1034, 261, "Known as the legendary bird of fire. Every flap of its wings creates a dazzling flash of flames.", 350, 20, 126, 5, 47, 6, "Moltres", "Moltres", 1009, 1002, 146, 600 },
+                    { 1038, 1034, 261, "A legendary bird Pokémon. It can create blizzards by freezing moisture in the air.", 350, 17, 79, 78, 74, 80, "Articuno", "Articuno", 1014, 1002, 144, 554 },
+                    { 1039, 1034, 261, "RAIKOU embodies the speed of lightning. The roars of this POKéMON send shock waves shuddering through the air and shake the ground as if lightning bolts had come crashing down.", 350, 19, 112, 6, 117, 78, "Raikou", "Raikou", 1012, 1018, 243, 1780 },
+                    { 1040, 1034, 261, "ENTEI embodies the passion of magma. This POKéMON is thought to have been born in the eruption of a volcano. It sends up massive bursts of fire that utterly consume all that they touch.", 350, 21, 126, 5, 47, 6, "Entei", "Entei", 1009, 1018, 244, 1980 },
+                    { 1041, 1034, 261, "SUICUNE embodies the compassion of a pure spring of water. It runs across the land with gracefulness. This POKéMON has the power to purify dirty water.", 350, 20, 89, 78, 90, 91, "Suicune", "Suicune", 1014, 1018, 245, 1870 },
+                    { 1042, 1034, 306, "LUGIA's wings pack devastating power—a light fluttering of its wings can blow apart regular houses. As a result, this POKéMON chooses to live out of sight deep under the sea.", 350, 52, 20, 17, 19, 18, "Lugia", "Lugia", 1013, 1002, 249, 2160 },
+                    { 1043, 1034, 306, "HO-OH's feathers glow in seven colors depending on the angle at which they are struck by light. These feathers are said to bring happiness to the bearers. This POKéMON is said to live at the foot of a rainbow.", 350, 38, 126, 5, 47, 6, "Ho-Oh", "Ho-Oh", 1009, 1002, 250, 1990 },
+                    { 1044, 1034, 270, "This POKéMON came from the future by crossing over time. It is thought that so long as CELEBI appears, a bright and shining future awaits us.", 350, 6, 120, 17, 121, 124, "Celebi", "Celebi", 1011, 1013, 251, 50 },
+                    { 1045, 1034, 302, "KYOGRE has the power to create massive rain clouds that cover the entire sky and bring about torrential downpours. This POKéMON saved people who were suffering from droughts.", 350, 45, 88, 74, 91, 96, "Kyogre", "Kyogre", 1010, 1018, 382, 3520 },
+                    { 1046, 1034, 302, "GROUDON has long been described in mythology as the POKéMON that raised lands and expanded continents. This POKéMON took to sleep after a cataclysmic battle with KYOGRE.", 350, 35, 44, 46, 41, 6, "Groudon", "Groudon", 1004, 1018, 383, 9500 },
+                    { 1047, 1034, 306, "RAYQUAZA lived for hundreds of millions of years in the earth's ozone layer, never descending to the ground. This POKéMON appears to feed on water and particles in the atmosphere.", 350, 70, 33, 6, 30, 31, "Rayquaza", "Rayquaza", 1015, 1002, 384, 2065 },
+                    { 1048, 1034, 270, "The DNA of a space virus underwent a sudden mutation upon exposure to a laser beam and resulted in DEOXYS. The crystalline organ on this POKéMON's chest appears to be its brain.", 350, 17, 20, 17, 19, 18, "Deoxys", "Deoxys", 1013, 1018, 386, 608 },
+                    { 1049, 1034, 270, "JIRACHI will awaken from its sleep of a thousand years if you sing to it in a voice of purity. It is said to make true any wish that people desire.", 350, 3, 20, 17, 19, 18, "Jirachi", "Jirachi", 1011, 1013, 385, 11 },
+                    { 1050, 1024, 142, "When the bulb on its back grows large, it appears to lose the ability to stand on its hind legs.", 250, 10, 1, 9, 11, 10, "Ivysaur", "Ivysaur", 1011, 1003, 2, 130 },
+                    { 1051, 1016, 142, "It has a barbaric nature. In battle, it whips its fiery tail around and slashes away with sharp claws.", 250, 11, 16, 15, 4, 5, "Charmeleon", "Charmeleon", 1009, 1018, 5, 190 },
+                    { 1052, 1024, 236, "Its plant blooms when it is absorbing solar energy. It stays on the move to seek sunlight.", 250, 20, 1, 9, 11, 10, "Venusaur", "Venusaur", 1011, 1003, 3, 1000 },
+                    { 1053, 1016, 240, "It spits fire that is hot enough to melt boulders. It may cause forest fires by blowing flames.", 250, 17, 16, 15, 14, 5, "Charizard", "Charizard", 1009, 1002, 6, 905 },
+                    { 1054, 1018, 239, "It crushes its foe under its heavy body to cause fainting. In a pinch, it will withdraw inside its shell.", 250, 16, 1, 89, 92, 90, "Blastoise", "Blastoise", 1010, 1018, 9, 855 },
+                    { 1055, 1018, 142, "It is recognized as a symbol of longevity. If its shell has algae on it, that WARTORTLE is very old.", 250, 10, 91, 89, 92, 90, "Wartortle", "Wartortle", 1010, 1018, 8, 225 },
+                    { 1056, 1012, 178, "It loves the honey of flowers and can locate flower patches that have even tiny amounts of pollen.", 250, 11, 20, 17, 19, 18, "Catarpie", "Catarpie", 1006, 1018, 10, 320 },
+                    { 1057, 1012, 72, "Its shell is filled with a thick liquid. All of the cells throughout its body are being rebuilt in preparation for evolution.", 250, 7, 20, 17, 19, 18, "Metapod", "Metapod", 1006, 1018, 11, 99 },
+                    { 1058, 1012, 178, "It loves the honey of flowers and can locate flower patches that have even tiny amounts of pollen.", 250, 11, 20, 17, 19, 18, "Butterfree", "Butterfree", 1006, 1002, 12, 320 },
+                    { 1059, 1012, 39, "Often found in forests, eating leaves. It has a sharp venomous stinger on its head.", 250, 3, 67, 52, 55, 54, "Weedle", "Weedle", 1006, 1003, 13, 32 },
+                    { 1060, 1012, 72, "Almost incapable of moving, this POKéMON can only harden its shell to protect itself from predators.", 250, 6, 67, 52, 55, 54, "Kakuna", "Kakuna", 1006, 1003, 14, 100 },
+                    { 1061, 1012, 178, "It has three poisonous stingers on its forelegs and its tail. They are used to jab its enemy repeatedly.", 250, 10, 67, 52, 55, 54, "Beedrill", "Beedrill", 1006, 1003, 15, 295 },
+                    { 1062, 1020, 50, "Very docile. If attacked, it will often kick up sand to protect itself rather than fight back.", 250, 3, 86, 81, 85, 82, "Pidgey", "Pidgey", 1000, 1002, 16, 18 },
+                    { 1063, 1020, 122, "The claws on its feet are well developed. It can carry prey such as an EXEGGCUTE to its nest over 60 miles away.", 250, 11, 86, 81, 85, 82, "Pidgeotto", "Pidgeotto", 1000, 1002, 17, 300 },
+                    { 1064, 1020, 216, "When hunting, it skims the surface of water at high speed to pick off unwary prey such as MAGIKARP.", 250, 15, 86, 81, 85, 82, "Pidgeot", "Pidgeot", 1000, 1002, 18, 395 },
+                    { 1065, 1011, 51, "Bites anything when it attacks. Small and very quick, it is a common sight in many places.", 250, 3, 93, 1, 78, 45, "Rattata", "Rattata", 1000, 1018, 19, 35 },
+                    { 1066, 1011, 145, "It uses its whiskers to maintain its balance. It apparently slows down if they are cut off.", 250, 7, 93, 1, 78, 45, "Raticate", "Raticate", 1000, 1018, 20, 185 },
+                    { 1067, 1020, 52, "Eats bugs in grassy areas. It has to flap its short wings at high speed to stay airborne.", 250, 3, 86, 81, 85, 82, "Spearow", "Spearow", 1000, 1002, 21, 20 },
+                    { 1068, 1020, 155, "With its huge and magnificent wings, it can keep aloft without ever having to land for rest.", 250, 12, 86, 81, 85, 82, "Fearow", "Fearow", 1000, 1002, 22, 380 },
+                    { 1069, 1011, 58, "Moves silently and stealthily. Eats the eggs of birds, such as PIDGEY and SPEAROW, whole.", 250, 20, 93, 1, 78, 45, "Ekans", "Ekans", 1003, 1018, 23, 69 },
+                    { 1070, 1011, 153, "The pattern on its belly appears to be a frightening face. Weak foes will flee just at the sight of the pattern.", 250, 35, 93, 1, 78, 45, "Arbok", "Arbok", 1003, 1018, 24, 650 },
+                    { 1071, 1019, 218, "Its long tail serves as a ground to protect itself from its own high-voltage power.", 250, 8, 113, 118, 116, 117, "Raichu", "Raichu", 1012, 1018, 26, 300 },
+                    { 1072, 1011, 60, "Burrows deep underground in arid locations far from water. It only emerges to hunt for food.", 250, 6, 44, 41, 1, 42, "Sandshrew", "Sandshrew", 1004, 1018, 27, 120 },
+                    { 1073, 1011, 158, "Curls up into a spiny ball when threatened. It can roll while curled up to attack or escape.", 250, 10, 44, 41, 43, 42, "Sandslash", "Sandslash", 1004, 1018, 28, 295 },
+                    { 1074, 1011, 55, "NIDORAN has barbs that secrete a powerful poison. They are thought to have developed as protection for this small-bodied POKéMON. When enraged, it releases a horrible toxin from its horn.", 250, 4, 57, 1, 56, 45, "Nidoran♀", "Nidoran♀", 1003, 1018, 29, 70 },
+                    { 1075, 1011, 128, "When NIDORINA are with their friends or family, they keep their barbs tucked away to prevent hurting each other. This POKéMON appears to become nervous if separated from the others.", 250, 8, 57, 1, 56, 45, "Nidorina", "Nidorina", 1003, 1018, 30, 200 },
+                    { 1076, 1011, 227, "NIDOQUEEN's body is encased in extremely hard scales. It is adept at sending foes flying with harsh tackles. This POKéMON is at its strongest when it is defending its young.", 250, 13, 57, 1, 56, 45, "Nidoqueen", "Nidoqueen", 1003, 1004, 31, 600 },
+                    { 1077, 1011, 55, "NIDORAN has developed muscles for moving its ears. Thanks to them, the ears can be freely moved in any direction. Even the slightest sound does not escape this POKéMON's notice.", 250, 5, 57, 1, 56, 45, "Nidoran♂", "Nidoran♂", 1003, 1018, 32, 90 },
+                    { 1078, 1011, 128, "NIDORINO has a horn that is harder than a diamond. If it senses a hostile presence, all the barbs on its back bristle up at once, and it challenges the foe with all its might.", 250, 9, 57, 1, 56, 45, "Nidorino", "Nidorino", 1003, 1018, 33, 195 },
+                    { 1079, 1011, 227, "NIDOKING's thick tail packs enormously destructive power. With one swing, it can topple a metal transmission tower. Once this POKéMON goes on a rampage, there is no stopping it.", 250, 14, 57, 1, 56, 45, "Nidoking", "Nidoking", 1003, 1004, 34, 620 },
+                    { 1080, 1011, 113, "Its magical and cute appeal has many admirers. It is rare and found only in certain areas.", 250, 6, 20, 23, 19, 18, "Clefairy", "Clefairy", 1017, 1018, 35, 75 },
+                    { 1081, 1011, 217, "A timid fairy POKéMON that is rarely seen. It will run and hide the moment it senses people.", 250, 13, 20, 23, 19, 18, "Clefable", "Clefable", 1017, 1018, 36, 400 },
+                    { 1082, 1011, 60, "At the time of birth, it has just one tail. The tail splits from its tip as it grows older.", 250, 6, 16, 5, 14, 6, "Vulpix", "Vulpix", 1009, 1018, 37, 99 },
+                    { 1083, 1011, 177, "Very smart and very vengeful. Grabbing one of its many tails could result in a 1000-year curse.", 250, 11, 16, 5, 14, 6, "Ninetales", "Ninetales", 1009, 1018, 38, 199 },
+                    { 1084, 1011, 76, "When its huge eyes light up, it sings a mysteriously soothing melody that lulls its enemies to sleep.", 250, 5, 109, 105, 107, 106, "Jigglypuff", "Jigglypuff", 1000, 1017, 39, 55 },
+                    { 1085, 1011, 109, "The body is soft and rubbery. When angered, it will suck in air and inflate itself to an enormous size.", 250, 10, 109, 105, 107, 106, "Wigglytuff", "Wigglytuff", 1000, 1017, 40, 120 },
+                    { 1086, 1011, 49, "Forms colonies in perpetually dark places. Uses ultrasonic waves to identify and approach targets.", 250, 8, 82, 58, 55, 54, "Zubat", "Zubat", 1003, 1002, 41, 75 },
+                    { 1087, 1011, 159, "Once it strikes, it will not stop draining energy from the victim even if it gets too heavy to fly.", 250, 16, 82, 58, 55, 54, "Golbat", "Golbat", 1003, 1002, 42, 550 },
+                    { 1088, 1011, 64, "During the day, it keeps its face buried in the ground. At night, it wanders around sowing its seeds.", 250, 5, 97, 11, 10, 12, "Oddish", "Oddish", 1003, 1011, 43, 54 },
+                    { 1089, 1011, 138, "The fluid that oozes from its mouth isn't drool. It is a nectar that is used to attract prey.", 250, 8, 97, 11, 10, 12, "Gloom", "Gloom", 1003, 1011, 44, 86 },
+                    { 1090, 1011, 221, "The larger its petals, the more toxic pollen it contains. Its big head is heavy and hard to hold up.", 250, 12, 97, 11, 10, 12, "Vileplume", "Vileplume", 1003, 1011, 45, 186 },
+                    { 1091, 1011, 57, "Burrows to suck tree roots. The mushrooms on its back grow by drawing nutrients from the bug host.", 250, 3, 67, 99, 66, 97, "Paras", "Paras", 1006, 1011, 46, 54 },
+                    { 1092, 1011, 142, "A host-parasite pair in which the parasite mushroom has taken over the host bug. Prefers damp places.", 250, 10, 67, 99, 66, 97, "Parasect", "Parasect", 1006, 1011, 47, 295 },
+                    { 1093, 1011, 61, "Lives in the shadows of tall trees where it eats insects. It is attracted by light at night.", 250, 10, 67, 52, 55, 54, "Venonat", "Venonat", 1006, 1003, 48, 300 },
+                    { 1094, 1011, 158, "The dust-like scales covering its wings are color coded to indicate the kinds of poison it has.", 250, 15, 67, 52, 55, 54, "Venomoth", "Venomoth", 1006, 1003, 49, 125 },
+                    { 1095, 1011, 53, "Lives about one yard underground where it feeds on plant roots. It sometimes appears above ground.", 250, 2, 44, 41, 43, 42, "Diglett", "Diglett", 1004, 1018, 50, 8 },
+                    { 1096, 1011, 142, "A team of DIGLETT triplets. It triggers huge earthquakes by burrowing 60 miles underground.", 250, 7, 44, 41, 43, 42, "Dugtrio", "Dugtrio", 1004, 1018, 51, 333 },
+                    { 1097, 1011, 58, "Adores circular objects. Wanders the streets on a nightly basis to look for dropped loose change.", 250, 4, 93, 1, 78, 45, "Meowth", "Meowth", 1000, 1018, 52, 42 },
+                    { 1098, 1011, 154, "Although its fur has many admirers, it is tough to raise as a pet because of its fickle meanness.", 250, 10, 93, 1, 78, 45, "Persian", "Persian", 1000, 1018, 53, 320 },
+                    { 1099, 1010, 64, "While lulling its enemies with its vacant look, this wily POKéMON will use psychokinetic powers.", 250, 8, 95, 89, 92, 90, "Psyduck", "Psyduck", 1011, 1018, 54, 196 },
+                    { 1100, 1010, 175, "Often seen swimming elegantly by lake shores. It is often mistaken for the Japanese monster, Kappa.", 250, 17, 95, 89, 92, 90, "Golduck", "Golduck", 1011, 1018, 55, 766 },
+                    { 1101, 1030, 61, "Extremely quick to anger. It could be docile one moment then thrashing away the next instant.", 350, 5, 68, 70, 72, 71, "Mankey", "Mankey", 1001, 1018, 56, 280 },
+                    { 1102, 1030, 159, "Always furious and tenacious to boot. It will not abandon chasing its quarry until it is caught.", 350, 10, 68, 70, 72, 71, "Primeape", "Primeape", 1001, 1018, 57, 320 },
+                    { 1103, 1011, 70, "Very protective of its territory. It will bark and bite to repel intruders from its space.", 250, 7, 16, 5, 14, 6, "Growlithe", "Growlithe", 1009, 1018, 58, 190 },
+                    { 1104, 1011, 194, "A POKéMON that has been admired since the past for its beauty. It runs agilely as if on wings.", 250, 19, 16, 5, 14, 6, "Arcanine", "Arcanine", 1009, 1018, 59, 1550 },
+                    { 1105, 1011, 60, "Its newly grown legs prevent it from running. It appears to prefer swimming than trying to stand.", 250, 6, 68, 70, 72, 71, "Poliwag", "Poliwag", 1010, 1018, 60, 124 },
+                    { 1106, 1011, 135, "Capable of living in or out of water. When out of water, it sweats to keep its body slimy.", 250, 10, 68, 70, 72, 71, "Poliwhirl", "Poliwhirl", 1010, 1018, 61, 200 },
+                    { 1107, 1011, 230, "An adept swimmer at both the front crawl and breast stroke. Easily overtakes the best human swimmers.", 250, 13, 68, 70, 72, 71, "Poliwrath", "Poliwrath", 1010, 1001, 62, 540 },
+                    { 1108, 1011, 62, "Using its ability to read minds, it will identify impending danger and TELEPORT to safety.", 250, 9, 13, 19, 20, 18, "Abra", "Abra", 1013, 1018, 63, 195 },
+                    { 1109, 1011, 140, "It emits special alpha waves from its body that induce headaches just by being close by.", 250, 13, 13, 19, 20, 18, "Kadabra", "Kadabra", 1013, 1018, 64, 565 },
+                    { 1110, 1011, 225, "Its brain can outperform a supercomputer. Its intelligence quotient is said to be 5,000.", 250, 15, 13, 19, 20, 18, "Alakazam", "Alakazam", 1013, 1018, 65, 480 },
+                    { 1111, 1011, 61, "Loves to build its muscles. It trains in all styles of martial arts to become even stronger.", 250, 8, 68, 70, 72, 71, "Machop", "Machop", 1001, 1018, 66, 195 },
+                    { 1112, 1011, 142, "Its muscular body is so powerful, it must wear a power save belt to be able to regulate its motions.", 250, 15, 68, 70, 72, 71, "Machoke", "Machoke", 1001, 1018, 67, 705 },
+                    { 1113, 1011, 227, "Using its heavy muscles, it throws powerful punches that can send the victim clear over the horizon.", 250, 16, 68, 70, 72, 71, "Machamp", "Machamp", 1001, 1018, 68, 1300 },
+                    { 1114, 1011, 60, "A carnivorous POKéMON that traps and eats bugs. It uses its root feet to soak up needed moisture.", 250, 7, 97, 11, 10, 12, "Bellsprout", "Bellsprout", 1011, 1003, 69, 40 },
+                    { 1115, 1011, 137, "It spits out POISONPOWDER to immobilize the enemy and then finishes it with a spray of ACID.", 250, 10, 97, 11, 10, 12, "Weepinbell", "Weepinbell", 1011, 1003, 70, 64 },
+                    { 1116, 1011, 216, "Said to live in huge colonies deep in jungles, although no one has ever returned from there.", 250, 17, 97, 11, 10, 12, "Victreebel", "Victreebel", 1011, 1003, 71, 155 },
+                    { 1117, 1011, 67, "Drifts in shallow seas. Anglers who hook them by accident are often punished by its stinging acid.", 250, 9, 92, 56, 87, 54, "Tentacool", "Tentacool", 1010, 1003, 72, 455 },
+                    { 1118, 1011, 180, "The tentacles are normally kept short. On hunts, they are extended to ensnare and immobilize prey.", 250, 16, 92, 56, 87, 54, "Tentacruel", "Tentacruel", 1010, 1003, 73, 550 },
+                    { 1119, 1028, 60, "Found in fields and mountains. Mistaking them for boulders, people often step or trip on them.", 250, 4, 41, 63, 61, 62, "Geodude", "Geodude", 1005, 1004, 74, 200 },
+                    { 1120, 1028, 137, "Rolls down slopes to move. It rolls over any obstacle without slowing or changing its direction.", 250, 10, 41, 63, 61, 62, "Graveler", "Graveler", 1005, 1004, 75, 1050 },
+                    { 1121, 1028, 223, "Its boulder-like body is extremely hard. It can easily withstand dynamite blasts without damage.", 250, 14, 41, 63, 61, 62, "Golem", "Golem", 1005, 1004, 76, 3000 },
+                    { 1122, 1011, 82, "Its hooves are 10 times harder than diamonds. It can trample anything completely flat in little time.", 250, 10, 16, 5, 14, 6, "Ponyta", "Ponyta", 1009, 1018, 77, 300 },
+                    { 1123, 1011, 175, "Very competitive, this POKéMON will chase anything that moves fast in the hopes of racing it.", 250, 17, 16, 5, 14, 6, "Rapidash", "Rapidash", 1009, 1018, 78, 950 },
+                    { 1124, 1011, 63, "Incredibly slow and dopey. It takes 5 seconds for it to feel pain when under attack.", 250, 12, 95, 89, 92, 90, "Slowpoke", "Slowpoke", 1010, 1013, 79, 360 },
+                    { 1125, 1011, 172, "The SHELLDER that is latched onto SLOWPOKE's tail is said to feed on the host's left over scraps.", 250, 16, 95, 89, 92, 90, "Slowbro", "Slowbro", 1010, 1013, 80, 785 },
+                    { 1126, 1011, 65, "Uses anti-gravity to stay suspended. Appears without warning and uses THUNDER WAVE and similar moves.", 250, 3, 113, 51, 7, 6, "Magnemite", "Magnemite", 1012, 1008, 81, 60 },
+                    { 1127, 1011, 163, "Formed by several MAGNEMITEs linked together. They frequently appear when sunspots flare up.", 250, 10, 113, 51, 7, 6, "Magneton", "Magneton", 1012, 1008, 82, 600 },
+                    { 1128, 1001, 132, "The sprig of green onions it holds is its weapon. It is used much like a metal sword.", 250, 8, 81, 1, 95, 93, "Farfetch'd", "Farfetch'd", 1000, 1002, 83, 150 },
+                    { 1129, 1011, 62, "A bird that makes up for its poor flying with its fast foot speed. Leaves giant footprints.", 250, 14, 81, 1, 95, 93, "Doduo", "Doduo", 1000, 1002, 84, 392 },
+                    { 1130, 1011, 161, "Uses its three brains to execute complex plans. While two heads sleep, one head stays awake.", 250, 18, 81, 1, 95, 93, "Dodrio", "Dodrio", 1000, 1002, 85, 852 },
+                    { 1131, 1011, 65, "The protruding horn on its head is very hard. It is used for bashing through thick ice.", 250, 11, 74, 90, 75, 92, "Seel", "Seel", 1010, 1018, 86, 900 },
+                    { 1132, 1011, 166, "Stores thermal energy in its body. Swims at a steady 8 knots even in intensely cold waters.", 250, 17, 74, 90, 75, 92, "Dewgong", "Dewgong", 1010, 1014, 87, 1200 },
+                    { 1133, 1011, 65, "Appears in filthy areas. Thrives by sucking up polluted sludge that is pumped out of factories.", 250, 9, 57, 54, 58, 55, "Grimer", "Grimer", 1003, 1018, 88, 300 },
+                    { 1134, 1011, 175, "Thickly covered with a filthy, vile sludge. It is so toxic, even its footprints contain poison.", 250, 12, 57, 54, 58, 55, "Muk", "Muk", 1003, 1018, 89, 300 },
+                    { 1135, 1011, 61, "Its hard shell repels any kind of attack. It is vulnerable only when its shell is open.", 250, 3, 74, 90, 75, 92, "Shellder", "Shellder", 1010, 1018, 90, 40 },
+                    { 1136, 1011, 184, "When attacked, it launches its horns in quick volleys. Its innards have never been seen.", 250, 15, 74, 90, 75, 92, "Cloyster", "Cloyster", 1010, 1014, 91, 1325 },
+                    { 1137, 1011, 62, "Almost invisible, this gaseous POKéMON cloaks the target and puts it to sleep without notice.", 250, 13, 40, 56, 38, 36, "Gastly", "Gastly", 1007, 1003, 92, 1 },
+                    { 1138, 1011, 142, "Because of its ability to slip through block walls, it is said to be from another dimension.", 250, 16, 40, 56, 38, 36, "Haunter", "Haunter", 1007, 1003, 93, 1 },
+                    { 1139, 1011, 225, "Under a full moon, this POKéMON likes to mimic the shadows of people and laugh at their fright.", 250, 15, 40, 56, 38, 36, "Gengar", "Gengar", 1007, 1003, 94, 405 },
+                    { 1140, 1028, 77, "As it grows, the stone portions of its body harden to become similar to a diamond, but colored black.", 250, 88, 41, 63, 61, 62, "Onix", "Onix", 1005, 1004, 95, 2100 },
+                    { 1141, 1011, 66, "Puts enemies to sleep then eats their dreams. Occasionally gets sick from eating bad dreams.", 250, 10, 13, 19, 20, 18, "Drowzee", "Drowzee", 1013, 1018, 96, 324 },
+                    { 1142, 1011, 169, "When it locks eyes with an enemy, it will use a mix of PSI moves such as HYPNOSIS and CONFUSION.", 250, 16, 13, 19, 20, 18, "Hypno", "Hypno", 1013, 1018, 97, 756 },
+                    { 1143, 1011, 65, "Its pincers are not only powerful weapons, they are used for balance when walking sideways.", 250, 4, 97, 91, 90, 93, "Krabby", "Krabby", 1010, 1018, 98, 65 },
+                    { 1144, 1011, 166, "The large pincer has 10000 hp of crushing power. However, its huge size makes it unwieldy to use.", 250, 13, 97, 91, 90, 93, "Kingler", "Kingler", 1010, 1018, 99, 600 },
+                    { 1145, 1011, 66, "Usually found in power plants. Easily mistaken for a POKé BALL, they have zapped many people.", 250, 5, 113, 51, 7, 6, "Voltorb", "Voltorb", 1012, 1018, 100, 104 },
+                    { 1146, 1011, 172, "It stores electric energy under very high pressure. It often explodes with little or no provocation.", 250, 12, 113, 51, 7, 6, "Electrode", "Electrode", 1012, 1018, 101, 666 },
+                    { 1147, 1011, 65, "Often mistaken for eggs. When disturbed, they quickly gather and attack in swarms.", 250, 4, 110, 121, 124, 120, "Exeggcute", "Exeggcute", 1011, 1013, 102, 25 },
+                    { 1148, 1011, 182, "Legend has it that on rare occasions, one of its heads will drop off and continue on as an EXEGGCUTE.", 250, 20, 110, 121, 124, 120, "Exeggutor", "Exeggutor", 1011, 1013, 103, 1200 },
+                    { 1149, 1001, 64, "Because it never removes its skull helmet, no one has ever seen this POKéMON's real face.", 250, 4, 41, 63, 61, 62, "Cubone", "Cubone", 1004, 1018, 104, 65 },
+                    { 1150, 1001, 149, "The bone it holds is its key weapon. It throws the bone skillfully like a boomerang to KO targets.", 250, 10, 41, 63, 61, 62, "Marowak", "Marowak", 1004, 1018, 105, 450 },
+                    { 1151, 1011, 159, "When in a hurry, its legs lengthen progressively. It runs smoothly with extra long, loping strides.", 250, 15, 68, 70, 72, 71, "Hitmonlee", "Hitmonlee", 1001, 1018, 106, 498 },
+                    { 1152, 1011, 159, "While apparently doing nothing, it fires punches in lightning fast volleys that are impossible to see.", 250, 14, 68, 70, 72, 71, "Hitmonchan", "Hitmonchan", 1001, 1018, 107, 502 },
+                    { 1153, 1011, 77, "Its tongue can be extended like a chameleon's. It leaves a tingling sensation when it licks enemies.", 250, 12, 13, 19, 20, 18, "Lickitung", "Lickitung", 1000, 1018, 108, 655 },
+                    { 1154, 1011, 68, "Because it stores several kinds of toxic gases in its body, it is prone to exploding without warning.", 250, 6, 57, 54, 58, 55, "Koffing", "Koffing", 1003, 1018, 109, 10 },
+                    { 1155, 1011, 172, "Where two kinds of poison gases meet, 2 KOFFINGs can fuse into a WEEZING over many years.", 250, 12, 57, 54, 58, 55, "Weezing", "Weezing", 1003, 1018, 110, 95 },
+                    { 1156, 1001, 69, "Its massive bones are 1000 times harder than human bones. It can easily knock a trailer flying.", 250, 10, 41, 42, 61, 62, "Rhyhorn", "Rhyhorn", 1004, 1005, 111, 1150 },
+                    { 1157, 1001, 170, "Protected by an armor-like hide, it is capable of living in molten lava of 3,600 degrees.", 250, 19, 41, 42, 61, 62, "Rhydon", "Rhydon", 1004, 1005, 112, 1200 },
+                    { 1158, 1002, 395, "A rare and elusive POKéMON that is said to bring happiness to those who manage to get it.", 250, 11, 13, 19, 20, 18, "Chansey", "Chansey", 1000, 1018, 113, 346 },
+                    { 1159, 1027, 87, "The whole body is swathed with wide vines that are similar to seaweed. Its vines shake as it walks.", 250, 10, 110, 121, 124, 120, "Tangela", "Tangela", 1011, 1018, 114, 350 },
+                    { 1160, 1001, 172, "The infant rarely ventures out of its mother's protective pouch until it is 3 years old.", 250, 22, 93, 95, 96, 98, "Kangaskhan", "Kangaskhan", 1000, 1018, 115, 800 },
+                    { 1161, 1011, 59, "Known to shoot down flying bugs with precision blasts of ink from the surface of the water.", 250, 4, 74, 90, 75, 92, "Horsea", "Horsea", 1010, 1018, 116, 80 },
+                    { 1162, 1024, 154, "Capable of swimming backwards by rapidly flapping its wing-like pectoral fins and stout tail.", 250, 12, 74, 90, 75, 92, "Seadra", "Seadra", 1010, 1018, 117, 250 },
+                    { 1163, 1011, 64, "Its tail fin billows like an elegant ballroom dress, giving it the nickname of the Water Queen.", 250, 6, 74, 90, 75, 92, "Goldeen", "Goldeen", 1010, 1018, 118, 150 },
+                    { 1164, 1011, 158, "In the autumn spawning season, they can be seen swimming powerfully up rivers and creeks.", 250, 13, 74, 90, 75, 92, "Seaking", "Seaking", 1010, 1018, 119, 390 },
+                    { 1165, 1011, 68, "An enigmatic POKéMON that can effortlessly regenerate any appendage it loses in battle.", 250, 8, 89, 90, 91, 92, "Staryu", "Staryu", 1010, 1018, 120, 345 },
+                    { 1166, 1011, 182, "Its central core glows with the seven colors of the rainbow. Some people value the core as a gem.", 250, 11, 89, 90, 91, 92, "Starmie", "Starmie", 1010, 1014, 121, 800 },
+                    { 1167, 1011, 161, "If interrupted while it is miming, it will slap around the offender with its broad hands.", 250, 13, 17, 107, 120, 108, "Mr. Mime", "Mr. Mime", 1013, 1017, 122, 545 },
+                    { 1168, 1003, 100, "With ninja-like agility and speed, it can create the illusion that there is more than one.", 250, 15, 67, 51, 82, 65, "Scyther", "Scyther", 1006, 1002, 123, 560 },
+                    { 1169, 1032, 159, "It seductively wiggles its hips as it walks. It can cause people to dance in unison with it.", 250, 14, 79, 120, 20, 18, "Jynx", "Jynx", 1014, 1013, 124, 406 },
+                    { 1170, 1015, 172, "Normally found near power plants, they can wander away and cause major blackouts in cities.", 250, 11, 112, 7, 117, 118, "Electabuzz", "Electabuzz", 1012, 1018, 125, 300 },
+                    { 1171, 1016, 173, "Its body always burns with an orange glow that enables it to hide perfectly among flames.", 250, 13, 127, 7, 125, 115, "Magmar", "Magmar", 1009, 1018, 126, 445 },
+                    { 1172, 1026, 175, "If it fails to crush the victim in its pincers, it will swing it around and toss it hard.", 250, 15, 28, 64, 65, 67, "Pinsir", "Pinsir", 1006, 1018, 127, 550 },
+                    { 1173, 1004, 172, "When it targets an enemy, it charges furiously while whipping its body with its long tails.", 250, 14, 93, 95, 96, 98, "Tauros", "Tauros", 1000, 1018, 128, 884 },
+                    { 1174, 1002, 40, "In the distant past, it was somewhat stronger than the horribly weak descendants that exist today.", 250, 9, 1, 92, 87, 91, "Magikarp", "Magikarp", 1010, 1018, 129, 100 },
+                    { 1175, 1032, 189, "Rarely seen in the wild. Huge and vicious, it is capable of destroying entire cities in a rage.", 250, 65, 88, 33, 30, 34, "Gyarados", "Gyarados", 1010, 1002, 130, 2350 },
+                    { 1176, 1011, 187, "People have driven LAPRAS almost to the point of extinction. In the evenings, it is said to sing plaintively as it seeks what few others of its kind still remain.", 250, 25, 74, 90, 76, 92, "Lapras", "Lapras", 1010, 1014, 131, 2200 },
+                    { 1177, 1023, 101, "Capable of copying an enemy's genetic code to instantly transform itself into a duplicate of the enemy.", 250, 3, 13, 96, 129, 95, "Ditto", "Ditto", 1000, 1018, 132, 40 },
+                    { 1178, 1030, 184, "Lives close to water. Its long tail is ridged with a fin which is often mistaken for a mermaid's.", 400, 10, 74, 90, 87, 92, "Vaporeon", "Vaporeon", 1010, 1018, 134, 290 },
+                    { 1179, 1008, 184, "It accumulates negative ions in the atmosphere to blast out 10000-volt lightning bolts.", 250, 8, 113, 117, 7, 118, "Jolteon", "Jolteon", 1012, 1018, 135, 245 },
+                    { 1180, 1007, 184, "When storing thermal energy in its body, its temperature could soar to over 1600 degrees.", 250, 9, 16, 115, 7, 125, "Flareon", "Flareon", 1009, 1018, 136, 250 },
+                    { 1181, 1012, 79, "A POKéMON that consists entirely of programming code. Capable of moving freely in cyberspace.", 250, 8, 113, 51, 7, 6, "Porygon", "Porygon", 1000, 1018, 137, 365 },
+                    { 1182, 1017, 71, "Although long extinct, in rare cases, it can be genetically resurrected from fossils.", 250, 4, 91, 59, 89, 63, "Omanyte", "Omanyte", 1005, 1010, 138, 75 },
+                    { 1183, 1017, 173, "A prehistoric POKéMON that died out when its heavy shell made it impossible to catch prey.", 250, 10, 91, 59, 89, 63, "Omastar", "Omastar", 1005, 1010, 139, 350 },
+                    { 1184, 1017, 71, "A POKéMON that was resurrected from a fossil found in what was once the ocean floor eons ago.", 250, 5, 91, 59, 89, 63, "Kabuto", "Kabuto", 1005, 1010, 140, 115 },
+                    { 1185, 1017, 173, "Its sleek shape is perfect for swimming. It slashes prey with its claws and drains the body fluids.", 250, 13, 91, 59, 89, 63, "Kabutops", "Kabutops", 1005, 1004, 141, 405 },
+                    { 1186, 1004, 180, "A ferocious, prehistoric POKéMON that goes for the enemy's throat with its serrated saw-like fangs.", 250, 18, 82, 59, 81, 63, "Aerodactyl", "Aerodactyl", 1005, 1002, 142, 590 },
+                    { 1187, 1001, 189, "Very lazy. Just eats and sleeps. As its rotund bulk builds, it becomes steadily more slothful.", 250, 21, 93, 95, 96, 98, "Snorlax", "Snorlax", 1000, 1018, 143, 4600 },
+                    { 1188, 1004, 60, "Long considered a mythical POKéMON until recently when a small colony was found living underwater.", 250, 18, 88, 33, 30, 34, "Dratini", "Dratini", 1015, 1018, 147, 33 },
+                    { 1189, 1004, 147, "A mystical POKéMON that exudes a gentle aura. Has the ability to change climate conditions.", 250, 40, 88, 33, 30, 34, "Dragonair", "Dragonair", 1015, 1018, 148, 165 },
+                    { 1190, 1004, 270, "Dragonite is capable of circling the globe in just 16 hours. It is a kindhearted Pokémon that leads lost and foundering ships in a storm to the safety of land.", 250, 22, 88, 33, 30, 34, "Dragonite", "Dragonite", 1015, 1002, 149, 2100 },
+                    { 1191, 1024, 142, "A spicy aroma emanates from around its neck. The aroma acts as a stimulant to restore health.", 250, 12, 110, 121, 124, 120, "Bayleef", "Bayleef", 1011, 1018, 153, 158 },
+                    { 1192, 1024, 236, "The aroma that rises from its petals contains a substance that calms aggressive feelings.", 250, 18, 110, 121, 124, 120, "Meganium", "Meganium", 1011, 1018, 154, 1005 },
+                    { 1193, 1005, 62, "Be careful if it turns its back during battle. It means that it will attack with the fire on its back.", 250, 5, 16, 115, 7, 125, "Quilava", "Quilava", 1009, 1018, 156, 79 },
+                    { 1194, 1005, 240, "If its rage peaks, it becomes so hot that anything that touches it will instantly go up in flames.", 250, 17, 16, 115, 7, 125, "Typhlosion", "Typhlosion", 1009, 1018, 157, 795 },
+                    { 1195, 1006, 66, "Once it bites down, it won't let go until it loses its fangs. New fangs quickly grow into place.", 250, 11, 74, 90, 75, 92, "Croconaw", "Croconaw", 1010, 1018, 159, 250 },
+                    { 1196, 1006, 239, "It opens its huge mouth to intimidate enemies. In battle, it runs using its thick and powerful hind legs to charge the foe with incredible speed.", 250, 23, 74, 90, 75, 92, "Feraligator", "Feraligatr", 1010, 1018, 160, 888 },
+                    { 1197, 1002, 43, "It stands on its tail so it can see a long way. If it spots an enemy, it cries loudly to warn its kind.", 250, 8, 13, 19, 20, 18, "Sentret", "Sentret", 1000, 1018, 161, 60 },
+                    { 1198, 1002, 145, "The mother puts its offspring to sleep by curling up around them. It corners foes with speed.", 250, 18, 13, 19, 20, 18, "Furret", "Furret", 1000, 1018, 162, 325 },
+                    { 1199, 1002, 52, "It has an internal organ that senses the earth's rotation. Using this special organ, a HOOTHOOT begins hooting at precisely the same time every day.", 250, 7, 86, 1, 83, 80, "Hoothoot", "Hoothoot", 1000, 1002, 163, 212 },
+                    { 1200, 1002, 155, "Its eyes are specially developed to enable it to see clearly even in murky darkness and minimal light.", 250, 16, 86, 1, 83, 80, "Noctowl", "Noctowl", 1000, 1002, 164, 408 },
+                    { 1201, 1002, 53, "It is very timid. It will be afraid to move if it is alone. But it will be active if it is in a group.", 250, 10, 67, 51, 82, 65, "Ledyba", "Ledyba", 1006, 1002, 165, 108 },
+                    { 1202, 1002, 137, "When the stars flicker in the night sky, it flutters about, scattering a glowing powder.", 250, 14, 67, 51, 82, 65, "Ledian", "Ledian", 1006, 1002, 166, 356 },
+                    { 1203, 1002, 50, "It spins a web using fine--but durable--thread. It then waits patiently for prey to be trapped.", 250, 5, 67, 51, 82, 65, "Spinarak", "Spinarak", 1006, 1003, 167, 85 },
+                    { 1204, 1002, 137, "It spins string not only from its rear but also from its mouth. It's hard to tell which end is which.", 250, 11, 67, 51, 82, 65, "Ariados", "Ariados", 1006, 1003, 168, 335 },
+                    { 1205, 1001, 66, "It shoots positive and negative electricity between the tips of its two antennae and zaps its enemies.", 250, 5, 82, 86, 57, 54, "Crobat", "Crobat", 1003, 1002, 169, 120 },
+                    { 1206, 1002, 66, "It shoots positive and negative electricity between the tips of its two antennae and zaps its enemies.", 250, 5, 112, 7, 117, 118, "Chinchou", "Chinchou", 1012, 1010, 170, 120 },
+                    { 1207, 1002, 161, "The light it emits is so bright that it can illuminate the sea's surface from a depth of over three miles.", 250, 12, 112, 7, 117, 118, "Lanturn", "Lanturn", 1012, 1010, 171, 225 },
+                    { 1208, 1002, 41, "It is not yet skilled at storing electricity. It may send out a jolt if amused or startled.", 250, 3, 112, 7, 117, 118, "Pichu", "Pichu", 1012, 1018, 172, 20 },
+                    { 1209, 1002, 44, "Because of its unusual, star-like silhouette, people believe that it came here on a meteor.", 250, 3, 1, 22, 107, 23, "Cleffa", "Cleffa", 1017, 1018, 173, 30 },
+                    { 1210, 1002, 42, "Its extremely flexible and elastic body makes it bounce continuously--anytime, anywhere.", 250, 3, 1, 22, 107, 23, "Igglybuff", "Igglybuff", 1017, 1000, 174, 10 },
+                    { 1211, 1002, 49, "It is considered to be a symbol of good luck. Its shell is said to be filled with happiness.", 250, 3, 1, 22, 107, 23, "Togepi", "Togepi", 1017, 1018, 175, 15 },
+                    { 1212, 1002, 142, "It grows dispirited if it is not with kind people. It can float in midair without moving its wings.", 250, 6, 1, 22, 107, 23, "Togetic", "Togetic", 1017, 1002, 176, 32 },
+                    { 1213, 1025, 64, "It usually forages for food on the ground but may, on rare occasions, hop onto branches to peck at shoots.", 250, 2, 101, 17, 119, 18, "Natu", "Natu", 1013, 1002, 177, 20 },
+                    { 1214, 1025, 165, "They say that it stays still and quiet because it is seeing both the past and future at the same time.", 250, 15, 101, 17, 119, 18, "Xatu", "Xatu", 1013, 1002, 178, 150 },
+                    { 1215, 1002, 56, "Its fluffy wool rubs together and builds a static charge. The more energy is charged, the more brightly the lightbulb at the tip of its tail glows.", 250, 6, 112, 7, 117, 118, "Mareep", "Mareep", 1012, 1018, 179, 78 },
+                    { 1216, 1002, 128, "Its fluffy wool rubs together and builds a static charge. The more energy is charged, the more brightly the lightbulb at the tip of its tail glows.", 250, 8, 112, 7, 117, 118, "Flaaffy", "Flaaffy", 1012, 1018, 180, 133 },
+                    { 1217, 1002, 230, "The tail's tip shines brightly and can be seen from far away. It acts as a beacon for lost people.", 250, 14, 112, 7, 117, 118, "Ampharos", "Ampharos", 1012, 1018, 181, 1000 },
+                    { 1218, 1024, 221, "BELLOSSOM gather at times and seem to dance. They say that the dance is a ritual to summon the sun.", 250, 4, 110, 121, 124, 120, "Bellossom", "Bellossom", 1011, 1018, 182, 58 },
+                    { 1219, 1002, 88, "The tip of its tail, which contains oil that is lighter than water, lets it swim without drowning.", 250, 4, 106, 90, 111, 92, "Marill", "Marill", 1010, 1017, 183, 85 },
+                    { 1220, 1002, 189, "By keeping still and listening intently, it can even tell how close it is to evolving.", 250, 8, 106, 90, 111, 92, "Azumarill", "Azumarill", 1010, 1017, 184, 285 },
+                    { 1221, 1002, 144, "It disguises itself as a tree to avoid attack. It hates water, so it will disappear if it starts raining.", 250, 12, 47, 59, 95, 60, "Sudowoodo", "Sudowoodo", 1005, 1018, 185, 380 },
+                    { 1222, 1002, 225, "Whenever three or more of these get together, they sing in a loud voice that sounds like bellowing.", 250, 11, 106, 90, 111, 92, "Politoed", "Politoed", 1010, 1018, 186, 339 },
+                    { 1223, 1002, 50, "It drifts on winds. It is said that when Hoppip gather in fields and mountains, spring is on the way.", 250, 4, 110, 121, 124, 120, "Hoppip", "Hoppip", 1011, 1002, 187, 5 },
+                    { 1224, 1002, 119, "It blooms when the weather warms. It floats in the sky to soak up as much sunlight as possible.", 250, 6, 110, 121, 124, 120, "Skiploom", "Skiploom", 1011, 1002, 188, 10 },
+                    { 1225, 1002, 203, "Once it catches the wind, it deftly controls its cotton-puff spores to float, even around the world.", 250, 8, 110, 121, 124, 120, "Jumpluff", "Jumpluff", 1011, 1002, 189, 30 },
+                    { 1226, 1014, 72, "It lives atop tall trees. When leaping from branch to branch, it deftly uses its tail for balance.", 250, 8, 98, 69, 63, 72, "Aipom", "Aipom", 1000, 1018, 190, 115 },
+                    { 1227, 1002, 36, "It lives by drinking only dewdrops from under the leaves of plants. It is said that it eats nothing else.", 250, 3, 110, 121, 124, 120, "Sunkern", "Sunkern", 1011, 1018, 191, 18 },
+                    { 1228, 1002, 149, "It converts sun light into energy. In the darkness after sunset, it closes its petals and becomes still.", 250, 8, 110, 121, 124, 120, "Sunflora", "Sunflora", 1011, 1018, 192, 85 },
+                    { 1229, 1028, 78, "Its large eyes can scan 360 degrees. It looks in all directions to seek out insects as its prey.", 250, 12, 65, 66, 21, 67, "Yanma", "Yanma", 1006, 1002, 193, 380 },
+                    { 1230, 1002, 42, "When walking on land, it covers its body with a poisonous film that keeps its skin from dehydrating.", 250, 4, 44, 42, 89, 88, "Wooper", "Wooper", 1010, 1004, 194, 85 },
+                    { 1231, 1012, 151, "It has a sluggish nature. It lies at the river's bottom, waiting for prey to stray into its mouth.", 250, 14, 44, 42, 89, 88, "Quagsire", "Quagsire", 1010, 1004, 195, 750 },
+                    { 1232, 1019, 184, "It uses the fine hair that covers its body to sense air currents and predict its enemy's actions.", 250, 9, 120, 17, 101, 18, "Espeon", "Espeon", 1013, 1018, 196, 265 },
+                    { 1233, 1019, 184, "When darkness falls, the rings on the body begin to glow, striking fear in the hearts of anyone nearby.", 250, 10, 8, 26, 21, 29, "Umbreon", "Umbreon", 1016, 1018, 197, 270 },
+                    { 1234, 1019, 81, "It is said that when chased, it lures its attacker onto dark mountain trails where the foe will get lost.", 250, 5, 102, 26, 21, 29, "Murkrow", "Murkrow", 1016, 1002, 198, 21 },
+                    { 1235, 1034, 172, "Every time it yawns, Shellder injects more poison into it. The poison makes it more intelligent.", 250, 20, 74, 20, 75, 21, "Slowking", "Slowking", 1010, 1013, 199, 795 },
+                    { 1236, 1026, 87, "It likes playing mischievous tricks such as screaming and wailing to startle people at night.", 250, 7, 40, 35, 36, 37, "Misdreavus", "Misdreavus", 1007, 1018, 200, 10 },
+                    { 1237, 1002, 118, "Their shapes look like hieroglyphs on ancient tablets. It is said the two are somehow related.", 250, 5, 1, 17, 107, 18, "Unown", "Unown", 1013, 1018, 201, 50 },
+                    { 1238, 1002, 142, "It hates light and shock. If attacked, it inflates its body to pump up its counterstrike.", 250, 13, 40, 35, 36, 37, "Wobbuffet", "Wobbuffet", 1013, 1018, 202, 285 },
+                    { 1239, 1019, 159, "Its tail has a small brain of its own. Beware! If you get close, it may react to your scent and bite.", 250, 15, 120, 17, 119, 18, "Girafarig", "Girafarig", 1013, 1000, 203, 415 },
+                    { 1240, 1002, 58, "It likes to make its shell thicker by adding layers of tree bark. The additional weight doesn't bother it.", 250, 6, 103, 66, 1, 67, "Pineco", "Pineco", 1006, 1018, 204, 72 },
+                    { 1241, 1002, 163, "It keeps itself inside its steel shell. The shell is opened when it is catching prey, but it is so quick that the shell's inside cannot be seen.", 250, 12, 103, 66, 1, 67, "Forretress", "Forretress", 1006, 1008, 205, 1258 },
+                    { 1242, 1002, 145, "It has a drill for a tail. It uses this tail to burrow into the ground backwards. This Pokémon is known to make its nest in complex shapes deep under the ground.", 250, 15, 86, 1, 83, 80, "Dunsparce", "Dunsparce", 1000, 1018, 206, 140 },
+                    { 1243, 1027, 86, "It glides without making a single sound. It grasps the face of its foe using its hind and large front claws, then stabs with its poison barb.", 250, 11, 85, 46, 81, 41, "Gligar", "Gligar", 1004, 1002, 207, 648 },
+                    { 1244, 1002, 179, "It is said that if an Onix lives for over 100 years, its composition changes to become diamond-like.", 250, 92, 47, 59, 95, 60, "Steelix", "Steelix", 1008, 1004, 208, 4000 },
+                    { 1245, 1018, 60, "By baring its fangs and making a scary face, Snubbull sends smaller Pokémon scurrying away in terror. However, this Pokémon seems a little sad at making its foes flee.", 250, 6, 102, 26, 21, 29, "Snubbull", "Snubbull", 1016, 1018, 209, 78 },
+                    { 1246, 1018, 158, "It is actually timid and easily spooked. If attacked, it flails about to fend off its attacker.", 250, 14, 102, 26, 21, 29, "Granbull", "Granbull", 1016, 1018, 210, 487 },
+                    { 1247, 1027, 88, "It shoots the poison spines on its body in all directions. Its round form makes it a poor swimmer.", 250, 5, 56, 53, 89, 88, "Qwilfish", "Qwilfish", 1010, 1003, 211, 39 },
+                    { 1248, 1003, 175, "It swings its eye-patterned pincers up to scare its foes. This makes it look like it has three heads.", 250, 18, 53, 65, 51, 26, "Scizor", "Scizor", 1006, 1008, 212, 1180 },
+                    { 1249, 1006, 177, "The berries it stores in its vase-like shell decompose and become a gooey liquid.", 250, 6, 47, 59, 95, 60, "Shuckle", "Shuckle", 1006, 1005, 213, 205 },
+                    { 1250, 1002, 175, "This powerful Pokémon thrusts its prized horn under its enemies' bellies then lifts and throws them.", 250, 15, 64, 71, 65, 69, "Heracross", "Heracross", 1006, 1001, 214, 540 },
+                    { 1251, 1019, 86, "It feeds on eggs stolen from nests. Its sharply hooked claws rip vulnerable spots on prey.", 250, 9, 74, 26, 21, 29, "Sneasel", "Sneasel", 1016, 1014, 215, 280 },
+                    { 1252, 1018, 66, "It always licks honey. Its palm tastes sweet because of all the honey it has absorbed.", 250, 6, 102, 26, 21, 29, "Teddiursa", "Teddiursa", 1000, 1018, 216, 88 },
+                    { 1253, 1018, 175, "Although it is a good climber, it prefers to snap trees with its forelegs and eat fallen Berries.", 250, 18, 102, 26, 21, 29, "Ursaring", "Ursaring", 1000, 1018, 217, 1258 },
+                    { 1254, 1016, 50, "It is a species of Pokémon that lives in volcanic areas. If its body cools, its skin hardens and immobilizes it.", 250, 7, 127, 7, 126, 16, "Slugma", "Slugma", 1009, 1018, 218, 350 },
+                    { 1255, 1016, 151, "Its brittle shell occasionally spouts intense flames that circulate throughout its body.", 250, 8, 127, 7, 126, 16, "Magcargo", "Magcargo", 1009, 1005, 219, 550 },
+                    { 1256, 1018, 50, "It rubs its snout on the ground to find and dig up food. It sometimes discovers hot springs.", 250, 4, 78, 46, 76, 41, "Swinub", "Swinub", 1014, 1004, 220, 65 },
+                    { 1257, 1018, 158, "It has a very sensitive nose. It can locate mushrooms, berries, and even hot springs buried under ice.", 250, 11, 78, 46, 76, 41, "Piloswine", "Piloswine", 1014, 1004, 221, 558 },
+                    { 1258, 1018, 133, "It continuously sheds and grows. The tip of its head is prized as a treasure for its beauty.", 250, 6, 56, 53, 89, 88, "Corsola", "Corsola", 1010, 1005, 222, 50 },
+                    { 1259, 1018, 60, "It has superb accuracy. The water it shoots out can strike even moving prey from more than 300 feet.", 250, 6, 92, 87, 89, 88, "Remoraid", "Remoraid", 1010, 1018, 223, 120 },
+                    { 1260, 1018, 168, "It traps enemies with its suction-cupped tentacles then smashes them with its rock-hard head.", 250, 9, 92, 87, 89, 88, "Octillery", "Octillery", 1010, 1018, 224, 285 },
+                    { 1261, 1018, 116, "It carries food bundled up in its tail. There was a famous explorer who managed to scale Mt. Everest thanks to a Delibird sharing its food.", 250, 9, 82, 24, 84, 74, "Delibird", "Delibird", 1014, 1002, 225, 160 },
+                    { 1262, 1018, 170, "It swims along with a school of Remoraid. It leaps out of the water and catches prey Pokémon with its mouth.", 250, 21, 92, 87, 89, 88, "Mantine", "Mantine", 1010, 1002, 226, 2200 },
+                    { 1263, 1001, 163, "Its sturdy wings look heavy, but they are actually hollow and light, allowing it to fly freely in the sky.", 250, 17, 47, 59, 95, 60, "Skarmory", "Skarmory", 1008, 1002, 227, 505 },
+                    { 1264, 1018, 66, "It uses different kinds of cries for communicating with others of its kind and for pursuing its prey.", 250, 6, 102, 26, 21, 29, "Houndour", "Houndour", 1016, 1009, 228, 108 },
+                    { 1265, 1018, 175, "Upon hearing its eerie howls, other Pokémon get the shivers and head straight back to their nests.", 250, 14, 102, 26, 21, 29, "Houndoom", "Houndoom", 1016, 1009, 229, 350 },
+                    { 1266, 1009, 243, "It sleeps quietly, deep on the seafloor. When it comes up to the surface, it creates a huge whirlpool that can swallow even ships.", 250, 18, 34, 87, 89, 88, "Kingdra", "Kingdra", 1010, 1015, 230, 1520 },
+                    { 1267, 1032, 66, "It swings its long snout around playfully, but because it is so strong, that can be dangerous.", 250, 5, 44, 42, 43, 41, "Phanpy", "Phanpy", 1004, 1018, 231, 335 },
+                    { 1268, 1032, 175, "It has sharp, hard tusks and a rugged hide. Its Tackle is strong enough to knock down a house.", 250, 11, 44, 42, 43, 41, "Donphan", "Donphan", 1004, 1018, 232, 1200 },
+                    { 1269, 1002, 180, "Further research enhanced its abilities. Sometimes, it may exhibit motions that were not programmed.", 250, 6, 1, 17, 107, 18, "Porygon2", "Porygon2", 1000, 1018, 233, 325 },
+                    { 1270, 1018, 163, "The curved antlers subtly change the flow of air to create a strange space where reality is distorted.", 250, 14, 102, 26, 21, 29, "Stantler", "Stantler", 1000, 1018, 234, 712 },
+                    { 1271, 1018, 88, "A special fluid oozes from the tip of its tail. It paints the fluid everywhere to mark its territory.", 250, 12, 102, 26, 21, 29, "Smeargle", "Smeargle", 1000, 1018, 235, 580 },
+                    { 1272, 1003, 42, "It is always bursting with energy. To make itself stronger, it keeps on fighting even if it loses.", 250, 7, 72, 68, 73, 69, "Tyrogue", "Tyrogue", 1001, 1018, 236, 210 },
+                    { 1273, 1003, 159, "If you become enchanted by its smooth, elegant, dance-like kicks, you may get drilled hard.", 250, 14, 72, 68, 73, 69, "Hitmontop", "Hitmontop", 1001, 1018, 237, 480 },
+                    { 1274, 1028, 61, "Its lips are the most sensitive parts on its body. It always uses its lips first to examine things.", 250, 4, 1, 17, 107, 18, "Smoochum", "Smoochum", 1014, 1013, 238, 60 },
+                    { 1275, 1028, 72, "It generates electricity by whirling its arms. However, it can't store the energy it makes.", 250, 6, 114, 117, 116, 85, "Elekid", "Elekid", 1012, 1018, 239, 235 },
+                    { 1276, 1028, 73, "It is found in volcanic craters. Its body temp. is over 1100 degrees, so don't underestimate it.", 250, 7, 127, 7, 126, 16, "Magby", "Magby", 1009, 1018, 240, 214 },
+                    { 1277, 1018, 172, "It gives over five gallons of milk daily. Its sweet milk is enjoyed by children and grown-ups alike. People who can't drink milk turn it into yogurt and eat it instead.", 250, 12, 102, 26, 21, 29, "Miltank", "Miltank", 1000, 1018, 241, 755 },
+                    { 1278, 1018, 608, "It has a very compassionate nature. If it sees a sick Pokémon, it will nurse the sufferer back to health.", 250, 15, 102, 26, 21, 29, "Blissey", "Blissey", 1000, 1018, 242, 468 },
+                    { 1279, 1023, 60, "It feeds on soil. After it has eaten a large mountain, it will fall asleep so it can grow.", 250, 6, 29, 59, 28, 60, "Larvitar", "Larvitar", 1005, 1004, 246, 720 },
+                    { 1280, 1023, 144, "Its shell is as hard as sheet rock, and it is also very strong. Its THRASHING can topple a mountain.", 250, 12, 29, 59, 28, 60, "Pupitar", "Pupitar", 1005, 1004, 247, 1520 },
+                    { 1281, 1023, 270, "Its body can't be harmed by any sort of attack, so it is very eager to make challenges against enemies.", 250, 20, 29, 59, 28, 60, "Tyranitar", "Tyranitar", 1005, 1004, 248, 2020 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1177,6 +1597,16 @@ namespace PokemonCatcherGame.Server.Migrations
                 column: "PlayerInventoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_InventoryHealthItems_HealthItemId",
+                table: "InventoryHealthItems",
+                column: "HealthItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryHealthItems_PlayerItemInventoryId",
+                table: "InventoryHealthItems",
+                column: "PlayerItemInventoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Keys_Use",
                 table: "Keys",
                 column: "Use");
@@ -1200,6 +1630,11 @@ namespace PokemonCatcherGame.Server.Migrations
                 name: "IX_PersistedGrants_SubjectId_SessionId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerEntityPlayerPokemonEntity_PlayerId",
+                table: "PlayerEntityPlayerPokemonEntity",
+                column: "PlayerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlayerEntityPokemonEntity_PlayerId",
@@ -1227,9 +1662,44 @@ namespace PokemonCatcherGame.Server.Migrations
                 column: "TMsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Players_ItemIventoryId",
+                name: "IX_PlayerPokemon_AbilityId",
+                table: "PlayerPokemon",
+                column: "AbilityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerPokemon_MoveFourId",
+                table: "PlayerPokemon",
+                column: "MoveFourId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerPokemon_MoveOneId",
+                table: "PlayerPokemon",
+                column: "MoveOneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerPokemon_MoveThreeId",
+                table: "PlayerPokemon",
+                column: "MoveThreeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerPokemon_MoveTwoId",
+                table: "PlayerPokemon",
+                column: "MoveTwoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerPokemon_PokeTypeIdOne",
+                table: "PlayerPokemon",
+                column: "PokeTypeIdOne");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerPokemon_PokeTypeIdTwo",
+                table: "PlayerPokemon",
+                column: "PokeTypeIdTwo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Players_ItemInventoryId",
                 table: "Players",
-                column: "ItemIventoryId");
+                column: "ItemInventoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Players_UserId",
@@ -1312,10 +1782,16 @@ namespace PokemonCatcherGame.Server.Migrations
                 name: "HealthItemEntityPlayerItemInventoryEntity");
 
             migrationBuilder.DropTable(
+                name: "InventoryHealthItems");
+
+            migrationBuilder.DropTable(
                 name: "Keys");
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");
+
+            migrationBuilder.DropTable(
+                name: "PlayerEntityPlayerPokemonEntity");
 
             migrationBuilder.DropTable(
                 name: "PlayerEntityPokemonEntity");
@@ -1339,7 +1815,10 @@ namespace PokemonCatcherGame.Server.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "HealthRestoratinItems");
+                name: "HealthRestorationItems");
+
+            migrationBuilder.DropTable(
+                name: "PlayerPokemon");
 
             migrationBuilder.DropTable(
                 name: "Players");

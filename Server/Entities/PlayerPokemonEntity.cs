@@ -64,8 +64,9 @@ public class PlayerPokemonEntity
     public virtual PokemonAbilityEntity Ability { get; set; }
 
     public  virtual ICollection<PlayerEntity> Player { get; set; }
-
+    
     public PlayerPokemonEntity()
+
     {
         Player = new HashSet<PlayerEntity>();
     }

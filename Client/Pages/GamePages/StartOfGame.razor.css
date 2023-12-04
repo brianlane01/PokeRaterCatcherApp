@@ -1,0 +1,53 @@
+#nameField{
+   
+}
+
+#nameLabel{
+    padding-bottom: 2rem;
+}
+
+#welcomeHeader{
+    margin: 3rem;
+}
+
+#cardForEnteringName{
+    margin: 2rem;
+}
+
+#pokeTable{
+    margin-left: 5px;
+    padding: 1rem;
+    background-color: rgba(9, 197, 226, 0.436);
+    border: 5px solid rgb(11, 104, 59);
+    color: rgb(23, 177, 194);
+    text-align: center;
+    font-size: larger;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url("https://images.pexels.com/photos/1000366/pexels-photo-1000366.jpeg?auto=compress&cs=tinysrgb&w=1200");
+}
+
+#pokeCardTitle{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    padding: auto;
+    color: rgb(3, 3, 3);
+    font-weight: bolder;
+}
+
+#playerSubmit{
+    margin-top: 1rem;
+    margin-left: 2rem;
+    padding: auto;
+    color: rgb(10, 174, 127);
+    font-weight: bolder;
+}
+
+#submitButton{
+    margin-top: 1rem;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    padding: auto;
+    color: rgb(10, 174, 127);
+    font-weight: bolder;
+}
