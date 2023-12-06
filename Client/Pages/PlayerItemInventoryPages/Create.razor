@@ -9,7 +9,7 @@
 @using PokemonCatcherGame.Shared.Models.RejuvenationItemModels
 @using PokemonCatcherGame.Shared.Models.StatusConditionItemModels 
 @using PokemonCatcherGame.Shared.Models.TechnicalMachineMovesModels
-@using Microsoft.Fast.Components.FluentUI
+
 
 <PageTitle>CreateInventory</PageTitle>
 
@@ -565,8 +565,8 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
     private const int PageSize = 10;
 
     string activeId = "accordion-1";
-    FluentAccordionItem? changed;
-    
+    Microsoft.Fast.Components.FluentUI.FluentAccordionItem? changed;
+
     protected override async Task OnInitializedAsync()
     {
         await LoadDataForPokeBalls();
@@ -766,7 +766,7 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
         }
     }
 
-    private void HandleOnAccordionItemChange(FluentAccordionItem item)
+    private void HandleOnAccordionItemChange(Microsoft.Fast.Components.FluentUI.FluentAccordionItem item)
     {
         changed = item;
     }

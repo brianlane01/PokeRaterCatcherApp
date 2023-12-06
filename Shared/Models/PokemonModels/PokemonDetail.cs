@@ -35,19 +35,22 @@ public class PokemonDetail
     public int MoveOneId { get; set; } //* This is the id of the move and the foriegn key to the PokemonMove table
     public string MoveOneName { get; set; } = string.Empty; //* This is the name of the move
     public string MoveOneDescription { get; set; } = string.Empty; //* This is the description of the move
+    public int MoveOnePower { get; set; } //* This is the power of the move
 
     public int MoveTwoId { get; set; } //* This is the id of the  second move a pokemon can have and the foriegn key to the PokemonMove table
     public string MoveTwoName { get; set; } = string.Empty; //* This is the name of the second move a pokemon can have
     public string MoveTwoDescription { get; set; } = string.Empty; //* This is the description of the second move a pokemon can have.
+    public int MoveTwoPower { get; set; } //* This is the power of the second move a pokemon can have
 
     public int MoveThreeId { get; set; } //* This is the id of the third move a pokemon can have and the foriegn key to the PokemonMove table
     public string MoveThreeName { get; set; } = string.Empty; //* This is the name of the third move a pokemon can have
     public string? MoveThreeDescription { get; set; } = string.Empty; //* This is the description of the third move a pokemon can have.
+    public int MoveThreePower { get; set; } //* This is the power of the third move a pokemon can have
 
     public int? MoveFourId { get; set; } //* This is the id of the fourth move a pokemon can have and the foriegn key to the PokemonMove table. It is nullable because a pokemon may not have a fourth move.
     public string? MoveFourName { get; set; } = string.Empty; //* This is the name of the fourth move a pokemon can have. It is nullable because a pokemon may not have a fourth move.
     public string? MoveFourDescription { get; set; } = string.Empty; //* This is the description of the fourth move a pokemon can have. It is nullable because a pokemon may not have a fourth move.
-
+    public int? MoveFourPower { get; set; } //* This is the power of the fourth move a pokemon can have. It is nullable because a pokemon may not have a fourth move.
 
     //* These are the names and descriptions of the abilities and teachable moves
     //* that the pokemon has. They are not stored in the Pokemon Table, but are

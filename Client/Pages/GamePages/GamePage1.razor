@@ -1,0 +1,729 @@
+@page "/GamePage1"
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@inject HttpClient httpClient
+@attribute [Authorize]
+@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.RenderTree
+@using System.Text.Json
+
+<h3>Game Page</h3>
+
+@if (!gameStarted)
+{
+<div class = "row">
+    <div class ="col mx-auto justify-content-between">
+        <form class ="form-inline" @onsubmit ="GetPlayerAsync">
+            <div class = "form-group mb-2">
+                <p>To begin trainer What is your name?</p>
+                <input type = "text" @bind-value="@searchText" class="form-control" placeholder="Search Player" id="searchInput">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2 ml-auto" @onclick="StartGame">Find</button>
+        </form>
+    </div>
+</div>
+}
+else if (CurrentScene == "Continue exploring the cave") 
+{
+    <div class="container" id="firstTrainerContianer">
+        <p id="firstTrainerEncounterDescription">@CurrentSceneDescription</p>
+        @if (CurrentSceneOptions != null)
+        {   
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAd6ZAEoxDMYuxV6c9SWL5Sirfg3FvtegVGQ&usqp=CAU" id="itATrap" />
+            <iframe width="1128" height="634" src="https://www.youtube.com/embed/0GBvhZgmYPY" title="Admiral Ackbar &#39;It&#39;s A Trap!&#39; Star Wars Episode VI Return of the Jedi" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <p>What would you like to do?</p>
+            @foreach (var option in CurrentSceneOptions)
+            {
+                <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                <br>
+            }
+        }
+    </div>
+    <br>
+}
+else 
+{
+    <div>
+        <audio id="PokeThemeMusic">
+                <source src="https://soundcloud.com/pokemon-gameboy-music/oaks-theme-1?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" type="audio/mpeg">
+        </audio>
+        <p>@CurrentSceneDescription</p>
+        @if (CurrentSceneOptions != null)
+        {  
+            <p>What would you like to do?</p>
+            @foreach (var option in CurrentSceneOptions)
+            {
+                <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                <br>
+            }
+        }
+    </div>
+    <br>
+}
+
+@code {
+
+    public PlayerDetail? Player { get; set;}
+    public PlayerInventoryDetail? PlayersInventory { get; set; }
+    public PokemonDetail? encounteredPokemon { get; set; }
+    public int encounteredPokeHealth { get; set; } = 0;
+
+    public int damage { get; set; }
+
+// this is where we will store the player's pokemon that they have in there current party
+
+    public PokemonDetail? playerPoke1 { get; set; }
+    public PokemonDetail? playerPoke2 { get; set; }
+    public PokemonDetail? playerPoke3 { get; set; }
+    public PokemonDetail? playerPoke4 { get; set; }
+    public PokemonDetail? playerPoke5 { get; set; }
+    public PokemonDetail? playerPoke6 { get; set; }
+
+//---------------------------------------------------------
+
+
+//---------------------------------------------------------
+@** This is where the healths for the pokemon will be stored *@
+    public int playerPoke1Health { get; set; } = 0;
+    public int playerPoke2Health { get; set; } = 0;
+    public int playerPoke3Health { get; set; } = 0;
+    public int playerPoke4Health { get; set; } = 0;
+    public int playerPoke5Health { get; set; } = 0;
+    public int playerPoke6Health { get; set; } = 0;
+
+//---------------------------------------------------------
+
+
+    public string? searchText;
+    public bool IsLoading {get; set;}
+    private string? errorMessage;
+
+    private bool gameStarted = false;
+    private List<string> messages = new List<string>();
+    private int currentStep = 0;
+    private bool showContinueButton = false;
+
+    string CurrentScene = "";
+    string CurrentSceneDescription = "";
+    Dictionary<string, string> CurrentSceneOptions;
+
+
+    public int playerPokemonCount = 0;
+    
+    private enum BattleState
+    {
+        NotStarted,
+        Fighting,
+        Victory,
+        Defeat
+    }
+    private BattleState currentBattleState = BattleState.NotStarted;
+
+
+    protected async Task GetPlayerAsync()
+    {
+        if (string.IsNullOrEmpty(searchText))
+        {
+            // Handle the case where searchText is null or empty.
+            // You can either return from the method or use a default value.
+            return;
+        }
+        IsLoading = true;
+        Player = await GetPlayerDetailAsync(searchText);
+
+        IsLoading = false;
+    }
+    public async Task<PlayerDetail?> GetPlayerDetailAsync(string name)
+    {
+        var result = await httpClient.GetFromJsonAsync<PlayerDetail>($"api/Player/DetailByName/{name}");
+        if (result?.Name.Length == 0)
+        {
+            return null;
+        }
+
+        return result;
+    }
+
+    private List<Option> options = new List<Option>
+    {
+        new Option { Name = "Option 1", Selected = false },
+        new Option { Name = "Option 2", Selected = false },
+        new Option { Name = "Option 3", Selected = false }
+    };
+
+    private class Option
+    {
+        public string Name { get; set; }
+        public bool Selected { get; set; }
+    }
+
+    void StartGame()
+    {
+        gameStarted = true; // Start the initial ste
+        SetScene("Player's Bedroom, Morning", $"Welcome to the region of Lanenopia. Your adventure is just beginning. Let's get up out of the bed and enter the magnificent world of Pokémon!", new Dictionary<string, string> { { "GoDownstairs", "Go downstairs" } });
+    }
+    void SetScene(string scene, string description, Dictionary<string, string> options = null)
+    {
+        CurrentScene = scene;
+        CurrentSceneDescription = description;
+        CurrentSceneOptions = options;
+    }
+
+    private void Clear()
+    {
+        messages.Clear();
+    }
+
+    void ChooseOption(string optionKey)
+    {
+        switch (CurrentScene)
+        {
+            case "Player's Bedroom, Morning":
+                HandlePlayerBedroomOptionGoDownStairs(optionKey);
+                break;
+            case "Conversation with Mom":
+                HandleLeaveHomeOption(optionKey);
+                break;
+            case "On the streets of Whispering Pines":
+                HandleLeaveCityOption(optionKey);
+                break;
+            case "Leave the city of Whispering Pines":
+                HandleFirstPokeBattleOption(optionKey);
+                break;
+            case "The Wilds Next to Whispering Pines":
+                HandleFirstPokeBattleOption(optionKey);
+                break;
+            case "Engage with first Pokemon":
+                ChooseBattleAction(optionKey);
+                break;
+            case "Fight":
+                AttackPokemonAsync(optionKey);
+                break;
+            case "Battle":
+                ChooseMove(optionKey);
+                break;
+            case "BattleSituation":
+                AttackPokemonAsync(optionKey);
+                break;
+            case "Battle Loss":
+                ContinueAdventureAfterFirstLoss(optionKey);
+                break;
+            case "Back On the Path to Starhaven":
+                HandleLeaveCityOption(optionKey);
+                break;
+            case "Battle Win":
+                ContinueAfterFirstWin(optionKey);
+                break;
+
+            case "Continue On To Starhaven":
+                HandleUserChoiceAferFirstWin(optionKey);
+                break;
+
+            case "Go Into the cave to look for Pokémon":
+                WhisperingPinesCavePokéBallChoice(optionKey);
+                break;
+
+            case "Look in the Poké Ball":
+                ContinueExploringWhisperingCave(optionKey);
+                break;
+        }
+    }
+
+    void HandlePlayerBedroomOptionGoDownStairs(string optionKey)
+    {
+        switch (optionKey)
+        {
+            case "GoDownstairs":
+                SetScene("Conversation with Mom", $"Mom: (warmly) Good morning! Today's the day you start your Pokémon journey!  You have already selected your starter Pokémon so the Professor said you are ready to set out on your journey to become the next Pokémon master. I packed your bag, and your new adventure hat is on the table. Don't forget to say goodbye to the Professor at the lab. Now, off you go! The world of Pokémon awaits!", new Dictionary<string, string> { { "LeaveHome", "Begin your Adventure" } });
+                break;
+            // Add more cases as needed
+        }
+    }
+
+    void HandleLeaveHomeOption(string optionKey)
+    {
+        switch (optionKey)
+        {
+            case "LeaveHome":
+                SetScene("On the streets of Whispering Pines", "You begin making your way through the busy streets of Whispering Pines trying to make it to the route that will lead you to your first Gym battle in the city of Starhaven. As you reach the outskirts of the city you look back at the city for a long while as you wonder about the battles ahead of you. With that last look you leave the confines of your childhood and set forth in to wilds of Lanenopia.", new Dictionary<string, string> { { "ExitWhisperingPines", "Leave the city of Whispering Pines" } });
+                break;
+        }
+    }
+
+    void HandleLeaveCityOption(string optionKey)
+    {
+        switch (optionKey)
+        {
+            case "ExitWhisperingPines":
+                SetScene("The Wilds Next to Whispering Pines", "As you begin exploring you think to yourself: Wow, this place is amazing! I can feel the excitement in the air. I've been waiting for this moment for so long. At that momment: [The grass begins to move as something charges to you]. A Pokémon begins to emerge from the tall grass next to you...... ", new Dictionary<string, string> { { "FirstBattleEncounter", "Engage with first Pokemon" } });
+                break;
+        }
+    }
+
+    async Task HandleFirstPokeBattleOption(string optionKey)
+    {
+        switch (optionKey)
+        {
+            case "FirstBattleEncounter":
+            // Generate a random number between 1001 and 1281
+            int pokemonId = new Random().Next(1001, 1282);
+
+            // Make the API call to retrieve the Pokémon
+            // Assume a method GetPokemonFromApi is used for the API call
+            encounteredPokemon = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemonId}");
+            if(encounteredPokemon != null)
+                encounteredPokeHealth = encounteredPokemon.Health;
+
+            // Check if the API call was successful and proceed with the encounter
+            if (encounteredPokemon != null)
+            {
+                currentBattleState = BattleState.Fighting;
+                SetScene("Engage with first Pokemon", $"You have encountered a wild {encounteredPokemon.Name}! What will you do?", new Dictionary<string, string> { { "Fight", "Fight" }, { "Run", "Run" } });
+            }       
+            else
+            {
+                // Handle the case where the API call fails
+                SetScene("Failed Encounter", "Oops! Something went wrong during the encounter. Please try again.", null);
+            }
+
+            break;
+        }
+    }
+
+    private enum BattleAction
+    {
+        Attack,
+        SwitchPokemon,
+        UseItem,
+        Run
+    }
+
+    private BattleAction currentPlayerAction;
+
+    async Task ChooseBattleAction(string optionKey)
+    {
+        switch (optionKey)
+        {
+            case "Fight":
+            await GetPlayerAsync();
+            await SetPartyPokemon();
+            // Display available moves for the player to choose
+            SetScene("Fight", $"You send out {playerPoke1.Name} to fight {encounteredPokemon.Name}! Choose your action: ", new Dictionary<string, string> 
+            {
+                { "Attack", "Attack" },
+                { "Switch Pokemon", "Switch Pokemon" }, 
+                {"Use Item", "Use Item"}, 
+                { "Run", "Run" }
+            });
+            break;
+        }
+    }
+
+    async Task AttackPokemonAsync(string optionKey)
+    {
+        GetPlayerAsync();
+        SetPartyPokemon();
+        switch (optionKey)
+        {
+            case "Attack":
+            currentPlayerAction = BattleAction.Attack;
+            // Display available moves for the player to choose
+            SetScene("Battle", $"Choose the move you would like to use against {encounteredPokemon.Name}: ", new Dictionary<string, string> 
+            {
+                { "MoveOne", playerPoke1.MoveOneName },
+                { "MoveTwo", playerPoke1.MoveTwoName }, 
+                { "MoveThree", playerPoke1.MoveThreeName}, 
+                { "MoveFour", playerPoke1.MoveFourName }
+            });
+            break;
+        }
+    }
+
+    async Task ChooseMove(string moveKey)
+    {
+        // Implement logic based on the player's chosen move
+        // For simplicity, let's assume the player always successfully uses the move
+        // You would need to implement actual damage calculation and move effects
+        GetPlayerAsync();
+        SetPartyPokemon();
+        int movePower = 0;
+        string moveName = string.Empty;
+        switch (moveKey)
+        {
+            case "MoveOne":
+                movePower = playerPoke1.MoveOnePower;
+                moveName = playerPoke1.MoveOneName;
+                break;
+
+            case "MoveTwo":
+                movePower = playerPoke1.MoveTwoPower;
+                moveName = playerPoke1.MoveTwoName;
+                break;
+
+            case "MoveThree":
+                movePower = playerPoke1.MoveThreePower;
+                moveName = playerPoke1.MoveThreeName;
+                break;
+
+            case "MoveFour":
+                movePower = playerPoke1.MoveFourPower ?? 0;
+                moveName = playerPoke1.MoveFourName ?? string.Empty;
+                break;
+
+        } 
+            if (encounteredPokeHealth <= 0)
+            {
+                currentBattleState = BattleState.Victory;
+                SetScene("Battle", $"You defeated the wild {encounteredPokemon.Name}! Congratulations!");
+            }
+            else
+            {
+                // Implement logic for the wild Pokemon's attack
+                int opponentMoveIndex = new Random().Next(1, 4); // Choose a random move for the opponent
+                int opponentMovePower = GetOpponentMovePower(opponentMoveIndex);
+                int opponentDamage = CalculateDamage(opponentMovePower);
+                playerPoke1Health -= opponentDamage;
+                damage = CalculateDamage(movePower);
+                encounteredPokeHealth -= damage ;
+                if (encounteredPokeHealth <= 0)
+                {
+                    SetScene("Battle Win", $"You defeated the wild {encounteredPokemon.Name}! Congratulations! You have earned 100 XP and 100 Pokécoins! Now you can continue on your journey to Starhaven.", new Dictionary<string, string>
+                        {
+                        { "ContinueAfterFirstWin", "Continue On To Starhaven" }
+                    });
+                }
+                else if (playerPoke1Health <= 0)
+                {
+                    currentBattleState = BattleState.Defeat;
+                    SetScene("Battle Loss", $"Your {playerPoke1.Name} has fainted! You are out of usable Pokémon. You black out... ... . Later, you wake up in the Pokémon Center. The nurse tells you that your Pokémon have been fully healed. You feel a bit better and decide to continue your journey.", new Dictionary<string, string>
+                        {
+                        { "Continue", "Continue" }
+                    });
+
+                }
+                else
+                {
+                    Console.WriteLine($"Opponent Pokemon Health after player's attack: {encounteredPokeHealth}");
+
+                    Console.WriteLine($"Player's Pokemon Health after opponent's attack: {playerPoke1Health}");
+                
+                    SetScene("BattleSituation", $"You used {moveName} against {encounteredPokemon.Name}! Your {playerPoke1.Name} has {playerPoke1Health} HP left and {encounteredPokemon.Name} has {encounteredPokeHealth} HP left. What will you do?", new Dictionary<string, string> 
+                    { 
+                        { "Attack", "Attack" }, 
+                        { "Switch Pokemon", "Switch Pokemon" }, 
+                        { "Use Item", "Use Item" }, 
+                        { "Run", "Run" } 
+                    });
+                }
+        }
+        
+    }
+
+    public void ContinueAdventureAfterFirstLoss(string optionKey)
+    {
+        switch (optionKey)
+        {
+            case "Continue":
+                SetScene("Back On the Path to Starhaven", 
+                    "After your first loss you are more determined than ever to train up your Pokémon and become a Pokémon Master. " +
+                    "You continue on your way looking for Pokémon to battle and any Trainers to test your mettle against. " +
+                    "As you are making your way to Starhaven you see a cave in the distance. " +
+                    "You know that caves are a great place to find Pokémon and Trainers to battle. " +
+                    "But you also know that caves can be dangerous places, and you are eager to reach Starhaven.... What will you do? ", 
+                    new Dictionary<string, string> { { "EnterTheCave", "Go Into the cave to look for Pokémon" }, { "ContinueOnToStarhaven", "Continue on your journey to Starhaven" } });
+                break;
+        }
+    }
+
+    public void ContinueAfterFirstWin(string optionKey)
+    {
+        switch (optionKey)
+        {
+            case "ContinueAfterFirstWin":
+                SetScene("Continue On To Starhaven", 
+                    "You continue on your way looking for Pokémon to battle and any Trainers to test your mettle against. " +
+                    "As you are making your way to Starhaven you see a cave in the distance. " +
+                    "You know that caves are a great place to find Pokémon and Trainers to battle. " +
+                    "But you also know that caves can be dangerous places, and you are eager to reach Starhaven.... What will you do?", 
+                    new Dictionary<string, string> { { "EnterTheCave", "Go Into the cave to look for Pokémon" }, { "ContinueOnToStarhaven", "Continue on your journey to Starhaven" } });
+                
+            break;// Add more cases as needed
+        }
+    }
+
+    public void HandleUserChoiceAferFirstWin(string optionKey)
+    {
+        switch (optionKey)
+        {
+            case "EnterTheCave":
+                EnterTheWhisperingPinesCave(optionKey);
+                break;
+            case "ContinueOnToStarhaven":
+                ContinueOnToStarhaven(optionKey);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void EnterTheWhisperingPinesCave(string optionKey)
+    {
+        switch(optionKey)
+        {
+            case "EnterTheCave":
+                GetPlayerAsync();
+                SetScene("Go Into the cave to look for Pokémon",
+                "You enter the cave and begin to look around. " +
+                "You see something shiny in the distance and begin to make your way towards it. " +
+                "As you get closer you see that it is what looks like a Poké Ball..." +
+                "Do you want to see what is in the Poké Ball or continue exploring the cave?", 
+                new Dictionary<string, string> { { "LookInPokéBall", "Look in the Poké Ball" }, { "ContinueExploring", "Continue exploring the cave" } });
+                break;
+        }
+    }
+
+    public void WhisperingPinesCavePokéBallChoice(string optionKey)
+    {
+        switch(optionKey)
+        {
+            case "LookInPokéBall":
+                OpenFirstPokéBallInWhisperingCave(optionKey);
+                break;
+            case "ContinueExploring":
+                ContinueExploringWhisperingCave(optionKey);
+                break;
+        }
+    }
+
+    public async void OpenFirstPokéBallInWhisperingCave(string optionKey)
+    {
+        switch(optionKey)
+        {
+            case "LookInPokéBall":
+                GetPlayerAsync();
+                int tmId = new Random().Next(1001, 1083);
+                TMDetail tm = await httpClient.GetFromJsonAsync<TMDetail>($"api/TM/{tmId}");
+                PlayerInventoryDetail? playerInventory = await httpClient.GetFromJsonAsync<PlayerInventoryDetail>($"api/PlayerInventory/{Player.ItemInventoryId}");
+                Console.WriteLine($"Player Inventory {playerInventory.Id} {tmId} is {tm.MoveName}");
+                PlayerInventoryEdit playerInventoryEdit = new PlayerInventoryEdit
+                {
+                    Id = playerInventory.Id,
+                    NameOfPlayer = playerInventory.NameOfPlayer,
+                    HealthItems = playerInventory.HealthItems,
+                    ReviveItems = playerInventory.ReviveItems,
+                    TMs = playerInventory.TMs,
+                    NumberOfPotions = playerInventory.NumberOfPotions,
+                    NumberOfSuperPotions = playerInventory.NumberOfSuperPotions,
+                    NumberOfHyperPotions = playerInventory.NumberOfHyperPotions,
+                    NumberOfMaxPotions = playerInventory.NumberOfMaxPotions,
+                    NumberOfRevives = playerInventory.NumberOfRevives,
+                    NumberOfMaxRevives = playerInventory.NumberOfMaxRevives,
+                    NumberOfPokeBalls = playerInventory.NumberOfPokeBalls,
+                    NumberOfGreatBalls = playerInventory.NumberOfGreatBalls,
+                    NumberOfUltraBalls = playerInventory.NumberOfUltraBalls,
+                    NumberOfMasterBalls = playerInventory.NumberOfMasterBalls,
+                    NumberOfAntidotes = playerInventory.NumberOfAntidotes,
+                    NumberOfParalyzeHeals = playerInventory.NumberOfParalyzeHeals,
+                    NumberOfAwakening = playerInventory.NumberOfAwakening,
+                    NumberOfBurnHeals = playerInventory.NumberOfBurnHeals,
+                    NumberOfIceHeals = playerInventory.NumberOfIceHeals,
+                    NumberOfFullHeals = playerInventory.NumberOfFullHeals,
+                    NumberOfEnergyPowder = playerInventory.NumberOfEnergyPowder,
+                    NumberOfEnergyRoot = playerInventory.NumberOfEnergyRoot,
+                    NumberOfHealPowder = playerInventory.NumberOfHealPowder,
+                    NumberOfRevivalHerb = playerInventory.NumberOfRevivalHerb,
+                    NumberOfSodaPop = playerInventory.NumberOfSodaPop,
+                    NumberOfLemonade = playerInventory.NumberOfLemonade,
+                    NumberOfMoomooMilk = playerInventory.NumberOfMoomooMilk,
+                    NumberOfBerryJuice = playerInventory.NumberOfBerryJuice,
+                    NumberOfSacredAsh = playerInventory.NumberOfSacredAsh,
+                    NumberOfRageCandyBar = playerInventory.NumberOfRageCandyBar,
+                    NumberOfLavaCookie = playerInventory.NumberOfLavaCookie,
+                    NumberOfCasteliacone = playerInventory.NumberOfCasteliacone,
+                    NumberOfOldGateau = playerInventory.NumberOfOldGateau,
+                    NumberOfShalourSable = playerInventory.NumberOfShalourSable,
+                    NumberOfLumioseGalette = playerInventory.NumberOfLumioseGalette,
+                    NumberOfFineRemendy = playerInventory.NumberOfFineRemendy,
+                    NumberOfSafariBall = playerInventory.NumberOfSafariBall,
+                    NumberOfPremierBall = playerInventory.NumberOfPremierBall,
+                    NumberOfRepeatBall = playerInventory.NumberOfRepeatBall,
+                    NumberOfTimerBall = playerInventory.NumberOfTimerBall,
+                    NumberOfNestBall = playerInventory.NumberOfNestBall,
+                    NumberOfNetBall = playerInventory.NumberOfNetBall,
+                    NumberOfDiveBall = playerInventory.NumberOfDiveBall,
+                    NumberOfLuxuryBall = playerInventory.NumberOfLuxuryBall,
+                    NumberOfHealBall = playerInventory.NumberOfHealBall,
+                    NumberOfQuickBall = playerInventory.NumberOfQuickBall,
+                    NumberOfDuskBall = playerInventory.NumberOfDuskBall,
+                    NumberOfCherishBall = playerInventory.NumberOfCherishBall,
+                    NumberOfFullRestore = playerInventory.NumberOfFullRestore,
+                    NumberOfFreshWater = playerInventory.NumberOfFreshWater,
+                };
+                
+                playerInventoryEdit.TMs.Add(tm.Id);
+                var createInventoryResponse = await httpClient.PostAsJsonAsync("api/PlayerInventory", playerInventoryEdit);
+                
+                if (createInventoryResponse.IsSuccessStatusCode)
+                {
+                    var createdInventory = await createInventoryResponse.Content.ReadFromJsonAsync<PlayerInventoryDetail>();
+                    Console.WriteLine("Inventory Created");
+                    foreach (var name in createdInventory.MoveNames)
+                    {
+                        Console.WriteLine($"TM in inventory: {name}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Inventory Not Created");
+                }
+                
+                SetScene("Look in the Poké Ball",
+                "You pick up the Poké Ball and open it. " +
+                $"You have found the TM {tm.MoveName}. " +
+                "You place the TM in your bag and continue exploring the cave.",
+                new Dictionary<string, string> { { "ContinueExploringTheCave", "Continue exploring the cave" } });
+                break;
+        }
+    }
+
+    public void ContinueExploringWhisperingCave(string  optionKey)
+    {
+        switch(optionKey)
+        {
+            case "ContinueExploringTheCave":
+                GetPlayerAsync();
+                SetScene("Continue exploring the cave",
+                "You continue exploring the cave. " +
+                "You see a light in the distance and begin to make your way towards it. " +
+                "As you get closer you see ...... " +
+                "IT'S A TRAP! " +
+                "A trainer jumps out from behind a rock and challenges you to a battle. " +
+                "Do you run away from this challenge or accept the challenge? ",
+                new Dictionary<string, string> { { "RunAway", "Run away from the challenge" }, { "AcceptChallenge", "Accept the challenge" } });
+                break;
+        }
+    }
+
+    public void ContinueOnToStarhaven(string optionKey)
+    {
+
+    }
+
+    int CalculateDamage(int movePower)
+    {
+        // Implement your damage calculation logic here
+        // For simplicity, let's assume a basic formula
+        int damage = movePower;
+        return damage >= 0 ? damage : 50;
+    }
+
+    int GetOpponentMovePower(int moveIndex)
+    {
+        // Implement logic to get the power of the opponent's move based on the moveIndex
+        // For simplicity, let's assume you have a method to get the opponent's move power
+        return GetOpponentMovePowerFromDatabase(moveIndex);
+    }
+
+    int GetOpponentMovePowerFromDatabase(int moveIndex)
+    {
+        // Implement logic to retrieve the move power from the database
+        // You may need to adjust this based on your database structure
+        if(encounteredPokemon != null)
+        {   
+            switch (moveIndex)
+            {
+                case 1:
+                    return encounteredPokemon.MoveOnePower;
+
+                case 2:
+                    return encounteredPokemon.MoveTwoPower;
+
+                case 3:
+                    return encounteredPokemon.MoveThreePower;
+
+                case 4:
+                    return encounteredPokemon.MoveFourPower ?? 0;
+
+                default:
+                    return 0;
+            }
+        }
+        else
+            return 0;
+        
+    }
+
+    public async Task GetInventoryItemById(string itemId)
+    {
+    // Implement logic to retrieve an item from the database based on the itemId
+    // You may need to adjust this based on your item system
+        if(Player != null)
+            PlayersInventory = await httpClient.GetFromJsonAsync<PlayerInventoryDetail>($"api/Item/{Player.ItemInventoryId}");
+    }
+
+    public async Task SetPartyPokemon()
+    {
+        // Implement logic to set the player's party Pokemon
+        // You may need to adjust this based on your Pokemon system
+        // For simplicity, let's assume the player's party Pokemon are always the first 6 Pokemon in the player's Pokemon list
+        foreach (var pokemon in Player.PokemonIds)
+        {
+            playerPokemonCount++;
+            if(playerPokemonCount ==1)
+            {
+                playerPoke1 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+
+                if(playerPoke1 != null)
+                {
+                    playerPoke1Health = playerPoke1.Health;
+                }
+                else if (playerPokemonCount ==2)
+                {
+                    playerPoke2 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+
+                    if(playerPoke2 != null)
+                        playerPoke2Health = playerPoke2.Health;
+                }
+                else if (playerPokemonCount ==3)
+                {
+                    playerPoke3 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+
+                    if (playerPoke3 != null)
+                        playerPoke3Health = playerPoke3.Health;
+                }
+                else if (playerPokemonCount ==4)
+                {
+                    playerPoke4 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+                                    
+                    if (playerPoke4 != null)
+                        playerPoke4Health = playerPoke4.Health;
+                }
+                else if (playerPokemonCount ==5)
+                {
+                    playerPoke5 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+
+                    if (playerPoke5 != null)
+                        playerPoke5Health = playerPoke5.Health;
+                }
+                else if (playerPokemonCount ==6)
+                {
+                    playerPoke6 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+
+                    if (playerPoke6 != null)
+                        playerPoke6Health = playerPoke6.Health;
+                }
+            }
+        }
+    }
+
+    private async Task PlayAudio()
+    {
+        await jsRuntime.InvokeVoidAsync("playAudio");
+    }  
+}
+
+<script>
+window.playAudio = function() {
+    document.getElementById('PokeThemeMusic').play();
+};
+</script>

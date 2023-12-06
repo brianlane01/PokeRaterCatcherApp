@@ -78,6 +78,20 @@ public class PlayerController : ControllerBase
         return Ok(player);
     }
 
+    [HttpGet("DetailByName/{name}")]
+    public async Task<IActionResult> DetailsByName(string name)
+    {
+        if (!SetUserIdInService())
+            return Unauthorized();
+
+        var player = await _playerService.GetPlayerByNameAsync(name);
+
+        if (player == null)
+            return NotFound();
+
+        return Ok(player);
+    }
+
     [HttpPut("Edit/{id}")]
     public async Task<IActionResult> Edit(int id, PlayerEdit model)
     {

@@ -99,10 +99,10 @@ public class PlayerInventoryController : ControllerBase
         if (model == null || !ModelState.IsValid)
             return BadRequest();
 
-        bool wasSuccessful = await _playerInventoryService.UpdatePlayerInventoryAsync(model);
+        var response = await _playerInventoryService.UpdatePlayerInventoryAsync(model);
 
-        if (wasSuccessful)
-            return Ok();
+        if (response != null)
+            return Ok(response);
 
         return UnprocessableEntity();
     }

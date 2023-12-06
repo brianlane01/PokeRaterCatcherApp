@@ -17,6 +17,7 @@ using Server.Services.PlayerServices;
 using Server.Services.RejuvenationItemServices;
 using Server.Services.PokeBallServices;
 using Server.Services.PlayerPokemonServices;
+using MudBlazor.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,6 +55,7 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 

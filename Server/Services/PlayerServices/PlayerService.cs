@@ -111,6 +111,47 @@ public class PlayerService : IPlayerService
         };
     }
 
+    public async Task<PlayerDetail?> GetPlayerByNameAsync(string name)
+    {
+        var entity = await _dbContext.Players
+            .Include(c => c.CaughtPokemon)
+            .Include(c => c.CaughtPokemon)
+                .ThenInclude(p => p.PokeTypeOne)
+            .Include(c => c.CaughtPokemon)
+                .ThenInclude(p => p.PokeTypeTwo)   
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.PokeBalls)
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.HealthItems)
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.ReviveItems)
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.RemoveStatusConditionItems)
+            .Include(c => c.ItemInventory!)
+                .ThenInclude(i => i.TMs)
+            .SingleOrDefaultAsync(c => c.Name == name && c.UserId == _userId);
+
+        if (entity is null)
+            return null;
+
+        return new PlayerDetail
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            UserId = entity.UserId,
+            ItemInventoryId = entity.ItemInventoryId ?? 0,
+            PokemonNames = entity.CaughtPokemon.Select(c => c.Name).ToList(),
+            PokemonIds = entity.CaughtPokemon.Select(c => c.Id).ToList(),
+            PokemonTypeOne = entity.CaughtPokemon.Select(c => c.PokeTypeOne.PokeType).ToList(),
+            PokemonTypeTwo = entity.CaughtPokemon.Select(c => c.PokeTypeTwo.PokeType).ToList(),
+            HealthItems = entity.ItemInventory?.HealthItems.Select(c => c.HealthItemName).ToList(),
+            PokeBalls = entity.ItemInventory?.PokeBalls.Select(c => c.NameOfBall).ToList(),
+            ReviveItems = entity.ItemInventory?.ReviveItems.Select(c => c.RejuvenationItemName).ToList(),
+            StatusConditionItems = entity.ItemInventory?.RemoveStatusConditionItems.Select(c => c.StatusConditionItemName).ToList(),
+            TMs = entity.ItemInventory?.TMs.Select(c => c.MoveName).ToList(),
+        };
+    }
+
     public void AddPokemonToPlayer(List<int> pokemonIds, int playerId)
     {
         var newPlayer = _dbContext.Players.Include(c => c.CaughtPokemon).Single(c => c.Id == playerId);

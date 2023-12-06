@@ -11,22 +11,32 @@ public class PlayerInventoryDetail
 
     public string NameOfPlayer { get; set; } = string.Empty;
 
+    public List<int>? HealthItems { get; set; }
+
     public List<string>? HealthItemNames {get; set;}
 
     public List<string>? HealthItemDescriptions {get; set;}
+
+    public List<int>? ReviveItems { get; set; }
 
     public List<string>? ReviveItemNames {get; set;}
 
     public List<string>? ReviveItemDescriptions {get; set;} 
 
+    public List<int>? PokeBalls { get; set; }
+
     public List<string>? PokeBallNames {get; set;}
 
     public List<string>? PokeBallDescriptions {get; set;}
+
+    public List<int>? StatusConditionItems { get; set; }
 
     public List<string>? StatusConditionItemNames {get; set;}
 
     public List<string>? StatusConditionItemDescriptions {get; set;}
 
+    public List<int>? TMs { get; set; }
+    
     public List<string>? TMNumbers {get; set;}
 
     public List<string>? MoveNames {get; set;}

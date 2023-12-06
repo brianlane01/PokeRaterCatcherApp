@@ -148,7 +148,11 @@ public class PokemonService : IPokemonService
                 MoveFourDescription = entity.MoveFour.MoveDescription,
                 AbilityId = entity.AbilityId,
                 AbilityName = entity.Ability.AbilityName,
-                AbilityDescription = entity.Ability.AbilityEffect
+                AbilityDescription = entity.Ability.AbilityEffect,
+                MoveOnePower = entity.MoveOne.MovePower ?? 0,
+                MoveTwoPower = entity.MoveTwo.MovePower ?? 0,
+                MoveThreePower = entity.MoveThree.MovePower ?? 0,
+                MoveFourPower = entity.MoveFour.MovePower ?? 0,
             };
     }
 

@@ -25,4 +25,5 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 builder.Services.AddApiAuthorization();
 builder.Services.AddMudServices();
 
+
 await builder.Build().RunAsync();

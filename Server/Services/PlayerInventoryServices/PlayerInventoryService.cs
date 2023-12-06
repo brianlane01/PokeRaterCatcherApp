@@ -159,6 +159,11 @@ public class PlayerInventoryService : IPlayerInventoryService
             PokeBallDescriptions = entity.PokeBalls.Select(c => c.DescriptionOfPokeBall).ToList(),
             StatusConditionItemNames = entity.RemoveStatusConditionItems.Select(c => c.StatusConditionItemName).ToList(),
             StatusConditionItemDescriptions = entity.RemoveStatusConditionItems.Select(c => c.StatusConditionItemDescription).ToList(),
+            TMs = entity.TMs.Select(c => c.Id).ToList(),
+            HealthItems = entity.HealthItems.Select(c => c.Id).ToList(),
+            ReviveItems = entity.ReviveItems.Select(c => c.Id).ToList(),
+            PokeBalls = entity.PokeBalls.Select(c => c.Id).ToList(),
+            StatusConditionItems = entity.RemoveStatusConditionItems.Select(c => c.Id).ToList(),
             TMNumbers = entity.TMs.Select(c => c.TMNumber).ToList(),
             MoveNames = entity.TMs.Select(c => c.MoveName).ToList(),
             MoveDescriptions = entity.TMs.Select(c => c.MoveDescription).ToList(),
@@ -211,12 +216,12 @@ public class PlayerInventoryService : IPlayerInventoryService
         };
     }
 
-    public async Task<bool> UpdatePlayerInventoryAsync(PlayerInventoryEdit request)
+    public async Task<PlayerInventoryDetail?> UpdatePlayerInventoryAsync(PlayerInventoryEdit request)
     {
         var entity = await _dbContext.PlayerItemInventories.FindAsync(request.Id);
 
         if (entity is null)
-            return false;
+            return null;
 
         entity.NameOfPlayer = request.NameOfPlayer;
         entity.NumberOfAntidotes = request.NumberOfAntidotes ?? 0;
@@ -268,7 +273,7 @@ public class PlayerInventoryService : IPlayerInventoryService
         
         _dbContext.PlayerItemInventories.Update(entity);
 
-        var numberOfChanges = await _dbContext.SaveChangesAsync();
+        var inventoryUpdated = await _dbContext.SaveChangesAsync();
 
         if (request.HealthItems != null && request.HealthItems.Count > 0)
         {
@@ -295,7 +300,9 @@ public class PlayerInventoryService : IPlayerInventoryService
             AddTMsToInventory(request.TMs, entity.Id);
         }
 
-        return numberOfChanges == 1;
+        PlayerInventoryDetail? response = await GetPlayerInventoryByIdAsync(entity.Id);
+
+        return response;
     }
 
     public async Task<bool> DeletePlayerInventoryAsync(int id)

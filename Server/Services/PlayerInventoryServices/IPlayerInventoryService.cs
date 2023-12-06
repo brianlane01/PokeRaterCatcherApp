@@ -12,7 +12,7 @@ public interface IPlayerInventoryService
     Task<List<PlayerInventoryIndex>> GetAllPlayerInventoriesAsync(int page, int pageSize);
     Task<List<PlayerInventoryIndex>> GetAllPlayerInventoriesForPlayerAsync();
     Task<PlayerInventoryDetail?> GetPlayerInventoryByIdAsync(int id);
-    Task<bool> UpdatePlayerInventoryAsync(PlayerInventoryEdit request);
+    Task<PlayerInventoryDetail?> UpdatePlayerInventoryAsync(PlayerInventoryEdit request);
     Task<bool> DeletePlayerInventoryAsync(int id);
     void SetUserId(string userId);
 
