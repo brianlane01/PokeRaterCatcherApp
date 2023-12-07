@@ -13,7 +13,6 @@ namespace PokemonCatcherGame.Server.Services.PokemonServices;
 public class PokemonService : IPokemonService
 {
     private readonly ApplicationDbContext _dbContext;
-    private string? _userId;
 
     public PokemonService(ApplicationDbContext dbContext)
     {
@@ -184,6 +183,4 @@ public class PokemonService : IPokemonService
     {
         return await _dbContext.Pokemon.CountAsync();
     }
-
-    public void SetUserId(string userId) => _userId = userId;
 }

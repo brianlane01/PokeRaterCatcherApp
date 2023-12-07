@@ -1,0 +1,101 @@
+@page "/PokeAbility"
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@attribute [Authorize]
+@using PokemonCatcherGame.Shared.Models.PokeBallModels
+
+<PageTitle>AllPokeBalls</PageTitle>
+<h2>Types of Poke Balls used to Catch Pokemon</h2>
+
+<div id="pokeAbilityTabl">
+    @if(PokemonAbilities == null)
+    {
+        <p><em>Loading . . . . . .</em></p>
+    }
+    else
+    {
+        <table class="table table-striped table-dark table-hover table-bordered border-danger">
+            <thead>
+                <tr class="text-center">
+                    <th>Pokémon Ability Id</th>
+                    <th>Pokémon Ability Name</th>
+                    <th>Pokémon Ability Description</th>
+                    <th>What would you like to do?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var ability in PokemonAbilities)
+                {
+                    <tr class="text-center">
+                        <td>@ability.Id</td>
+                        <td>@ability.AbilityName</td>
+                        <td>@ability.AbilityEffect</td>
+                        <td>
+                            <div style="margin-bottom: 3px;">
+                                <a class="text-danger" href=@($"PokeAbility/{ability.Id}")>Get More Details</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a class="text-danger" href=@($"PokeAbility/Edit/{ability.Id}")>Edit Pokémon Ability</a>
+                            </div>
+                            <div style="margin-bottom: 3px;">
+                                <a class="text-danger" href=@($"PokeAbility/Delete/{ability.Id}")>Delete Pokémon Ability</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <button class="btn btn-danger"  @onclick="PreviousPage" disabled="@(currentPage == 1)">Previous</button>
+            <button class="btn btn-danger"  @onclick="NextPage" disabled="@(PokemonAbilities.Count() < 10)">Next</button>
+        </div>
+    }
+</div>
+
+@code{
+    private List<PokemonAbilityList> PokemonAbilities { get; set; } = new List<PokemonAbilityList>();
+
+    private string? errorMessage;
+
+    private int currentPage = 1;
+    private const int PageSize = 10;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            PokemonAbilities = await httpClient.GetFromJsonAsync<List<PokemonAbilityList>>($"api/PokemonAbility?page={currentPage}&pageSize={PageSize}");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await LoadData();
+        }
+    }
+
+    private async Task NextPage()
+    {
+        currentPage++;
+        await LoadData();
+    }
+
+    private void CreateNewPokemonAbility()
+    {
+        navigationManager.NavigateTo("/PokeAbility/Create");    
+    }
+
+}

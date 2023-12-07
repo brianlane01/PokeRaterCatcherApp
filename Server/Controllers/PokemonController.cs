@@ -17,40 +17,17 @@ public class PokemonController : ControllerBase
         _pokemonService = pokemonService;
     }
 
-    private string? GetUserId()
-    {
-        string userIdClaim = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
-
-        if (userIdClaim == null)
-            return null;
-
-        return userIdClaim;
-    }
-
-    private bool SetUserIdInService()
-    {
-        var userId = GetUserId();
-        if (userId == null)
-            return false;
-
-        _pokemonService.SetUserId(userId);
-        return true;
-    }
-
     public async Task<List<PokemonList>> Index(int page = 1, int pageSize = 10)
     {
-        if (!SetUserIdInService())
-            return new List<PokemonList>();
 
         var pokemon = await _pokemonService.GetAllPokemonAsync(page, pageSize);
 
         return pokemon.ToList();
     }
+
     [HttpGet("ForPlayerCreate")]
     public async Task<List<PokemonList>> GetPokemonForPlayerStart()
     {
-        if (!SetUserIdInService())
-            return new List<PokemonList>();
 
         var pokemon = await _pokemonService.GetAllPokemonForPlayerStartAsync();
 
@@ -62,9 +39,6 @@ public class PokemonController : ControllerBase
     {
         if(model == null || !ModelState.IsValid)
             return BadRequest();
-
-        if (!SetUserIdInService())
-            return Unauthorized();
 
         bool wasSuccessful = await _pokemonService.CreatePokemonAsync(model);
 
@@ -78,8 +52,6 @@ public class PokemonController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Details(int id)
     {
-        if (!SetUserIdInService())
-            return Unauthorized();
 
         var pokemon = await _pokemonService.GetPokemonByIdAsync(id);
 
@@ -89,12 +61,9 @@ public class PokemonController : ControllerBase
         return Ok(pokemon);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, PokemonEdit model)
+    [HttpPut("Edit/{id}")]
+    public async Task<IActionResult> Edit(PokemonEdit model)
     {
-        if (!SetUserIdInService())
-            return Unauthorized();
-
         if (model == null)
             return BadRequest();
 
@@ -110,8 +79,6 @@ public class PokemonController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        if (!SetUserIdInService())
-            return Unauthorized();
             
         var pokemon = await _pokemonService.GetPokemonByIdAsync(id);
         

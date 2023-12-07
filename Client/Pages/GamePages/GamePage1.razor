@@ -812,7 +812,7 @@ else
                 };
                 
                 playerInventoryEdit.TMs.Add(tm.Id);
-                var createInventoryResponse = await httpClient.PostAsJsonAsync("api/PlayerInventory", playerInventoryEdit);
+                var createInventoryResponse = await httpClient.PutAsJsonAsync($"api/PlayerInventory/Edit/{playerInventoryEdit.Id}", playerInventoryEdit);
                 
                 if (createInventoryResponse.IsSuccessStatusCode)
                 {

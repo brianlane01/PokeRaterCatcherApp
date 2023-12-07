@@ -7,7 +7,8 @@ namespace Server.Services.PokemonAbilityServices;
 public interface IPokemonAbilityService
 {
     Task<bool> CreatePokemonAbilityAsync(PokemonAbilityCreate model);
-    Task<List<PokemonAbilityList>> GetAllPokemonAbilitiesAsync();
+    Task<List<PokemonAbilityList>> GetAllPokemonAbilitiesAsync(int page, int pageSize);
+    Task<List<PokemonAbilityList>> GetAllPokemonAbilitiesForPokemomCreationAsync();
     Task<PokemonAbilityDetail?> GetPokemonAbilityByIdAsync(int id);
     Task<bool> UpdatePokemonAbilityAsync(PokemonAbilityEdit request);
     Task<bool> DeletePokemonAbilityAsync(int id);

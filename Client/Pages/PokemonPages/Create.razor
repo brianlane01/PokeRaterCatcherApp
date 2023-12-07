@@ -11,6 +11,7 @@
 @using PokemonCatcherGame.Shared.Models.PokemonAbilityModels
 @using System.Text.Json.Serialization
 @using Newtonsoft.Json
+@inherits LayoutComponentBase
 <PageTitle>Index</PageTitle>
 
 <style>
@@ -70,16 +71,18 @@
     </MudContainer>
 </div>
 
-<div>
-    <h3>Pokemon Description</h3>
+<div class="card" id="pokeDescripTitle">
+    <h3 id="descripTitle">Pokemon Description</h3>
     <div id="pokemonDescription">
         <p></p>
     </div>
 </div>
 
-<h3>Pokemon Evolves from</h3>
-<div class="text-capitalize" id="pokemonEvolution">
-    <p></p>
+<div class="card" id="pokeEvolutionTitle">
+    <h3 id="evoTitle">Pokemon Evolves from</h3>
+    <div class="text-capitalize" id="pokemonEvolution">
+        <p></p>
+    </div>
 </div>
 
 <div class = "row">
@@ -102,14 +105,15 @@ else
     if(Pokemon == null)
     {
         <h1 class ="text-center"> No Pokemon to display</h1>
+        <img src="https://cdn.openart.ai/uploads/image_D0sltdYw_1701912498968_512.webp" alt="No Pokemon to display" class="img-fluid">
     }
     else
     {
         <div class = "row">
             <div class = "col mx-auto justify-content-between">
-                <div class = "card">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/@(Pokemon.Id).png" class = "card-img-top img-fluid" alt="@Pokemon.Name">
-                    <div class = "card-body">
+                <div class = "card" id="pokeImageCard">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/@(Pokemon.Id).png" class = "card-img-top img-fluid" alt="@Pokemon.Name" id="pokeImage">
+                    <div class = "card-body" id="pokeImageCardBody">
                         <h3 class ="card-title text-capitalize">@Pokemon.Name</h3>
                         <h6>Id: @Pokemon.Id</h6>
                         <h6>Height: @Pokemon.Height</h6>
@@ -133,7 +137,7 @@ else
                         }
                     </div>
                 </div>
-                <form class = "form-inline">
+                <form class = "form-inline" id="pokeImageButtons">
                     <button type = "button" class = "btn btn-primary mb-2" @onclick="@(() => ChangePokemonAsync(-1))">Previous</button>
                     <button type = "button" class = "btn btn-primary mb-2" @onclick="@(() => ChangePokemonAsync(1))">Next</button>
                 </form>
@@ -303,7 +307,7 @@ else
     {
         types = await httpClient.GetFromJsonAsync<List<PokemonTypeList>>("/api/PokemonType");
         moves = await httpClient.GetFromJsonAsync<List<PokemonMoveListItem>>("/api/PokemonMove/ForPokemonCreate");
-        abilities = await httpClient.GetFromJsonAsync<List<PokemonAbilityList>>("/api/PokemonAbility");
+        abilities = await httpClient.GetFromJsonAsync<List<PokemonAbilityList>>("/api/PokemonAbility/ForPokemonCreate");
     }
 
     private async Task HandleSubmit()

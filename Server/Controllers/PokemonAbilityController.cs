@@ -41,14 +41,23 @@ public class PokemonAbilityController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<PokemonAbilityList>> Index()
+    public async Task<List<PokemonAbilityList>> Index(int page = 1, int pageSize = 10)
     {
         if (!SetUserIdInService())
             return new List<PokemonAbilityList>();
 
-        var abilities = await _pokemonAbilityService.GetAllPokemonAbilitiesAsync();
+        var abilities = await _pokemonAbilityService.GetAllPokemonAbilitiesAsync(page, pageSize);
             
         return abilities.ToList();
+    }
+
+    [HttpGet("ForPokemonCreate")]
+    public async Task<List<PokemonAbilityList>> GetPokemonForPlayerStart()
+    {
+
+        var pokemon = await _pokemonAbilityService.GetAllPokemonAbilitiesForPokemomCreationAsync();
+
+        return pokemon.ToList();
     }
 
     [HttpPost]

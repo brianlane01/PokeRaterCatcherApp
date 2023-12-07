@@ -14,7 +14,5 @@ public interface IPlayerInventoryService
     Task<PlayerInventoryDetail?> GetPlayerInventoryByIdAsync(int id);
     Task<PlayerInventoryDetail?> UpdatePlayerInventoryAsync(PlayerInventoryEdit request);
     Task<bool> DeletePlayerInventoryAsync(int id);
-    void SetUserId(string userId);
-
 
 }

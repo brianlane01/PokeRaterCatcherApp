@@ -13,7 +13,6 @@ public class PlayerInventoryService : IPlayerInventoryService
 {
     private readonly ApplicationDbContext _dbContext;
 
-    private string? _userId;
 
     public PlayerInventoryService(ApplicationDbContext dbContext)
     {
@@ -391,6 +390,4 @@ public class PlayerInventoryService : IPlayerInventoryService
 
         _dbContext.SaveChanges();
     }
-    
-    public void SetUserId(string userId) => _userId = userId;
 }

@@ -70,18 +70,18 @@ else
         <tbody>
             @foreach(var item in playerItemInventoryList)
             {
-                <tr class="text-center">
+                <tr class="text-center text-danger">
                     <td class="text-center"><strong>@item.Id</strong></td>
                     <td class="text-capitalize"><strong>@item.NameOfPlayer</strong></td>
                     <td>
-                        <div style="margin-bottom: 3px;">
-                            <a href=@($"PlayerInventory/{item.Id}")>Get More Details</a>
+                        <div style="margin-bottom: 3px; text-danger">
+                            <a class="text-danger" href=@($"PlayerInventory/{item.Id}")>Get More Details</a>
                         </div>
                         <div style="margin-bottom: 3px;">
-                            <a href=@($"PlayerInventory/Edit/{item.Id}")>Edit Inventory</a>
+                            <a class="text-danger" href=@($"PlayerInventory/Edit/{item.Id}")>Edit Inventory</a>
                         </div>
                         <div style="margin-bottom: 3px;">
-                            <a href=@($"PlayerInventory/Delete/{item.Id}")>Delete</a>
+                            <a class="text-danger" href=@($"PlayerInventory/Delete/{item.Id}")>Delete</a>
                         </div>
                     </td>
                 </tr>

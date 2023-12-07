@@ -2,11 +2,10 @@
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRuntime
-@attribute [Authorize]
 @using PokemonCatcherGame.Shared.Models.PokemonModels
 @using PokemonCatcherGame.Shared.Models.PokemonMoveModels
 @using PokemonCatcherGame.Shared.Models.PokemonAbilityModels
-@inherits OwningComponentBase<PokemonEdit>
+@inherits LayoutComponentBase
 
 @code{
     [Parameter]
@@ -32,7 +31,8 @@
         bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to update " + Pokemon.Name + "?");
         if(confirmed)
         {
-            var response = await httpClient.PutAsJsonAsync($"api/Pokemon/{PokemonId}", Pokemon);
+
+            var response = await httpClient.PutAsJsonAsync($"api/Pokemon/Edit/{PokemonId}", Pokemon);
             if (response.IsSuccessStatusCode)
             {
                 navigationManager.NavigateTo("/Pokemon");

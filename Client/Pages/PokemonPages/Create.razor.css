@@ -1,0 +1,65 @@
+#pokeDescripTitle{
+    margin-top: 3em;
+    margin-bottom: 1em;
+    border: 6px solid rgb(127, 178, 150);
+    border-radius: 10px;
+    color: rgb(12, 12, 12);
+}
+
+#descripTitle{
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 1rem;
+}
+
+#pokemonDescription{
+    margin-top: 1em;
+    margin-bottom: 2em;
+    padding-left: 3rem;
+    padding-bottom: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: rgb(39, 231, 164)
+}
+
+#pokeEvolutionTitle{
+    margin-top: 3em;
+    margin-bottom: 1em;
+    border: 6px solid rgb(161, 151, 161);
+    border-radius: 10px;
+    color: rgb(12, 12, 12);
+}
+
+#evoTitle{
+    font-weight: bold;
+    text-align: center;
+    padding-top: 1rem;
+}
+
+#pokeImage{
+    margin-top: 1em;
+    margin-bottom: 2em;
+    position: relative;
+    float: right;
+    width: 200px;
+    height: 200px;
+}
+
+#pokeImageCard{
+    background-image: url("https://cdn.openart.ai/uploads/image_pUbiwyc5_1701914661989_512.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#pokeImageCardBody{
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding-left: 3rem;
+}
+
+#pokeImageButtons{
+    margin-top: 2em;
+}

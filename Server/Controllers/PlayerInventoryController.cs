@@ -16,32 +16,9 @@ public class PlayerInventoryController : ControllerBase
         _playerInventoryService = playerInventoryService;
     }
 
-    private string? GetUserId()
-    {
-        string userIdClaim = User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value;
-
-        if (userIdClaim == null)
-            return null;
-
-        return userIdClaim;
-    }
-
-    private bool SetUserIdInService()
-    {
-        var userId = GetUserId();
-        if (userId == null)
-            return false;
-
-        _playerInventoryService.SetUserId(userId);
-        return true;
-    }
-
     [HttpGet]
     public async Task<List<PlayerInventoryIndex>> Index(int page = 1, int pageSize = 10)
     {
-        if (!SetUserIdInService())
-            return new List<PlayerInventoryIndex>();
-
         var playerItemInventory = await _playerInventoryService.GetAllPlayerInventoriesAsync(page, pageSize);
 
         return playerItemInventory.ToList();
@@ -50,9 +27,6 @@ public class PlayerInventoryController : ControllerBase
     [HttpGet("ForPlayer")]
     public async Task<List<PlayerInventoryIndex>> GetAllPlayerInventoriesForPlayer()
     {
-        if (!SetUserIdInService())
-            return new List<PlayerInventoryIndex>();
-
         var playerItemInventory = await _playerInventoryService.GetAllPlayerInventoriesForPlayerAsync();
 
         return playerItemInventory.ToList();
@@ -61,9 +35,6 @@ public class PlayerInventoryController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Details(int id)
     {
-        if (!SetUserIdInService())
-            return Unauthorized();
-
         var playerItemInventory = await _playerInventoryService.GetPlayerInventoryByIdAsync(id);
 
         if (playerItemInventory == null)
@@ -78,9 +49,6 @@ public class PlayerInventoryController : ControllerBase
         if (model == null || !ModelState.IsValid)
             return BadRequest();
 
-        if (!SetUserIdInService())
-            return Unauthorized();
-
         var response = await _playerInventoryService.CreatePlayerInventoryAsync(model);
 
         if (response != null)
@@ -93,8 +61,6 @@ public class PlayerInventoryController : ControllerBase
     [HttpPut("Edit/{id}")]
     public async Task<IActionResult> Update(PlayerInventoryEdit model)
     {
-        if (!SetUserIdInService())
-            return Unauthorized();
 
         if (model == null || !ModelState.IsValid)
             return BadRequest();
@@ -110,9 +76,6 @@ public class PlayerInventoryController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        if (!SetUserIdInService())
-            return Unauthorized();
-
         var playerItemInventory = await _playerInventoryService.GetPlayerInventoryByIdAsync(id);
 
         if (playerItemInventory == null)

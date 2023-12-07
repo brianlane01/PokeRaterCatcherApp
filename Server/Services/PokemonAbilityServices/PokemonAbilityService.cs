@@ -46,7 +46,7 @@ public class PokemonAbilityService : IPokemonAbilityService
         return await _dbContext.SaveChangesAsync() == 1;
     }
 
-    public async Task<List<PokemonAbilityList>> GetAllPokemonAbilitiesAsync()
+    public async Task<List<PokemonAbilityList>> GetAllPokemonAbilitiesAsync(int page, int pageSize)
     {
         var abilityQuery = _dbContext.PokemonAbilities
             .Select(n => 
@@ -57,7 +57,25 @@ public class PokemonAbilityService : IPokemonAbilityService
                 AbilityEffect = n.AbilityEffect,
             });
         
-        return await abilityQuery.ToListAsync();
+        return await abilityQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+            
+    }
+    public async Task<List<PokemonAbilityList>> GetAllPokemonAbilitiesForPokemomCreationAsync()
+    {
+        var abilityQuery = _dbContext.PokemonAbilities
+            .Select(n => 
+            new PokemonAbilityList
+            {
+                Id = n.Id,
+                AbilityName = n.AbilityName,
+                AbilityEffect = n.AbilityEffect,
+            });
+        
+        return await abilityQuery
+            .ToListAsync();
             
     }
 

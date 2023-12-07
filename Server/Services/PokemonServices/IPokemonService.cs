@@ -14,6 +14,5 @@ public interface IPokemonService
     Task<PokemonDetail?> GetPokemonByIdAsync(int id);
     Task<bool> UpdatePokemonAsync(PokemonEdit request);
     Task<bool> DeletePokemonAsync(int id);
-    void SetUserId(string userId);
     Task<int> GetPokemonTotalCountAsync();
 }

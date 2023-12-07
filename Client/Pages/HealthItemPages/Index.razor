@@ -86,13 +86,13 @@ else
                         <td>@healthItem.HealthItemDescription</td>
                         <td>
                             <div style="margin-bottom: 3px;">
-                                <a href=@($"HealthItem/{healthItem.Id}")>Get More Details</a>
+                                <a class="text-danger" href=@($"HealthItem/{healthItem.Id}")>Get More Details</a>
                             </div>
                             <div style="margin-bottom: 3px;">
-                                <a href=@($"HealthItem/Edit/{healthItem.Id}")>Edit Health Item</a>
+                                <a class="text-danger" href=@($"HealthItem/Edit/{healthItem.Id}")>Edit Health Item</a>
                             </div>
                             <div style="margin-bottom: 3px;">
-                                <a href=@($"HealthItem/Delete/{healthItem.Id}")>Delete Health Item</a>
+                                <a class="text-danger" href=@($"HealthItem/Delete/{healthItem.Id}")>Delete Health Item</a>
                             </div>
                         </td>
                     </tr>

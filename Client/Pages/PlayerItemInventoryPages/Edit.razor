@@ -775,7 +775,7 @@ else if(PokeBalls != null && HealthItems != null && RejuvenationItems != null &&
                     EditInventory.StatusConditionItems = StatusConditionItemIds.Split(',').Select(int.Parse).ToList();
                     EditInventory.TMs = TechnicalMachineMoveIds.Split(',').Select(int.Parse).ToList();
 
-                    var EditInventoryResponse = await httpClient.PostAsJsonAsync("api/PlayerInventory", EditInventory);
+                    var EditInventoryResponse = await httpClient.PutAsJsonAsync($"api/PlayerInventory/Edit/{EditInventory.Id}", EditInventory);
                     if (EditInventoryResponse.IsSuccessStatusCode)
                     {
                         await jsRuntime.InvokeVoidAsync("alert", "Inventory Created");

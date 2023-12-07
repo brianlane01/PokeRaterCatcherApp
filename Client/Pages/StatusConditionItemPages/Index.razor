@@ -71,9 +71,9 @@ else
         <table class="table table-striped table-dark table-hover table-bordered border-danger">
             <thead>
                 <tr class="text-center">
-                    <th>Health Item Id</th>
-                    <th>Health Item Name</th>
-                    <th>Health Item Description</th>
+                    <th>Status Condition Item Id</th>
+                    <th>Status Condition Item Name</th>
+                    <th>Status Condition Item Description</th>
                     <th>What would you like to do?</th>
                 </tr>
             </thead>
@@ -86,13 +86,13 @@ else
                         <td>@statusItem.StatusConditionItemDescription</td>
                         <td>
                             <div style="margin-bottom: 3px;">
-                                <a href=@($"StatusConditionItem/{statusItem.Id}")>Get More Details</a>
+                                <a class="text-danger" href=@($"StatusConditionItem/{statusItem.Id}")>Get More Details</a>
                             </div>
                             <div style="margin-bottom: 3px;">
-                                <a href=@($"StatusConditionItem/Edit/{statusItem.Id}")>Edit Status Removal Item</a>
+                                <a class="text-danger" href=@($"StatusConditionItem/Edit/{statusItem.Id}")>Edit Status Removal Item</a>
                             </div>
                             <div style="margin-bottom: 3px;">
-                                <a href=@($"StatusConditionItem/Delete/{statusItem.Id}")>Delete Status Removal Item</a>
+                                <a class="text-danger" href=@($"StatusConditionItem/Delete/{statusItem.Id}")>Delete Status Removal Item</a>
                             </div>
                         </td>
                     </tr>
