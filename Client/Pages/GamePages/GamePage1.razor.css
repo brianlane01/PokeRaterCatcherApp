@@ -1,0 +1,333 @@
+#playerSearch{
+    background-color: rgb(24, 173, 81);
+    background-image: url("https://images4.alphacoders.com/686/thumbbig-686166.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: rgb(10, 146, 83);
+    font-size: 20px;
+    border: solid 4px rgb(9, 9, 9);
+    border-radius: 5px;
+    margin-top: 2em;
+    height: 1000px;
+    width: 1500px;
+    position: relative;
+}
+
+#nameTitle{
+    color: rgb(10, 10, 10);
+    font-size: 55px;
+    font-weight: bolder;
+    text-align: center;
+    margin-top: 4em;
+    margin-left: 2rem;
+    position: relative; 
+    z-index: 1; 
+}
+
+#playerSearchLabel{
+    color: rgb(239, 248, 246);
+    font-weight: bolder;
+    margin-top: 1em;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    position: relative; 
+    z-index: 1; 
+}
+
+#playerNameSubmit{
+    color: rgb(10, 10, 10);
+    font-weight: bolder;
+    margin-top: 1em;
+    margin-left: .5rem;
+    position: relative; 
+    z-index: 1;
+    width: 10em;; 
+}
+
+#welcomeCard{
+    margin-top : 13em;
+
+}
+
+#theWelcomeCard{
+    background-color: rgb(24, 173, 81);
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxHtp-gwfWe2anDglrUjhCmEgTWIas4KcAjw&usqp=CAU");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 20px;
+    border: solid 4px rgb(48, 168, 154);
+    border-radius: 5px;
+    margin-top: 2em;
+    height: 480px;
+    position: relative;
+
+}
+
+#beginConvoWithMom{
+    border: solid 6px rgb(48, 168, 154);
+    border-radius: 1rem;
+    margin-top: 10em;
+    position: relative; 
+    z-index: 1;
+    height: 30em;
+}
+
+#convoWithMom{
+    background-image: url("https://www.serebii.net/letsgopikachueevee/happiness.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid rgb(234, 242, 241);
+    border-radius: 1rem;
+    height: 29em;
+}
+
+#convoWithMomScene{
+    margin-top: 2rem;
+    width : 55rem;
+    color: rgb(207, 9, 9);
+    font-weight: bolder;
+    font-size: 1.5rem;
+}
+
+#welcomeIntoGame{
+    color: rgb(245, 50, 11);
+    font-weight: bolder;
+    margin-top: 2em;
+}
+
+#onTheStreet{
+    background-color: rgb(246, 143, 9);
+    margin-top: 5rem;
+    border: 6px solid rgb(81, 83, 83);
+    border-radius: 2rem;
+    height: 30em;
+}
+
+#onTheStreetCard{
+    background-image: url("https://cdn.openart.ai/stable_diffusion/69e92f5958024d1ee6555bd7921d309c6227460d_2000x2000.webp");
+    color: rgb(250, 250, 250);
+    font-weight: bolder;
+    font-size: 1.2rem;
+    margin-top: .3rem;
+    border: 1px solid rgb(234, 242, 241);
+    border-radius: 1rem;
+    height: 20.7em;
+}
+
+#onTheStreetCardBody{
+    margin-top: 8rem;
+}
+
+#beginningOfWildsCard{
+    margin-top: 3em;
+    margin-bottom: 3em;
+    background-color: rgb(10, 239, 105);
+    border: 6px solid rgb(81, 83, 83);
+    border-radius: 2rem;
+    height: 70em;
+}
+
+#wildsCard{
+    background-image: url("https://cdn.openart.ai/uploads/upscaled/create-a-image-for-an-area-in-the-wilds-being-explored-by-a-character-in-a-pokemon-game_aMymu9Nd_upscaled.jpg");
+    background-repeat: none;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid rgb(234, 242, 241);
+    border-radius: 1.6rem;
+}
+
+#wildsSceneDescription{
+    margin-top: 21rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    color: rgb(110, 68, 4);
+    font-weight: bolder;
+    font-size: 1.8rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+}
+
+#engagePokeButton{
+    margin-top: 6rem;
+    margin-left: 8em;
+    color: rgb(245, 240, 233);
+    font-weight: bolder;
+    font-size: 2rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#encounteredPokeImage{
+    
+    height: 20em;
+    width: 20em;
+    margin-left: 25em;
+    padding-bottom: 9em;
+    position: relative;
+}
+
+#firstFightCardStart{
+    margin-top: 5em;
+    background-color: rgb(10, 239, 105);
+    background-image: url("https://cdn.openart.ai/uploads/upscaled/epic-battle-scene-in-a-pokemon-game-dynamic-action-intense-showdown-3d-ren...rainer-in-action-detailed-pokemon-vibrant-colors-powerful-special-effects_09aoAitl_upscaled.jpg");
+    background-repeat: none;
+    background-size: cover;
+    background-position: center;
+    border: 6px solid rgb(81, 83, 83);
+    border-radius: 2rem;
+    height: 60em;
+}
+
+#firstFightCardBody{
+    margin-top: 5em;
+    margin-left: 2em;
+    margin-right: 2em;
+    margin-bottom: 9em;
+    background-color: rgba(155, 164, 159, 0.359);
+    color: rgb(255, 252, 255);
+    font-weight: bolder;
+    font-size: 1.8rem;
+    height: 1em;
+}
+
+#chooseToFightOrRun{
+    padding-top: 2rem;
+    color: rgb(249, 249, 249);
+    font-weight: bolder;
+    font-size: 2rem;
+}
+
+#firstFightSelection{
+    color: rgb(11, 10, 10);
+    font-weight: bolder;
+    font-size: 1rem;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#beginWinCard{
+    margin-top: 5em;
+    background-color: rgb(10, 239, 105);
+    border: 6px solid rgb(81, 83, 83);
+    border-radius: 2rem;
+    height: 60em;
+}
+
+#winCardBody
+{
+    background-image: url("https://cdn.openart.ai/uploads/upscaled/victorious-pokemon-adventurer-vibrant-and-colorful-high-quality-art-fantas...rt-fantasy-adventure-game-victorious-joyful-ambiance-detailed-environment_qwcmGLtC_upscaled.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid rgb(234, 242, 241);
+    border-radius: 1.6rem;
+}
+
+#winSceneDescription{
+    margin-top: 4rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    color: rgb(253, 248, 248);
+    font-weight: bolder;
+    font-size: 2rem;
+}
+
+#winBattleContinueButton{
+    margin-top: 2rem;
+    margin-left: 6em;
+    margin-right: 2rem;
+    color: rgb(6, 6, 6);
+    font-weight: bolder;
+    font-size: 2rem;
+}
+
+#contStarhavenCard{
+    margin-top: 3em;
+    margin-bottom: 3em;
+    background-color: rgb(0, 163, 68);
+    border: 6px solid rgb(81, 83, 83);
+    border-radius: 2rem;
+}
+
+#contStarhavenCardBody{
+    background-image: url("https://cdn.openart.ai/uploads/image_Ytrb18GC_1701918215997_raw.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid rgb(234, 242, 241);
+    border-radius: 1.6rem;
+    height: 60em;
+}
+
+#setUpContStarDescription{
+    margin-top: 4rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    color: rgb(13, 235, 50);
+    font-weight: bolder;
+    font-size: 2rem;
+}
+
+#insideWhisperingCaveCard{
+    margin-top: 3em;
+    margin-bottom: 3em;
+    background-color: rgb(0, 163, 68);
+    border: 6px solid rgb(81, 83, 83);
+    border-radius: 2rem;
+}
+
+#insideWhisperingCaveCardBody{
+    background-image: url("https://cdn.openart.ai/uploads/image_b482UrGq_1701924281687_raw.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid rgb(234, 242, 241);
+    border-radius: 1.6rem;
+    height: 60em;
+}
+
+#whisperCaveDescrip{
+    margin-top: 5rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    color: rgb(251, 3, 28);
+    font-weight: bolder;
+    font-size: 2rem;
+}
+
+#firstTrainerContianer{
+    margin-top: 3em;
+    margin-bottom: 3em;
+    background-color: rgb(0, 163, 68);
+    border: 6px solid rgb(81, 83, 83);
+    border-radius: 2rem;
+}
+
+#firstTrainerCardBody
+{
+    background-image: url("https://cdn.openart.ai/uploads/image_ORKFPkQ4_1701925107011_raw.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid rgb(234, 242, 241);
+    border-radius: 1.6rem;
+    height: 60em;
+}
+
+#ackbarMeme{
+    margin-top: 1em;
+    margin-bottom: 3em;
+    border: 6px solid rgb(81, 83, 83);
+    border-radius: 2rem;
+    float: right;
+}
+
+#firstTrainerEncounterDescription{
+    margin-top: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    color: rgb(251, 3, 28);
+    font-weight: bolder;
+    font-size: 2rem;
+}

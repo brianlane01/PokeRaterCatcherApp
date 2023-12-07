@@ -7,57 +7,296 @@
 @using Microsoft.AspNetCore.Components.RenderTree
 @using System.Text.Json
 
-<h3>Game Page</h3>
+<style>
+    body{
+        background-image: url('https://images.pexels.com/photos/2156881/pexels-photo-2156881.jpeg?auto=compress&cs=tinysrgb&w=1200');
+        background-repeat: no-repeat;
+        background-size:  cover;
+    }
+</style>
+
 
 @if (!gameStarted)
 {
-<div class = "row">
-    <div class ="col mx-auto justify-content-between">
+
+<div class="container" id="playerSearch" >
+    <h3 id="nameTitle">Welcome to the World Of Pokémon</h3>
+    <div>
+        <audio autoplay loop id="PokeTitleMusic">
+                <source src="https://vgmsite.com/soundtracks/pokemon-emerald-enhanced-soundtrack/hckioedvlz/1-03%20Title%20Theme.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
         <form class ="form-inline" @onsubmit ="GetPlayerAsync">
             <div class = "form-group mb-2">
-                <p>To begin trainer What is your name?</p>
-                <input type = "text" @bind-value="@searchText" class="form-control" placeholder="Search Player" id="searchInput">
+
+                <p id="playerSearchLabel">To begin with what is your name Trainer?</p>
+                <input type="text" @bind-value="@searchText" class="form-control" placeholder="Search Player" id="searchInput">
             </div>
-            <button type="submit" class="btn btn-primary mb-2 ml-auto" @onclick="StartGame">Find</button>
+            <button type="submit" class="btn btn-success" id="playerNameSubmit" @onclick="StartGame">Find</button>
         </form>
     </div>
 </div>
+
 }
 else if (CurrentScene == "Continue exploring the cave") 
 {
-    <div class="container" id="firstTrainerContianer">
-        <p id="firstTrainerEncounterDescription">@CurrentSceneDescription</p>
+    <div class="card" id="firstTrainerContianer">
+        <audio autoplay loop id="PokeTitleMusic">
+                <source src="https://vgmsite.com/soundtracks/pokemon-emerald-enhanced-soundtrack/hckioedvlz/1-03%20Title%20Theme.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
+        <div class="card-body" id="firstTrainerCardBody">
+            <div id="firstTrainerEncounterDescription">
+                <p>@CurrentSceneDescription</p>
+                @if (CurrentSceneOptions != null)
+                {   
+                    <img id="ackbarMeme"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAd6ZAEoxDMYuxV6c9SWL5Sirfg3FvtegVGQ&usqp=CAU" />
+                    <p>What will you do?</p>
+                    @foreach (var option in CurrentSceneOptions)
+                    {
+                        <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                        <br>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <br>
+}
+else if(CurrentScene == "The Wilds Next to Whispering Pines")
+{
+    <div class="card" id="beginningOfWildsCard">
+        <audio autoplay loop id="PokeThemeMusic">
+                <source src="https://vgmsite.com/soundtracks/pokemon-game-boy-pok-mon-sound-complete-set-play-cd/byadjqgxwm/1-06.%20The%20Road%20To%20Veridian%20~%20From%20Pallet.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
+        <div class="card-body" id="wildsCard">
+            <p id="wildsSceneDescription">@CurrentSceneDescription</p>
+            @if (CurrentSceneOptions != null)
+            {  
+                @foreach (var option in CurrentSceneOptions)
+                {
+                    <button id="engagePokeButton" @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                    <br>
+                }
+            }
+        </div>
+    </div>
+}
+
+else if(CurrentScene == "Fight" || CurrentScene == "Battle" || CurrentScene == "Engage with first Pokemon" || CurrentScene == "BattleSituation")
+{
+    <div class="card" id="firstFightCardStart">
+        <audio autoplay loop id="PokeThemeMusicForBattleFight">
+                <source src="https://vgmsite.com/soundtracks/pokemon-game-boy-pok-mon-sound-complete-set-play-cd/wpfiaxpxan/1-07.%20Battle%20%28Vs.%20Wild%20Pokémon%29.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
+        <div class="card-body" id="firstFightCardBody">
+            <p>@CurrentSceneDescription</p>
+            @if (CurrentSceneOptions != null)
+            {  
+                <p id="chooseToFightOrRun">What would you like to do?</p>
+                @foreach (var option in CurrentSceneOptions)
+                {
+                    <button id="firstFightSelection" @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                    <br>
+                }
+            }
+            <img id="encounteredPokeImage" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/@(encounteredPokemon.PokedexNumber).png" class = "card-img-top img-fluid" alt="@encounteredPokemon.Name">
+        </div>
+    </div>
+}
+else if(CurrentScene == "Battle Win")
+{
+    <div class="card" id="beginWinCard">
+        <audio autoplay loop id="PokeThemeMusicForBattleWin">
+                <source src="https://vgmsite.com/soundtracks/pokemon-game-boy-pok-mon-sound-complete-set-play-cd/zqjgamugau/1-08.%20Victory%20%28Vs.%20Wild%20Pokémon%29.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
+        <div class="card-body" id="winCardBody">
+            <p id="winSceneDescription">@CurrentSceneDescription</p>
         @if (CurrentSceneOptions != null)
-        {   
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAd6ZAEoxDMYuxV6c9SWL5Sirfg3FvtegVGQ&usqp=CAU" id="itATrap" />
-            <iframe width="1128" height="634" src="https://www.youtube.com/embed/0GBvhZgmYPY" title="Admiral Ackbar &#39;It&#39;s A Trap!&#39; Star Wars Episode VI Return of the Jedi" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            <p>What would you like to do?</p>
+        {  
             @foreach (var option in CurrentSceneOptions)
             {
-                <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                <button id="winBattleContinueButton" @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
                 <br>
             }
         }
     </div>
-    <br>
+    </div>
 }
-else 
+else if(CurrentScene == "Continue On To Starhaven")
 {
-    <div>
-        <audio controls autoplay id="PokeThemeMusic">
-                <source src="https://github.com/brianlane01/PokeRaterCatcherApp/blob/main/Client/Pages/GamePages/1-01%20Too%20Good%20To%20Not%20Believe%20(feat.%20Lizzie%20Morgan,%20Melvin%20Crispell%20III%20&%20Cecily).m4p" type="audio/mpeg">
+    <div class="card" id=contStarhavenCard> 
+        <audio autoplay loop id="MusicForBeforeCave">
+                <source src="https://vgmsite.com/soundtracks/pokemon-game-boy-pok-mon-sound-complete-set-play-cd/kihjfondbh/1-12.%20Viridian%20Forest.mp3" type="audio/mpeg">
                 Your browser does not support the audio element
         </audio>
-        <p>@CurrentSceneDescription</p>
-        @if (CurrentSceneOptions != null)
-        {  
-            <p>What would you like to do?</p>
-            @foreach (var option in CurrentSceneOptions)
-            {
-                <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
-                <br>
-            }
-        }
+        <div class="card-body" id="contStarhavenCardBody">
+            <div id="setUpContStarDescription">
+                <p id="contStarhavenSceneDescription">@CurrentSceneDescription</p>
+                @if (CurrentSceneOptions != null)
+                {  
+                    <p>What will you choose do?</p>
+                    @foreach (var option in CurrentSceneOptions)
+                    {
+                        <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                        <br>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+else if(CurrentScene == "Go Into the cave to look for Pokémon" || CurrentScene == "Look in the Poké Ball")
+{
+    <div class="card" id="insideWhisperingCaveCard">
+        <audio autoplay loop id="MusicForCave">
+                <source src="https://vgmsite.com/soundtracks/pokemon-gold-silver-crystal/pzwlitzfni/89.%20Battle%20Tower.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
+        <div class="card-body" id="insideWhisperingCaveCardBody">
+            <div id="whisperCaveDescrip">
+                <p>@CurrentSceneDescription</p>
+                @if (CurrentSceneOptions != null)
+                {  
+                    <p>What would you like to do?</p>
+                    @foreach (var option in CurrentSceneOptions)
+                    {
+                        <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                        <br>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+else if(CurrentScene == "Player's Bedroom, Morning") 
+{
+    <div id="welcomeCard">
+    <MudPaper Height="500px" Width="100%" Elevation="24" Style="@($"background:{Colors.BlueGrey.Darken1};")">
+    <MudContainer >
+        <div>
+            <audio autoplay loop id="PokeThemeMusic">
+                    <source src="https://vgmsite.com/soundtracks/pokemon-game-boy-pok-mon-sound-complete-set-play-cd/ztovckmxmw/1-02.%20Theme%20Of%20Pallet%20Town.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element
+            </audio>
+            <div class="card" id="theWelcomeCard">
+                <div class="card-body" id="welcomeIntoGame">
+                    <p>@CurrentSceneDescription</p>
+                    @if (CurrentSceneOptions != null)
+                    {  
+                        @foreach (var option in CurrentSceneOptions)
+                        {
+                            <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                            <br>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </MudContainer>
+    </MudPaper>
+    </div>
+
+    <br>
+}
+else if(CurrentScene == "Conversation with Mom")
+{
+    <div id="beginConvoWithMom">
+        <audio autoplay loop id="PokeThemeMusic">
+                <source src="https://vgmsite.com/soundtracks/pokemon-game-boy-pok-mon-sound-complete-set-play-cd/ztovckmxmw/1-02.%20Theme%20Of%20Pallet%20Town.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
+        <div class="card" id="convoWithMom">
+            <div class="card-body" id="convoWithMomScene">
+                <p>@CurrentSceneDescription</p>
+                @if (CurrentSceneOptions != null)
+                {  
+                    @foreach (var option in CurrentSceneOptions)
+                    {
+                        <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                        <br>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <br>
+}
+else if(CurrentScene == "On the streets of Whispering Pines")
+{
+    <div id="onTheStreet">
+        <audio autoplay loop id="PokeThemeMusic">
+                <source src="https://vgmsite.com/soundtracks/pokemon-game-boy-pok-mon-sound-complete-set-play-cd/ztovckmxmw/1-02.%20Theme%20Of%20Pallet%20Town.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
+        <div class="card" id="onTheStreetCard">
+            <div class="card-body" id="onTheStreetCardBody">
+                <p>@CurrentSceneDescription</p>
+                @if (CurrentSceneOptions != null)
+                {  
+                    @foreach (var option in CurrentSceneOptions)
+                    {
+                        <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                        <br>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <br>
+}
+else if (CurrentScene == "Accept the challenge") 
+{
+    <div class="card" id="trainerEncounterCard">
+        <audio autoplay loop id="PokeTitleMusic">
+                <source src="https://vgmsite.com/soundtracks/pokemon-emerald-enhanced-soundtrack/hckioedvlz/1-03%20Title%20Theme.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
+        <div class="card-body" id="trainerEncounterCardBody">
+            <div id="TrainerEncounterDescription">
+                <p>@CurrentSceneDescription</p>
+                @if (CurrentSceneOptions != null)
+                {   
+                    <img id="ackbarMeme"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAd6ZAEoxDMYuxV6c9SWL5Sirfg3FvtegVGQ&usqp=CAU" />
+                    <p>What will you do?</p>
+                    @foreach (var option in CurrentSceneOptions)
+                    {
+                        <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                        <br>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <br>
+}
+else
+{
+    <div class="card" id="trainerEncounterCard">
+        <audio autoplay loop id="PokeTitleMusic">
+                <source src="https://vgmsite.com/soundtracks/pokemon-emerald-enhanced-soundtrack/hckioedvlz/1-03%20Title%20Theme.mp3" type="audio/mpeg">
+                Your browser does not support the audio element
+        </audio>
+        <div class="card-body" id="trainerEncounterCardBody">
+            <div id="TrainerEncounterDescription">
+                <p>@CurrentSceneDescription</p>
+                @if (CurrentSceneOptions != null)
+                {   
+                    <img id="ackbarMeme"src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAd6ZAEoxDMYuxV6c9SWL5Sirfg3FvtegVGQ&usqp=CAU" />
+                    <p>What will you do?</p>
+                    @foreach (var option in CurrentSceneOptions)
+                    {
+                        <button @onclick="(() => ChooseOption(option.Key))">@option.Value</button>
+                        <br>
+                    }
+                }
+            </div>
+        </div>
     </div>
     <br>
 }
@@ -66,8 +305,15 @@ else
 
     public PlayerDetail? Player { get; set;}
     public PlayerInventoryDetail? PlayersInventory { get; set; }
+
+    //this is where we will store the pokemon that the player encounters
+    //and the Trainer's pokemon for now
     public PokemonDetail? encounteredPokemon { get; set; }
+    public int trainerPokemonHealth { get; set; } = 0;
     public int encounteredPokeHealth { get; set; } = 0;
+
+    public PokemonDetail? trainerPokemon { get; set; }
+    public int trainerPokemonId { get; set; } = 0;
 
     public int damage { get; set; }
 
@@ -226,6 +472,10 @@ else
 
             case "Look in the Poké Ball":
                 ContinueExploringWhisperingCave(optionKey);
+                break;
+
+            case "Continue exploring the cave":
+                FirstTrainerChallengeChoice(optionKey);
                 break;
         }
     }
@@ -601,6 +851,94 @@ else
                 "A trainer jumps out from behind a rock and challenges you to a battle. " +
                 "Do you run away from this challenge or accept the challenge? ",
                 new Dictionary<string, string> { { "RunAway", "Run away from the challenge" }, { "AcceptChallenge", "Accept the challenge" } });
+                break;
+        }
+    }
+
+    public void FirstTrainerChallengeChoice(string optionKey)
+    {
+        switch(optionKey)
+        {
+            case "RunAway":
+                RunAwayFromFirstTrainerChallenge(optionKey);
+                break;
+            case "AcceptChallenge":
+                AcceptFirstTrainerChallenge(optionKey);
+                break;
+        }
+    }
+
+    public void RunAwayFromFirstTrainerChallenge(string optionKey)
+    {
+
+    }
+
+    public async void AcceptFirstTrainerChallenge(string optionKey)
+    {
+        Console.WriteLine("AcceptFirstTrainerChallenge");
+        Player = await GetPlayerDetailAsync(searchText);
+        Console.WriteLine($"Player Name: {Player.Name}");
+        Console.WriteLine($"Player Pokemon Count: {Player.PokemonIds.Count}");
+        foreach (var pokemon in Player.PokemonIds)
+        {
+            playerPokemonCount++;
+    
+            if (playerPokemonCount == 1)
+            {
+                playerPoke1 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+                if (playerPoke1 != null)
+                    playerPoke1Health = playerPoke1.Health;
+            }
+            else if (playerPokemonCount == 2)
+            {
+                playerPoke2 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+                if (playerPoke2 != null)
+                    playerPoke2Health = playerPoke2.Health;
+            }
+            else if (playerPokemonCount == 3)
+            {
+                playerPoke3 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+                if (playerPoke3 != null)
+                    playerPoke3Health = playerPoke3.Health;
+            }
+            else if (playerPokemonCount == 4)
+            {
+                playerPoke4 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+                if (playerPoke4 != null)
+                    playerPoke4Health = playerPoke4.Health;
+            }
+            else if (playerPokemonCount == 5)
+            {
+                playerPoke5 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+                if (playerPoke5 != null)
+                    playerPoke5Health = playerPoke5.Health;
+            }
+            else if (playerPokemonCount == 6)
+            {
+                playerPoke6 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
+                if (playerPoke6 != null)
+                    playerPoke6Health = playerPoke6.Health;
+            }
+        }
+    
+        Console.WriteLine($"Player Pokemon Name: {playerPoke1.Name}");
+        trainerPokemonId = new Random().Next(1001, 1282);
+        trainerPokemon = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{trainerPokemonId}");
+        if(trainerPokemon != null)
+            trainerPokemonHealth = trainerPokemon.Health;
+        
+        Console.WriteLine($"Trainer Pokemon Health: {trainerPokemonHealth}");
+        switch(optionKey)
+        {
+            case "AcceptChallenge":
+                SetScene("Accept the challenge",
+                "You accept the trainer's challenge and go into battle. " +
+                $"The trainer sends out their first Pokémon {trainerPokemon.Name}. " +
+                "You need to send out your Pokémon.... " +
+                "Which Pokémon will you send out?",
+                new Dictionary<string, string> { 
+                    { "Poke1", playerPoke1.Name },
+                    });
                 break;
         }
     }
