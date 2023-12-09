@@ -8,8 +8,10 @@
             "args": [
                 "build",
                 "${workspaceFolder}/PokemonCatcherGame.sln",
+                "-nowarn" ,
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
+                
             ],
             "problemMatcher": "$msCompile"
         },

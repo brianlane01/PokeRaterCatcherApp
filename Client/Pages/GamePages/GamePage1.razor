@@ -66,7 +66,7 @@ else if (CurrentScene == "Continue exploring the cave")
 else if(CurrentScene == "The Wilds Next to Whispering Pines")
 {
     <div class="card" id="beginningOfWildsCard">
-        <audio autoplay loop id="PokeThemeMusic">
+        <audio controls autoplay loop id="PokeThemeMusic">
                 <source src="https://vgmsite.com/soundtracks/pokemon-game-boy-pok-mon-sound-complete-set-play-cd/byadjqgxwm/1-06.%20The%20Road%20To%20Veridian%20~%20From%20Pallet.mp3" type="audio/mpeg">
                 Your browser does not support the audio element
         </audio>
@@ -879,65 +879,52 @@ else
         Player = await GetPlayerDetailAsync(searchText);
         Console.WriteLine($"Player Name: {Player.Name}");
         Console.WriteLine($"Player Pokemon Count: {Player.PokemonIds.Count}");
-        foreach (var pokemon in Player.PokemonIds)
+
+        //* This is creating an array to store player Pokémon so that we can use them in the battle *//
+        PokemonDetail[] playerPoke = new PokemonDetail[Player.PokemonIds.Count];
+
+        //* This is looping through the player's Pokémon and storing them in the array *//
+        for (int i = 0; i < Player.PokemonIds.Count; i++)
         {
-            playerPokemonCount++;
-    
-            if (playerPokemonCount == 1)
+            int pokemonId = Player.PokemonIds[i]; // Get the PokemonId from the player's PokemonIds list
+            playerPoke[i] = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemonId}");  // Make the API call to retrieve the Pokemon
+
+            if (playerPoke[i] != null) // Check if the API call was successful
             {
-                playerPoke1 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
-                if (playerPoke1 != null)
-                    playerPoke1Health = playerPoke1.Health;
-            }
-            else if (playerPokemonCount == 2)
-            {
-                playerPoke2 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
-                if (playerPoke2 != null)
-                    playerPoke2Health = playerPoke2.Health;
-            }
-            else if (playerPokemonCount == 3)
-            {
-                playerPoke3 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
-                if (playerPoke3 != null)
-                    playerPoke3Health = playerPoke3.Health;
-            }
-            else if (playerPokemonCount == 4)
-            {
-                playerPoke4 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
-                if (playerPoke4 != null)
-                    playerPoke4Health = playerPoke4.Health;
-            }
-            else if (playerPokemonCount == 5)
-            {
-                playerPoke5 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
-                if (playerPoke5 != null)
-                    playerPoke5Health = playerPoke5.Health;
-            }
-            else if (playerPokemonCount == 6)
-            {
-                playerPoke6 = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{pokemon}");
-                if (playerPoke6 != null)
-                    playerPoke6Health = playerPoke6.Health;
+                playerPokemonCount++; // Increment the playerPokemonCount
+
+                int[] playerPokeHealth = { playerPoke1Health, playerPoke2Health, playerPoke3Health, playerPoke4Health, playerPoke5Health, playerPoke6Health }; // Create an array to store the player's Pokémon health
+
+                if (playerPokemonCount <= playerPokeHealth.Length) // Check if the playerPokemonCount is less than or equal to the playerPokeHealth array length
+                {
+                    playerPokeHealth[playerPokemonCount - 1] = playerPoke[i].Health; // Set the playerPokeHealth array at the index of the playerPokemonCount - 1 to the playerPoke[i].Health
+                }
             }
         }
+        
     
-        Console.WriteLine($"Player Pokemon Name: {playerPoke1.Name}");
-        trainerPokemonId = new Random().Next(1001, 1282);
-        trainerPokemon = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{trainerPokemonId}");
+        Console.WriteLine($"Player Pokemon Name: {playerPoke[1].Name}");
+        trainerPokemonId = new Random().Next(1001, 1282);  // Generate a random number between 1001 and 1282
+
+        trainerPokemon = await httpClient.GetFromJsonAsync<PokemonDetail>($"api/Pokemon/{trainerPokemonId}"); // Make the API call to retrieve the Pokémon
         if(trainerPokemon != null)
             trainerPokemonHealth = trainerPokemon.Health;
         
         Console.WriteLine($"Trainer Pokemon Health: {trainerPokemonHealth}");
+
+        // Check if the API call was successful and proceed with the encounter
         switch(optionKey)
         {
-            case "AcceptChallenge":
+            case "AcceptChallenge": 
                 SetScene("Accept the challenge",
                 "You accept the trainer's challenge and go into battle. " +
                 $"The trainer sends out their first Pokémon {trainerPokemon.Name}. " +
                 "You need to send out your Pokémon.... " +
                 "Which Pokémon will you send out?",
-                new Dictionary<string, string> { 
-                    { "Poke1", playerPoke1.Name },
+                new Dictionary<string, string> {            //Dictionary of options the player can choose from that will be displayed on the screen and what will happen when they choose that option
+                    { "Poke1", playerPoke[0].Name },
+                    { "Poke2", playerPoke[1].Name},
+                    { "Poke3", playerPoke[2].Name}
                     });
                 break;
         }
@@ -966,7 +953,6 @@ else
     int GetOpponentMovePowerFromDatabase(int moveIndex)
     {
         // Implement logic to retrieve the move power from the database
-        // You may need to adjust this based on your database structure
         if(encounteredPokemon != null)
         {   
             switch (moveIndex)
